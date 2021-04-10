@@ -12,7 +12,7 @@ import { Product } from './entities/product.entity';
   imports: [
     GraphQLModule.forRoot({
       installSubscriptionHandlers: true,
-      autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+      autoSchemaFile: join(process.cwd(), 'tools/graphql/schema.gql'),
     }),
     TypeOrmModule.forRoot({
       type: 'mongodb',
