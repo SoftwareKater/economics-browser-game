@@ -7,14 +7,14 @@ import { Product } from '../../entities/product.entity';
 export class ProductService {
   constructor(
     @InjectRepository(Product)
-    private productRepository: Repository<Product>,
+    private productRepository: Repository<Product>
   ) {}
 
   findAll(): Promise<Product[]> {
     return this.productRepository.find();
   }
 
-  findOne(id: number): Promise<Product | undefined> {
+  findOneById(id: number): Promise<Product | undefined> {
     return this.productRepository.findOne(id);
   }
 
