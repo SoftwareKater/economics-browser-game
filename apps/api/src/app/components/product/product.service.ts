@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Product } from '../../entities/product.entity';
+import { PRODUCTS } from '../../mocks/products';
 
 @Injectable()
 export class ProductService {
@@ -20,5 +21,19 @@ export class ProductService {
 
   async remove(id: number): Promise<void> {
     await this.productRepository.delete(id);
+  }
+
+  async save(product: Product): Promise<void> {
+    await this.productRepository.save(product);
+  }
+
+  async initMockProducts(): Promise<void> {
+    for (const product of PRODUCTS) {
+      try {
+        await this.save(product);
+      } catch (err) {
+        console.warn(err.message);
+      }
+    }
   }
 }

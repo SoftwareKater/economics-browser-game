@@ -4,7 +4,9 @@ import { ProductService } from './product.service';
 
 @Resolver(() => Product)
 export class ProductResolver {
-  constructor(private productService: ProductService) {}
+  constructor(private productService: ProductService) {
+    this.productService.initMockProducts();
+  }
 
   @Query(() => [Product])
   async products() {

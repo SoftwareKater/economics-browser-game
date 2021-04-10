@@ -1,14 +1,14 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ObjectID, ObjectIdColumn } from 'typeorm';
 
 @ObjectType()
 @Entity()
 export class Product {
-  @Field(type => Int)
-  @PrimaryGeneratedColumn()
-  id!: number;
+  @Field(type => String)
+  @ObjectIdColumn()
+  id!: ObjectID;
 
-  @Field()
+  @Field(type => String)
   @Column({
     unique: true
   })
