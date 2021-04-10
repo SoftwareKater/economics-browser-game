@@ -1,8 +1,8 @@
 import { Query, Resolver } from '@nestjs/graphql';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Accommodation } from '../../entities/accommodation.entity';
-import { Product } from '../../entities/product.entity';
+import { Accommodation } from '../../models/accommodation.entity';
+import { Product } from '../../models/product.entity';
 import { ACCOMMODATIONS } from '../../mocks/accommodations';
 
 @Resolver(() => Accommodation)

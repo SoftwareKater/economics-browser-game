@@ -7,8 +7,10 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AccommodationModule } from './components/accommodations/accommodation.module';
 import { ProductModule } from './components/product/product.module';
-import { Accommodation } from './entities/accommodation.entity';
-import { Product } from './entities/product.entity';
+import { ProductionSiteModule } from './components/production-sites/production-sites.module';
+import { Accommodation } from './models/accommodation.entity';
+import { Product } from './models/product.entity';
+import { ProductionSite } from './models/production-site.entity';
 
 @Module({
   imports: [
@@ -23,11 +25,12 @@ import { Product } from './entities/product.entity';
       // username: 'root',
       // password: 'root',
       // database: 'test',
-      entities: [Product, Accommodation],
+      entities: [Product, Accommodation, ProductionSite],
       synchronize: true,
     }),
     ProductModule,
     AccommodationModule,
+    ProductionSiteModule,
   ],
   controllers: [AppController],
   providers: [AppService],

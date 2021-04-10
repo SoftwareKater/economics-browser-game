@@ -1,4 +1,4 @@
-import { Product } from '../../entities/product.entity';
+import { Product } from '../../models/product.entity';
 
 export const WOOD = {
     name: 'wood',

@@ -1,4 +1,4 @@
-import { Accommodation } from '../entities/accommodation.entity';
+import { Accommodation } from '../models/accommodation.entity';
 import { WOOD } from './products/wood';
 
 export const ACCOMMODATIONS: Accommodation[] = [
