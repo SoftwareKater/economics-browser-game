@@ -5,7 +5,9 @@ import { join } from 'path';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { AccommodationModule } from './components/accommodations/accommodation.module';
 import { ProductModule } from './components/product/product.module';
+import { Accommodation } from './entities/accommodation.entity';
 import { Product } from './entities/product.entity';
 
 @Module({
@@ -21,10 +23,11 @@ import { Product } from './entities/product.entity';
       // username: 'root',
       // password: 'root',
       // database: 'test',
-      entities: [Product],
+      entities: [Product, Accommodation],
       synchronize: true,
     }),
     ProductModule,
+    AccommodationModule,
   ],
   controllers: [AppController],
   providers: [AppService],
