@@ -5,7 +5,7 @@ import { join } from 'path';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { AccommodationModule } from './components/accommodations/accommodation.module';
+import { AccommodationModule } from './components/accommodation/accommodation.module';
 import { ProductModule } from './components/product/product.module';
 import { ProductionSiteModule } from './components/production-sites/production-sites.module';
 import { Accommodation } from './models/accommodation.entity';
