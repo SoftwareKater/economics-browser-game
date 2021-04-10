@@ -1,6 +1,76 @@
 
-
 # Economics1k
+
+
+## Intro
+
+- Browser / Handy game
+
+### Players
+- rule a city
+- decide about the production in their city
+- can engage in trade in a global market
+
+### Cities
+- Each habitant needs 3 nutrition units per day
+- Each type of food yields a different amount of nutrition
+- To build new  buildings (production sites, storages, and housing) players need building materials
+- Building materials include wood, steel, sand, etc.
+- To research new buildings players need "tech?" materials
+- Tech materials include paper, ink, computerchips, etc.
+
+### Start
+- population of 1000 habitants
+- 10qkm (10.000.000 qm) land to build stuff on
+- each habitant lives in a tent
+
+## Housing
+
+
+productivity multiplicator: increases or decreases the number of units a habitant produces per day
+capacity: how many habitants can live in the housing
+size:
+
+Examples
+- a homeless habitant will not work
+- 5 habitants can live in one villa, they will all receive a great boost to their productivity
+
+## Production
+-
+- for exact values see <a href="./constants/production-sites.ts">production-sites.ts<a>
+
+## Habitants
+
+- base productivity: 1
+
+### Starving
+
+- habitants that do not get enough nutrition units starve
+- starving greatly decreases productivity until it reaches 0
+- habitants do not die
+- (just like they are not born, your city will always house 1000 habitants)
+- for exact values see <a href="./constants/starving.ts">starving.ts<a>
+
+### Well fed
+
+- habitants that eat more that 3 nutrition units will receive a productivity boost
+
+## Market
+
+- the currency is Habitrons (H with two horzontal lines)
+- players can create offers and bids to engage in trade
+- an offer (and a bid) comprises a product, an amount and a price
+- when offering, the price is interpreted as a minimum price (player will sell at every price above the offer price)
+- when biddig, the price is interpreted as a maximum price (player will buy at every price below the bidding price)
+- every hour the market is cleared:
+  - all offers and bids are sorted by product
+  - then the offers and bids for each product are sorted (offers are sorted increasing by price, bids are sorted decreasing by price)
+  - the highest bidder gets served first, the lowest offerer my serve first
+  - the price will be the arithmetic mean betwenn the offer and bid price
+  - when the bidder is saturated, the next is served; when the offerer is sold out, the next will serve
+  - this goes on until there is no bidder willing to buy at a price
+
+# Generated Readme
 
 This project was generated using [Nx](https://nx.dev).
 
