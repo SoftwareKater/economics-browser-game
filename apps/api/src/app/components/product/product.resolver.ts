@@ -13,8 +13,8 @@ export class ProductResolver {
     return this.productService.findAll();
   }
 
-  @Query(() => Product)
-  async product(@Args('id', { type: () => Int }) id: number) {
-    return this.productService.findOneById(id);
-  }
+  // @Query(() => Product)
+  // async product(@Args('id', { type: () => Int }) id: number) {
+  //   return this.productService.findOneById(id);
+  // }
 }

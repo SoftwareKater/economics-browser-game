@@ -1,17 +1,10 @@
 import { Accommodation } from '../models/accommodation.entity';
 import { WOOD } from './products/wood';
 
+export const homelessProductivityMultiplicator = 0.1;
+export const homelessDescription = 'A habitant that finds no free accommodation becomes homeless';
+
 export const ACCOMMODATIONS: Accommodation[] = [
-  {
-    name: 'homeless',
-    description: 'A habitant that finds no free accommodation becomes homeless',
-    productivityMultiplicator: 0.1,
-    size: 0,
-    capacity: 1,
-    constructionTime: 0,
-    constructionCosts: [],
-    maintenanceCosts: [],
-  } as unknown as Accommodation,
   {
     name: 'tent',
     description: 'The most basic form of housing',

@@ -12,7 +12,7 @@ export class CityResolver {
     private cityRepository: Repository<City>
   ) {}
 
-  @Query(() => [City])
+  @Query(() => [City], { name: 'cities' })
   async cities() {
     return this.cityRepository.find();
   }
@@ -21,12 +21,12 @@ export class CityResolver {
    * @todo This needs to be secured with oauth, city to fetch should be read from token
    * @returns The city of the player that send the query
    */
-  @Query((returns) => City)
+  @Query((returns) => City, { name: 'getMyCity' })
   async getMyCity() {
     return this.cityRepository.findOneOrFail();
   }
 
-  @Mutation((returns) => City)
+  @Mutation((returns) => City, { name: 'createCity' })
   async createCity(@Args({ name: 'name', type: () => String }) name: string) {
     const uuid = uuidv4();
     const newCity = {
