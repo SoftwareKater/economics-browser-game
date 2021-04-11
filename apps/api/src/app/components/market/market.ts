@@ -2,6 +2,9 @@ import { PRODUCTS } from "../../mocks/products";
 import { PlayersOffer } from "./players-offer.interface";
 import { TradeAgreement } from "./trade-agreement.interface";
 
+/**
+ * Utility funtions concerned with the market
+ */
 export class MarketController {
   /**
    * Clear the market: bring together sellers and purchasers, carry out transactions
