@@ -15,7 +15,8 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@economics1k/data-access": ["libs/data-access/src/index.ts"]
+      "@economics1k/data-access": ["libs/data-access/src/index.ts"],
+      "@economics1k/ui": ["libs/ui/src/index.ts"]
     },
     "strict": true
   },

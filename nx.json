@@ -15,6 +15,7 @@
     "api": { "tags": [] },
     "frontend": { "tags": [] },
     "frontend-e2e": { "tags": [], "implicitDependencies": ["frontend"] },
-    "data-access": { "tags": [] }
+    "data-access": { "tags": [] },
+    "ui": { "tags": [] }
   }
 }
