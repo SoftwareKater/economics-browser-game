@@ -1,0 +1,17 @@
+query {
+  cities {
+    id
+    name
+    habitants {
+      name
+    }
+  }
+}
+
+mutation createCity($name: String!) {
+  createCity(name: $name) {
+    id
+    name
+    habitants {id}
+  }
+}
