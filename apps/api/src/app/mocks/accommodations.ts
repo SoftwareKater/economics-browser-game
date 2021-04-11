@@ -5,7 +5,7 @@ export const ACCOMMODATIONS: Accommodation[] = [
   {
     name: 'homeless',
     description: 'A habitant that finds no free accommodation becomes homeless',
-    productivityMultiplicator: 0,
+    productivityMultiplicator: 0.1,
     size: 0,
     capacity: 1,
     constructionTime: 0,
@@ -15,7 +15,7 @@ export const ACCOMMODATIONS: Accommodation[] = [
   {
     name: 'tent',
     description: 'The most basic form of housing',
-    productivityMultiplicator: 0.1,
+    productivityMultiplicator: 0.2,
     size: 5,
     capacity: 1,
     constructionTime: 0,
@@ -25,7 +25,7 @@ export const ACCOMMODATIONS: Accommodation[] = [
   {
     name: 'shack',
     description: 'A simple house build from wood',
-    productivityMultiplicator: 0.2,
+    productivityMultiplicator: 0.3,
     size: 10,
     capacity: 2,
     constructionTime: 1,
@@ -43,7 +43,7 @@ export const ACCOMMODATIONS: Accommodation[] = [
     ],
   } as Accommodation,
   {
-    name: 'sky scaper',
+    name: 'sky scraper',
     description: '',
     productivityMultiplicator: 1.5,
     size: 1000,
