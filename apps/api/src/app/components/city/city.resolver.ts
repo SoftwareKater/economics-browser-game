@@ -17,6 +17,15 @@ export class CityResolver {
     return this.cityRepository.find();
   }
 
+  /**
+   * @todo This needs to be secured with oauth, city to fetch should be read from token
+   * @returns The city of the player that send the query
+   */
+  @Query((returns) => City)
+  async getMyCity() {
+    return this.cityRepository.findOneOrFail();
+  }
+
   @Mutation((returns) => City)
   async createCity(@Args({ name: 'name', type: () => String }) name: string) {
     const uuid = uuidv4();
