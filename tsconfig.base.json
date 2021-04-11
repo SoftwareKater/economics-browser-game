@@ -14,7 +14,9 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {},
+    "paths": {
+      "@economics1k/data-access": ["libs/data-access/src/index.ts"]
+    },
     "strict": true
   },
   "exclude": ["node_modules", "tmp"]
