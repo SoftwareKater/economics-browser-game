@@ -40,3 +40,6 @@ Thumbs.db
 
 # GraphQL generated schema
 tools/graphql/schema.gql
+
+#GraphQL generated typescript
+libs/data-access/src/lib/generated

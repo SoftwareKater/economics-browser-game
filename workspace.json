@@ -152,7 +152,8 @@
       "root": "libs/data-access",
       "sourceRoot": "libs/data-access/src",
       "projectType": "library",
-      "architect": {
+      "architect": {},
+      "targets": {
         "generate": {
           "builder": "@nrwl/workspace:run-commands",
           "options": {
@@ -162,9 +163,7 @@
               }
             ]
           }
-        }
-      },
-      "targets": {
+        },
         "lint": {
           "executor": "@nrwl/linter:eslint",
           "options": {

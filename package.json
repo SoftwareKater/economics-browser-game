@@ -4,6 +4,7 @@
   "license": "MIT",
   "scripts": {
     "nx": "nx",
+    "codegen": "nx run data-access:generate",
     "start": "nx serve",
     "start:frontend": "nx serve frontend",
     "build": "nx build",
