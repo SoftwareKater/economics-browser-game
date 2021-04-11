@@ -152,6 +152,18 @@
       "root": "libs/data-access",
       "sourceRoot": "libs/data-access/src",
       "projectType": "library",
+      "architect": {
+        "generate": {
+          "builder": "@nrwl/workspace:run-commands",
+          "options": {
+            "commands": [
+              {
+                "command": "npx graphql-codegen --config libs/data-access/codegen.yml"
+              }
+            ]
+          }
+        }
+      },
       "targets": {
         "lint": {
           "executor": "@nrwl/linter:eslint",
