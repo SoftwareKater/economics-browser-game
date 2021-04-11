@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { City } from '../../models/city.entity';
 import { Habitant } from '../../models/habitant.entity';
 import { v4 as uuidv4 } from 'uuid';
+import { CityDevelopment } from '../../models/city-development.entity';
 
 @Resolver(() => City)
 export class CityResolver {
@@ -23,7 +24,11 @@ export class CityResolver {
    */
   @Query((returns) => City, { name: 'getMyCity' })
   async getMyCity() {
-    return this.cityRepository.findOneOrFail();
+    const allCities = await this.cityRepository.find();
+    if (!allCities || allCities.length < 1) {
+      throw new Error('404 not found');
+    }
+    return allCities[0];
   }
 
   @Mutation((returns) => City, { name: 'createCity' })
@@ -34,10 +39,17 @@ export class CityResolver {
       uuid,
     };
     const habitants: Habitant[] = [];
+    const development: CityDevelopment[] = [
+      {
+        buildingId: '1',
+        amount: 3,
+      },
+    ];
     try {
       const insertResult = await this.cityRepository.save({
         ...newCity,
         habitants,
+        development,
       });
       return insertResult;
     } catch (err) {

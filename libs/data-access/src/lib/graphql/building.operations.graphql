@@ -1,0 +1,27 @@
+query accommodations {
+  accommodations {
+    id
+    name
+    description
+    size
+    places
+    buildingType {
+      name
+    }
+    constructionTime
+  }
+}
+
+query productionSites {
+  productionSites {
+    id
+    name
+    description
+    size
+    places
+    buildingType {
+      name
+    }
+    constructionTime
+  }
+}

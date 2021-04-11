@@ -1,7 +1,6 @@
 import { Field, Float, Int, ObjectType } from '@nestjs/graphql';
 import { Entity, Column, ObjectID, ObjectIdColumn, ManyToOne } from 'typeorm';
-import { Accommodation } from './accommodation.entity';
-import { ProductionSite } from './production-site.entity';
+import { Building } from './building.entity';
 
 @ObjectType()
 @Entity()
@@ -37,13 +36,13 @@ export class Habitant {
   /**
    * If this habitant is employed, this field holds the production site it is employed with
    */
-  @Field((type) => ProductionSite, {
+  @Field((type) => Building, {
     nullable: true,
   })
   @Column({
     nullable: true,
   })
-  employment?: ProductionSite;
+  employment?: Building;
 
   /**
    * True, if this habitant is currently starving
@@ -76,9 +75,9 @@ export class Habitant {
   /**
    * The habitants accommodation
    */
-  @Field((type) => Accommodation)
+  @Field((type) => Building)
   @Column()
-  accommodation!: Accommodation;
+  accommodation!: Building;
 
   /**
    * The base productivty of this habitant

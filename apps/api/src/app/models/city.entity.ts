@@ -1,5 +1,6 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 import { Entity, Column, ObjectID, ObjectIdColumn } from 'typeorm';
+import { CityDevelopment } from './city-development.entity';
 import { Habitant } from './habitant.entity';
 
 @ObjectType()
@@ -22,4 +23,8 @@ export class City {
   @Field(type => [Habitant])
   @Column()
   habitants!: Habitant[];
+
+  @Field(type => [CityDevelopment])
+  @Column()
+  development!: CityDevelopment[];
 }

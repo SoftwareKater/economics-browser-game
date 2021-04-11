@@ -5,16 +5,14 @@ import { join } from 'path';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { AccommodationModule } from './components/accommodation/accommodation.module';
+import { BuildingModule } from './components/building/building.module';
 import { CityModule } from './components/city/city.module';
 import { HabitantModule } from './components/habitant/habitant.module';
 import { ProductModule } from './components/product/product.module';
-import { ProductionSiteModule } from './components/production-sites/production-sites.module';
-import { Accommodation } from './models/accommodation.entity';
+import { Building } from './models/building.entity';
 import { City } from './models/city.entity';
 import { Habitant } from './models/habitant.entity';
 import { Product } from './models/product.entity';
-import { ProductionSite } from './models/production-site.entity';
 
 @Module({
   imports: [
@@ -29,14 +27,13 @@ import { ProductionSite } from './models/production-site.entity';
       // username: 'root',
       // password: 'root',
       // database: 'test',
-      entities: [Product, Accommodation, ProductionSite, Habitant, City],
+      entities: [Product, Habitant, City, Building],
       synchronize: true,
     }),
     ProductModule,
-    AccommodationModule,
-    ProductionSiteModule,
     CityModule,
     HabitantModule,
+    BuildingModule,
   ],
   controllers: [AppController],
   providers: [AppService],

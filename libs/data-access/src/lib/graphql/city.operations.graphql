@@ -8,6 +8,22 @@ query cities {
   }
 }
 
+query getMyCity {
+  getMyCity {
+    id
+    uuid
+    name
+    habitants {
+      id
+      unemployed
+    }
+    development {
+      buildingId
+      amount
+    }
+  }
+}
+
 mutation createCity($name: String!) {
   createCity(name: $name) {
     id
@@ -15,4 +31,3 @@ mutation createCity($name: String!) {
     habitants {id}
   }
 }
-

@@ -1,7 +1,0 @@
-query accommodations {
-  accommodations {
-    id
-    name
-    constructionTime
-  }
-}
