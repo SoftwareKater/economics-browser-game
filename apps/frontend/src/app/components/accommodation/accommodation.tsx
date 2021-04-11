@@ -1,25 +1,64 @@
-
 import React from 'react';
-// import styles from './accommodation.scss';
+import './accommodation.scss';
 import { useAccommodationsQuery } from '@economics1k/data-access';
 
-/* eslint-disable-next-line */
-export interface SetListProps {}
+import { InfoCard, DetailCard, DetailCardProps } from '@economics1k/ui';
 
-export const Accommodation = (props: SetListProps) => {
+export const Accommodation = () => {
   const { loading, error, data } = useAccommodationsQuery();
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error :(</p>;
 
+  let accommodationDetails: DetailCardProps = {} as DetailCardProps;
+
+  function updateAccommodationDetails(id: string): void {
+    console.log('updating details ', id);
+    const acc = data?.accommodations.find(
+      (accommodation) => accommodation.id === id
+    );
+    if (!acc) {
+      return;
+    }
+    accommodationDetails = {
+      id: acc.id,
+      title: acc.name,
+      image: 'assets/shack.png',
+      alt: acc.name,
+      description: 'acc.description',
+      buttonTitle: 'Build',
+      buttonAction: () => {
+        window.alert('building a shack');
+      },
+    };
+    console.log(accommodationDetails);
+  }
+
   return (
-    <ul>
-      {data?.accommodations.map(({ id, name, constructionTime }) => (
-        <li key={id}>
-          {id} - <strong>{name}</strong> ({constructionTime} days)
-        </li>
-      ))}
-    </ul>
+    <section>
+      <div>
+        {accommodationDetails.id ? (
+          <DetailCard key={accommodationDetails.id} {...accommodationDetails} />
+        ) : (
+          <div></div>
+        )}
+      </div>
+      <div className="master">
+        {data?.accommodations.map(({ id, name }) => (
+          <InfoCard
+            key={id}
+            {...{
+              title: name,
+              image: `assets/${name}`,
+              alt: name,
+              primaryAction: () => {
+                updateAccommodationDetails(id);
+              },
+            }}
+          ></InfoCard>
+        ))}
+      </div>
+    </section>
   );
 };
 
