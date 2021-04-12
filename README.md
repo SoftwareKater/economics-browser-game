@@ -70,6 +70,13 @@ Examples
   - when the bidder is saturated, the next is served; when the offerer is sold out, the next will serve
   - this goes on until there is no bidder willing to buy at a price
 
+
+## Open Questions
+
+Every day/hour/tick the current state of each city should be saved to a db, so that we can do macro economic analysis on the data
+
+
+
 # Generated Readme
 
 This project was generated using [Nx](https://nx.dev).

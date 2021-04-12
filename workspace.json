@@ -142,6 +142,14 @@
             "jestConfig": "apps/frontend/jest.config.js",
             "passWithNoTests": true
           }
+        },
+        "build-tailwind-css": {
+          "builder": "@nrwl/workspace:run-commands",
+          "outputs": [],
+          "options": {
+            "command": "npx tailwindcss-cli@latest build ./src/styles.scss -o src/app/tailwind.scss",
+            "cwd": "apps/frontend"
+          }
         }
       }
     },
