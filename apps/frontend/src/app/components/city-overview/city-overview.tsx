@@ -1,7 +1,9 @@
-import React from 'react';
-import { Habitant, useGetMyCityQuery } from '@economics1k/data-access';
+import React, { useState } from 'react';
+import { useGetMyCityQuery } from '@economics1k/data-access';
 
 export const CityOverview = () => {
+  const [value, setValue] = useState({ showPercent: false });
+
   const { loading, error, data } = useGetMyCityQuery();
 
   if (loading) return <p>Loading...</p>;
@@ -13,14 +15,19 @@ export const CityOverview = () => {
    * @param city
    * @returns
    */
-  function getUnemploymentRate(city: {
-    habitants: { unemployed: boolean }[];
+  function getUnemploymentCount(city: {
+    habitants: { employment?: any }[];
   }): number {
     const unemployedHabitants = city.habitants
-      .map((habitant) => habitant.unemployed)
-      .filter((value) => !!value).length;
-    const unemploymentRate = unemployedHabitants / city.habitants.length;
-    return unemploymentRate;
+      .filter((habitant) => !habitant.employment).length;
+    return unemployedHabitants;
+  }
+  function getHomelessCount(city: {
+    habitants: { accommodation?: any }[];
+  }): number {
+    const homelessHabitants = city.habitants
+      .filter((habitant) => !habitant.accommodation).length;
+    return homelessHabitants;
   }
 
   //   function getMeanProductivity(habitant: Habitant) {
@@ -48,23 +55,37 @@ export const CityOverview = () => {
     <section>
       <h2>{data.getMyCity.name} - Dashboard</h2>
       <h3>Economic Data</h3>
+
+      <button onClick={() => (setValue({showPercent: false}))}>absolute</button>
+      <button onClick={() => (setValue({showPercent: true}))}>in %</button>
+
       <table>
         <tbody>
           <tr>
-            <td>Unemployment Rate</td>
-            <td>{getUnemploymentRate(data.getMyCity)}</td>
+            <td>Unemployment</td>
+            <td>
+              {value.showPercent
+                ? `${getUnemploymentCount(data.getMyCity) * 100 /
+                  data.getMyCity.habitants.length}  %`
+                : `${getUnemploymentCount(data.getMyCity)} people`}
+            </td>
           </tr>
           <tr>
-            <td>Mean Productivity</td>
-            <td>{getUnemploymentRate(data.getMyCity)}</td>
-          </tr>
-          <tr>
-            <td>Homeless Rate</td>
-            <td>{getUnemploymentRate(data.getMyCity)}</td>
+            <td>Homeless</td>
+            <td>
+              {value.showPercent
+                ? `${getHomelessCount(data.getMyCity) * 100 /
+                  data.getMyCity.habitants.length} %`
+                : `${getHomelessCount(data.getMyCity)} people`}
+            </td>
           </tr>
           <tr>
             <td>Space Usage</td>
-            <td>{getSpaceUsage({ development: [] })}</td>
+            <td>
+              {value.showPercent
+                ? `${getSpaceUsage({ development: [] }) * 100 / 10000000} %`
+                : `${getSpaceUsage({ development: [] })} m^2`}
+            </td>
           </tr>
         </tbody>
       </table>

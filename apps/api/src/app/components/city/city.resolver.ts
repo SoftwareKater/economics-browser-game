@@ -32,30 +32,44 @@ export class CityResolver {
   }
 
   @Mutation((returns) => City, { name: 'createCity' })
+  async createBuilding(@Args({ name: 'buildingId', type: () => String }) buildingId: string) {
+    // start a counter and if the building is finished update city.development and(!) habitants.accommodation, habitants.employed
+  }
+
+  @Mutation((returns) => City, { name: 'createCity' })
   async createCity(@Args({ name: 'name', type: () => String }) name: string) {
-    const uuid = uuidv4();
-    const newCity = {
+    const newCity: Partial<City> = {
       name,
-      uuid,
     };
-    const habitants: Habitant[] = [];
+    newCity.uuid = uuidv4();
+
+    const habitants: Partial<Habitant>[] = [];
+    let habitant: Partial<Habitant>;
+    for (let i = 1; i <= 10000; i++) {
+      habitant = {
+        name: `Habitant ${i}`,
+        uuid: uuidv4(),
+        accommodation: undefined,
+        starving: 0,
+        employment: undefined,
+      };
+      habitants.push(habitant);
+    }
+    newCity.habitants = habitants as Habitant[];
     const development: CityDevelopment[] = [
       {
         buildingId: '1',
         amount: 3,
       },
     ];
+    newCity.development = development;
+
     try {
-      const insertResult = await this.cityRepository.save({
-        ...newCity,
-        habitants,
-        development,
-      });
+      const insertResult = await this.cityRepository.save(newCity);
       return insertResult;
     } catch (err) {
       console.warn(err.message);
     }
-    // @todo populate the city with habitants
   }
 
   /**
