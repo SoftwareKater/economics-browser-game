@@ -1,19 +1,22 @@
-import { Field, Float, Int, ObjectType } from '@nestjs/graphql';
-import { Entity, Column } from 'typeorm';
+import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { Entity, Column, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Building } from './building.entity';
+import { City } from './city.entity';
 
 @ObjectType()
 @Entity()
 export class Habitant {
   @Field((type) => String)
-  @Column({
-    unique: true,
-  })
-  uuid!: string;
+  @PrimaryGeneratedColumn("uuid")
+  id!: string;
 
   @Field((type) => String)
   @Column()
   name!: string;
+
+  @Field((type) => City)
+  @ManyToOne(() => City, city => city.habitants)
+  city!: City;
 
   /**
    * If this habitant is employed, this field holds the production site it is employed with.

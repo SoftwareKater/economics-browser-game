@@ -1,16 +1,23 @@
 import { Field, Float, Int, ObjectType } from '@nestjs/graphql';
-import { Entity, Column, ObjectID, ObjectIdColumn } from 'typeorm';
-import { BuildingType } from './building-type.entity';
-import { ProductAmount } from './product-amount.entity';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { BuildingConstructionCost } from './building-construction-cost';
+import { BuildingInput } from './building-input.entity';
+import { BuildingMaintenanceCost } from './building-maintenance-cost';
+import { BuildingOutput } from './building-output.entity';
+import { BuildingType } from './building-type.enum';
 
 /* disable-eslint @typescript-eslint/no-unsued-vars */
 
+/**
+ * All buildings in economics1k.
+ * Will be filled when the game is started for the first time. Has no relations to any other table.
+ */
 @ObjectType()
 @Entity()
 export class Building {
   @Field((type) => String)
-  @ObjectIdColumn()
-  id!: ObjectID;
+  @PrimaryGeneratedColumn('uuid')
+  id!: string;
 
   @Field((type) => String)
   @Column({
@@ -46,20 +53,23 @@ export class Building {
   /**
    * The inputs that are needed per day (only applies to production sites)
    */
-  @Field((type) => [ProductAmount])
-  @Column()
-  inputs!: ProductAmount[];
+  @Field((type) => [BuildingInput])
+  @OneToMany(() => BuildingInput, (buildingInput) => buildingInput.building)
+  inputs!: BuildingInput[];
 
   /**
    * The outputs that are produced each day (only applies to production sites)
    */
-  @Field((type) => [ProductAmount])
-  @Column()
-  outputs!: ProductAmount[];
+  @Field((type) => [BuildingOutput])
+  @OneToMany(() => BuildingOutput, (buildingOutput) => buildingOutput.building)
+  outputs!: BuildingOutput[];
 
-  @Field((type) => [ProductAmount])
-  @Column()
-  constructionCosts!: ProductAmount[];
+  @Field((type) => [BuildingConstructionCost])
+  @OneToMany(
+    () => BuildingConstructionCost,
+    (buildingConstructionCost) => buildingConstructionCost.building
+  )
+  constructionCosts!: BuildingConstructionCost[];
 
   @Field((type) => Float)
   @Column()
@@ -75,14 +85,21 @@ export class Building {
   /**
    * Only applies for accommodations and storages (not for production-sites)
    */
-  @Field((type) => [ProductAmount])
-  @Column()
-  maintenanceCosts!: ProductAmount[];
+  @Field((type) => [BuildingMaintenanceCost])
+  @OneToMany(
+    () => BuildingMaintenanceCost,
+    (buildingMaintenance) => buildingMaintenance.building
+  )
+  maintenanceCosts!: BuildingMaintenanceCost[];
 
   /**
    * The type of this building (accommodation, storage, production-site)
    */
-   @Field((type) => BuildingType)
-   @Column()
-   buildingType!: BuildingType;
+  @Field((type) => BuildingType)
+  @Column({
+    type: 'enum',
+    enum: BuildingType,
+    default: BuildingType.ACCOMMODATION,
+  })
+  buildingType!: BuildingType;
 }

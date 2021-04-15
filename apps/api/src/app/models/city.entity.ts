@@ -1,5 +1,5 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-import { Entity, Column, ObjectID, ObjectIdColumn } from 'typeorm';
+import { Entity, Column, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { CityDevelopment } from './city-development.entity';
 import { Habitant } from './habitant.entity';
 
@@ -7,8 +7,9 @@ import { Habitant } from './habitant.entity';
 @Entity()
 export class City {
   @Field((type) => String)
-  @ObjectIdColumn()
-  id!: ObjectID;
+  @PrimaryGeneratedColumn("uuid")
+  id!: string;
+
 
   @Field((type) => String)
   @Column({
@@ -21,10 +22,10 @@ export class City {
   name!: string;
 
   @Field(type => [Habitant])
-  @Column()
+  @OneToMany(() => Habitant, habitant => habitant.city)
   habitants!: Habitant[];
 
   @Field(type => [CityDevelopment])
-  @Column()
-  development!: CityDevelopment[];
+  @OneToMany(() => CityDevelopment, development => development.city)
+  developments!: CityDevelopment[];
 }

@@ -1,9 +1,14 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
-import { Entity, Column, ObjectID, ObjectIdColumn } from 'typeorm';
+import { Entity, Column, ObjectID, ObjectIdColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { City } from './city.entity';
 
 @ObjectType()
 @Entity()
 export class CityDevelopment {
+  @Field((type) => String)
+  @PrimaryGeneratedColumn("uuid")
+  id!: string;
+
   /**
    * Can be the id of any building (accommodation, production site, ...)
    */
@@ -12,9 +17,16 @@ export class CityDevelopment {
   buildingId!: string;
 
   /**
-   * The number of buildings of this type
+   * The city that the development was made in
+   */
+  @Field((type) => City)
+  @ManyToOne(() => City, (city) => city.developments)
+  city!: City;
+
+  /**
+   * UNIX timestamp of creation date
    */
   @Field((type) => Int)
   @Column()
-  amount!: number;
+  createdOn!: number;
 }
