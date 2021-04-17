@@ -10,7 +10,9 @@ import { CityDevelopment } from '../../models/city-development.entity';
 export class CityResolver {
   constructor(
     @InjectRepository(City)
-    private cityRepository: Repository<City>
+    private cityRepository: Repository<City>,
+    // @InjectRepository(CityDevelopment)
+    // private cityDevelRepository: Repository<CityDevelopment>
   ) {}
 
   @Query(() => [City], { name: 'cities' })
@@ -31,10 +33,19 @@ export class CityResolver {
     return allCities[0];
   }
 
-  @Mutation((returns) => City, { name: 'createCity' })
-  async createBuilding(@Args({ name: 'buildingId', type: () => String }) buildingId: string) {
-    // start a counter and if the building is finished update city.development and(!) habitants.accommodation, habitants.employed
-  }
+  // @Mutation((returns) => City, { name: 'createBuilding' })
+  // async createBuilding(
+  //   @Args({ name: 'cityId', type: () => String }) cityId: string,
+  //   @Args({ name: 'buildingId', type: () => String }) buildingId: string
+  // ) {
+  //   const now = new Date().getTime();
+  //   this.cityDevelRepository.update(cityId, {
+  //     buildingId,
+  //     city: { id: cityId },
+  //     createdOn: now,
+  //   });
+  //   // @todo start a counter and if the building is finished update city.development and(!) habitants.accommodation, habitants.employed
+  // }
 
   @Mutation((returns) => City, { name: 'createCity' })
   async createCity(@Args({ name: 'name', type: () => String }) name: string) {
@@ -47,8 +58,8 @@ export class CityResolver {
     let habitant: Partial<Habitant>;
     for (let i = 1; i <= 10000; i++) {
       habitant = {
+        // id: uuidv4(),
         name: `Habitant ${i}`,
-        uuid: uuidv4(),
         accommodation: undefined,
         starving: 0,
         employment: undefined,
@@ -56,13 +67,14 @@ export class CityResolver {
       habitants.push(habitant);
     }
     newCity.habitants = habitants as Habitant[];
+    const creationDate = new Date().getTime();
     const development: CityDevelopment[] = [
       {
         buildingId: '1',
-        amount: 3,
-      },
+        createdOn: creationDate,
+      } as CityDevelopment,
     ];
-    newCity.development = development;
+    newCity.developments = development;
 
     try {
       const insertResult = await this.cityRepository.save(newCity);

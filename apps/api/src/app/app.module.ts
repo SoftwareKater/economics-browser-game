@@ -7,11 +7,10 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { BuildingModule } from './components/building/building.module';
 import { CityModule } from './components/city/city.module';
-import { HabitantModule } from './components/habitant/habitant.module';
 import { ProductModule } from './components/product/product.module';
 import { Building } from './models/building.entity';
+import { CityDevelopment } from './models/city-development.entity';
 import { City } from './models/city.entity';
-import { Habitant } from './models/habitant.entity';
 import { Product } from './models/product.entity';
 
 @Module({
@@ -21,14 +20,18 @@ import { Product } from './models/product.entity';
       autoSchemaFile: join(process.cwd(), 'tools/graphql/schema.gql'),
     }),
     TypeOrmModule.forRoot({
-      type: 'mongodb',
+      type: 'mysql',
       host: 'localhost',
-      port: 27017,
-      // username: 'root',
-      // password: 'root',
-      // database: 'test',
-      entities: [Product, City, Building],
+      port: 3306,
+      username: 'root',
+      password: 'root',
+      database: 'test',
+      entities: [Product, City, Building, CityDevelopment],
       synchronize: true,
+      migrations: ["migration/*.js"],
+      cli: {
+        migrationsDir: 'migration',
+      },
     }),
     ProductModule,
     CityModule,

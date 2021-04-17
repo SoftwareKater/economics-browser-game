@@ -3,14 +3,12 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { BUILDINGS } from '../../mocks/buildings';
 import { Building } from '../../models/building.entity';
-import { Product } from '../../models/product.entity';
 
 @Resolver(() => Building)
 export class BuildingResolver {
   constructor(
-
     @InjectRepository(Building)
-    private buildingRepository: Repository<Product>
+    private buildingRepository: Repository<Building>
   ) {
     this.initMockBuildings();
   }

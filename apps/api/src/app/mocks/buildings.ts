@@ -1,4 +1,8 @@
-import { BuildingType } from '../models/building-type.entity';
+import { BuildingConstructionCost } from '../models/building-construction-cost';
+import { BuildingInput } from '../models/building-input.entity';
+import { BuildingMaintenanceCost } from '../models/building-maintenance-cost';
+import { BuildingOutput } from '../models/building-output.entity';
+import { BuildingType } from '../models/building-type.enum';
 import { Building } from '../models/building.entity';
 import { STONE } from './products/stone';
 import { WATER } from './products/water';
@@ -13,20 +17,18 @@ export const BUILDINGS: Partial<Building>[] = [
   {
     name: 'wheat field',
     description: 'a wheat field',
-    buildingType: {
-        name: 'production-site'
-    } as BuildingType,
+    buildingType: BuildingType.PRODUCTION_SITE,
     inputs: [
       {
         product: WATER,
         amount: 1,
-      },
+      } as BuildingInput,
     ],
     outputs: [
       {
         product: WHEAT,
         amount: 10,
-      },
+      } as BuildingOutput,
     ],
     constructionCosts: [],
     constructionTime: 1,
@@ -37,21 +39,19 @@ export const BUILDINGS: Partial<Building>[] = [
   {
     name: 'well',
     description: '',
-    buildingType: {
-        name: 'production-site'
-    } as BuildingType,
+    buildingType: BuildingType.PRODUCTION_SITE,
     inputs: [],
     outputs: [
       {
         product: WATER,
         amount: 10,
-      },
+      } as BuildingOutput,
     ],
     constructionCosts: [
       {
         product: STONE,
         amount: 40,
-      },
+      } as BuildingConstructionCost,
     ],
     constructionTime: 2,
     maintenanceCosts: [],
@@ -61,15 +61,13 @@ export const BUILDINGS: Partial<Building>[] = [
   {
     name: 'quarry',
     description: '',
-    buildingType: {
-        name: 'production-site'
-    } as BuildingType,
+    buildingType: BuildingType.PRODUCTION_SITE,
     inputs: [],
     outputs: [
       {
         product: STONE,
         amount: 200,
-      },
+      } as BuildingOutput,
     ],
     constructionCosts: [],
     constructionTime: 10,
@@ -80,9 +78,7 @@ export const BUILDINGS: Partial<Building>[] = [
   {
     name: 'tent',
     description: 'The most basic form of housing',
-    buildingType: {
-        name: 'accommodation'
-    } as BuildingType,
+    buildingType: BuildingType.ACCOMMODATION,
     productivityMultiplicator: 0.2,
     size: 5,
     places: 1,
@@ -93,9 +89,7 @@ export const BUILDINGS: Partial<Building>[] = [
   {
     name: 'shack',
     description: 'A simple house build from wood',
-    buildingType: {
-        name: 'accommodation'
-    } as BuildingType,
+    buildingType: BuildingType.ACCOMMODATION,
     productivityMultiplicator: 0.3,
     size: 10,
     places: 2,
@@ -104,21 +98,19 @@ export const BUILDINGS: Partial<Building>[] = [
       {
         product: WOOD,
         amount: 100,
-      },
+      } as BuildingConstructionCost,
     ],
     maintenanceCosts: [
       {
         product: WOOD,
         amount: 2,
-      },
+      } as BuildingMaintenanceCost,
     ],
   },
   {
     name: 'sky scraper',
     description: '',
-    buildingType: {
-        name: 'accommodation'
-    } as BuildingType,
+    buildingType: BuildingType.ACCOMMODATION,
     productivityMultiplicator: 1.5,
     size: 1000,
     places: 1000,
@@ -129,9 +121,7 @@ export const BUILDINGS: Partial<Building>[] = [
   {
     name: 'villa',
     description: '',
-    buildingType: {
-        name: 'accommodation'
-    } as BuildingType,
+    buildingType: BuildingType.ACCOMMODATION,
     productivityMultiplicator: 2,
     size: 1000,
     places: 5,
