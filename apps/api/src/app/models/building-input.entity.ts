@@ -1,17 +1,20 @@
+import { Field, ObjectType } from '@nestjs/graphql';
 import { Entity, Column, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Building } from './building.entity';
 import { Product } from './product.entity';
 
+@ObjectType()
 @Entity()
 export class BuildingInput {
+  @Field((type) => String)
   @PrimaryGeneratedColumn('uuid')
   id!: string;
 
   @Column()
-  buildingId!: number;
+  buildingId!: string;
 
   @Column()
-  productId!: number;
+  productId!: string;
 
   @Column()
   amount!: number;

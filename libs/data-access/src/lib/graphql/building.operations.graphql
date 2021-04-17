@@ -5,9 +5,7 @@ query accommodations {
     description
     size
     places
-    buildingType {
-      name
-    }
+    buildingType
     constructionTime
   }
 }
@@ -19,9 +17,7 @@ query productionSites {
     description
     size
     places
-    buildingType {
-      name
-    }
+    buildingType
     constructionTime
   }
 }

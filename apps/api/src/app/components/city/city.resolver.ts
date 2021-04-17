@@ -5,14 +5,19 @@ import { City } from '../../models/city.entity';
 import { Habitant } from '../../models/habitant.entity';
 import { v4 as uuidv4 } from 'uuid';
 import { CityDevelopment } from '../../models/city-development.entity';
+import { Building } from '../../models/building.entity';
 
 @Resolver(() => City)
 export class CityResolver {
   constructor(
+    @InjectRepository(Building)
+    private buildingRepository: Repository<Building>,
     @InjectRepository(City)
     private cityRepository: Repository<City>,
-    // @InjectRepository(CityDevelopment)
-    // private cityDevelRepository: Repository<CityDevelopment>
+    @InjectRepository(CityDevelopment)
+    private cityDevelRepository: Repository<CityDevelopment>,
+    @InjectRepository(Habitant)
+    private habitantRepository: Repository<Habitant>
   ) {}
 
   @Query(() => [City], { name: 'cities' })
@@ -26,11 +31,18 @@ export class CityResolver {
    */
   @Query((returns) => City, { name: 'getMyCity' })
   async getMyCity() {
-    const allCities = await this.cityRepository.find();
+    const allCities = await this.cityRepository.find({
+      relations: ['habitants', 'developments'],
+    });
     if (!allCities || allCities.length < 1) {
       throw new Error('404 not found');
     }
-    return allCities[0];
+    const myCity = allCities[0];
+    // const myHabitants: Habitant[] = await this.habitantRepository.find({
+    //   where: { cityId: myCity.id },
+    // });
+    // myCity.habitants = myHabitants;
+    return myCity;
   }
 
   // @Mutation((returns) => City, { name: 'createBuilding' })
@@ -52,8 +64,8 @@ export class CityResolver {
     const newCity: Partial<City> = {
       name,
     };
-    newCity.uuid = uuidv4();
 
+    // Habitants of the new city
     const habitants: Partial<Habitant>[] = [];
     let habitant: Partial<Habitant>;
     for (let i = 1; i <= 10000; i++) {
@@ -63,25 +75,57 @@ export class CityResolver {
         accommodation: undefined,
         starving: 0,
         employment: undefined,
+        city: newCity as City,
       };
       habitants.push(habitant);
     }
-    newCity.habitants = habitants as Habitant[];
-    const creationDate = new Date().getTime();
-    const development: CityDevelopment[] = [
-      {
-        buildingId: '1',
-        createdOn: creationDate,
-      } as CityDevelopment,
-    ];
-    newCity.developments = development;
 
-    try {
-      const insertResult = await this.cityRepository.save(newCity);
-      return insertResult;
-    } catch (err) {
-      console.warn(err.message);
+    const well = await this.buildingRepository.findOne({
+      where: { name: 'well' },
+    });
+    const shack = await this.buildingRepository.findOne({
+      where: { name: 'shack' },
+    });
+    if (!shack || !well) {
+      return console.error(
+        'Could not find buildings for inital development of the city. Aborting city creation.'
+      );
     }
+    // Initial development of the city
+    const developments: Partial<CityDevelopment>[] = [
+      {
+        building: well,
+        city: newCity as City,
+      },
+      {
+        building: shack,
+        city: newCity as City,
+      },
+      {
+        building: shack,
+        city: newCity as City,
+      },
+      {
+        building: shack,
+        city: newCity as City,
+      },
+    ];
+
+    let insertResult: (Partial<City> & City) | undefined = undefined;
+    try {
+      insertResult = await this.cityRepository.save(newCity);
+      await this.habitantRepository.insert(habitants);
+      await this.cityDevelRepository.insert(developments);
+    } catch (err) {
+      // Revert everything
+      this.cityDevelRepository.delete({ city: newCity });
+      this.habitantRepository.delete({ city: newCity });
+      if (insertResult) {
+        this.cityRepository.delete({ id: insertResult.id });
+      }
+      return console.error(err.message);
+    }
+    return insertResult;
   }
 
   /**

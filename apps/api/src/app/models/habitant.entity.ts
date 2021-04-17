@@ -7,7 +7,7 @@ import { City } from './city.entity';
 @Entity()
 export class Habitant {
   @Field((type) => String)
-  @PrimaryGeneratedColumn("uuid")
+  @PrimaryGeneratedColumn('uuid')
   id!: string;
 
   @Field((type) => String)
@@ -15,7 +15,7 @@ export class Habitant {
   name!: string;
 
   @Field((type) => City)
-  @ManyToOne(() => City, city => city.habitants)
+  @ManyToOne(() => City, (city) => city.habitants)
   city!: City;
 
   /**
@@ -25,7 +25,7 @@ export class Habitant {
   @Field((type) => Building, {
     nullable: true,
   })
-  @Column({
+  @ManyToOne(() => Building, (building) => building.employees, {
     nullable: true,
   })
   employment?: Building;
@@ -45,7 +45,7 @@ export class Habitant {
   @Field((type) => Building, {
     nullable: true,
   })
-  @Column({
+  @ManyToOne(() => Building, (building) => building.residents, {
     nullable: true,
   })
   accommodation?: Building;

@@ -9,10 +9,9 @@ query cities {
 query getMyCity {
   getMyCity {
     id
-    uuid
     name
     habitants {
-      uuid
+      id
       name
       employment {
         id
@@ -24,9 +23,8 @@ query getMyCity {
         name
       }
     }
-    development {
+    developments {
       buildingId
-      createdOn
     }
   }
 }

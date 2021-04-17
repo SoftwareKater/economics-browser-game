@@ -3,8 +3,8 @@ import {
   Entity,
   Column,
   ObjectID,
-  ObjectIdColumn,
   OneToMany,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 import { BuildingConstructionCost } from './building-construction-cost';
 import { BuildingInput } from './building-input.entity';
@@ -15,8 +15,8 @@ import { BuildingOutput } from './building-output.entity';
 @Entity()
 export class Product {
   @Field((type) => String)
-  @ObjectIdColumn()
-  id!: ObjectID;
+  @PrimaryGeneratedColumn("uuid")
+  id!: string;
 
   @Field((type) => String)
   @Column({

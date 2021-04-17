@@ -5,6 +5,8 @@ import { BuildingInput } from './building-input.entity';
 import { BuildingMaintenanceCost } from './building-maintenance-cost';
 import { BuildingOutput } from './building-output.entity';
 import { BuildingType } from './building-type.enum';
+import { CityDevelopment } from './city-development.entity';
+import { Habitant } from './habitant.entity';
 
 /* disable-eslint @typescript-eslint/no-unsued-vars */
 
@@ -37,18 +39,26 @@ export class Building {
   size!: number;
 
   /**
-   * The number of products that can be stored (only applies to storages)
+   * The number of products that can be stored (only applies to storages).
+   * If zero (default), the building cannot store anything (accommodation, production site)
+   * @todo when this mechanic is ever introduced: products should have a size.
    */
   @Field((type) => Int)
-  @Column()
-  capacity!: number;
+  @Column({
+    default: 0,
+  })
+  capacity?: number;
 
   /**
-   * The number of habitants that can work in this production site
+   * The number of habitants that can work in this production site,
+   * or the number of habitants that can live in this accommodation.
+   * If zero (default), habitants can neither work nor live in the building (storage)
    */
   @Field((type) => Int)
-  @Column()
-  places!: number;
+  @Column({
+    default: 0,
+  })
+  places?: number;
 
   /**
    * The inputs that are needed per day (only applies to production sites)
@@ -71,16 +81,21 @@ export class Building {
   )
   constructionCosts!: BuildingConstructionCost[];
 
+  /**
+   * Time to construct this building in ticks (or sec)?
+   * @todo how is this done in browser games?
+   */
   @Field((type) => Float)
   @Column()
   constructionTime!: number;
 
   /**
-   * Only applies for accommodations (not for production-sites and storages)
+   * Only applies for accommodations (not for production-sites and storages).
+   * If zero (default), the building has no impact on productivity (production site, storage)
    */
   @Field((type) => Float)
-  @Column()
-  productivityMultiplicator!: number;
+  @Column({ type: 'float', default: 0 })
+  productivityMultiplicator?: number;
 
   /**
    * Only applies for accommodations and storages (not for production-sites)
@@ -102,4 +117,23 @@ export class Building {
     default: BuildingType.ACCOMMODATION,
   })
   buildingType!: BuildingType;
+
+  @Field((type) => [Habitant])
+  @OneToMany(() => Habitant, (habitant) => habitant.employment)
+  employees!: Habitant[];
+
+  @Field((type) => [Habitant])
+  @OneToMany(() => Habitant, (habitant) => habitant.accommodation)
+  residents!: Habitant[];
+
+  @Field((type) => [CityDevelopment])
+  @OneToMany(() => CityDevelopment, (cityDevel) => cityDevel.building)
+  developedIn!: CityDevelopment[];
+
+  /**
+   * if negative (default), there is no maximum amount for this building.
+   */
+  @Field((type) => Number)
+  @Column({ default: -1 })
+  maxPerCity!: number;
 }

@@ -26,11 +26,6 @@
 
 ## Housing
 
-
-productivity multiplicator: increases or decreases the number of units a habitant produces per day
-capacity: how many habitants can live in the housing
-size:
-
 Examples
 - a homeless habitant will not work
 - 5 habitants can live in one villa, they will all receive a great boost to their productivity
