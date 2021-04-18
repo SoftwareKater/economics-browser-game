@@ -35,7 +35,6 @@ export const BUILDINGS: Partial<Building>[] = [
     name: 'well',
     description: '',
     buildingType: BuildingType.PRODUCTION_SITE,
-    inputs: [],
     outputs: [
       {
         product: PRODUCTS.WATER,

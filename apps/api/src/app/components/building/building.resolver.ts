@@ -2,6 +2,7 @@ import { Query, Resolver } from '@nestjs/graphql';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { BUILDINGS } from '../../mocks/buildings';
+import { PRODUCTS } from '../../mocks/products';
 import { BuildingConstructionCost } from '../../models/building-construction-cost';
 import { BuildingInput } from '../../models/building-input.entity';
 import { BuildingMaintenanceCost } from '../../models/building-maintenance-cost';
@@ -44,7 +45,18 @@ export class BuildingResolver {
   }
 
   async initMockBuildings(): Promise<void> {
-    const products = await this.productRepository.find();
+    let products: Product[] = [];
+    try {
+      products = await this.initMockProducts();
+    } catch (err) {
+      if (err.message.startsWith('Duplicate entry')) {
+        products = await this.productRepository.find();
+      }
+    }
+    if (products.length < 1) {
+      return console.error('No products');
+    }
+
     for (const building of BUILDINGS) {
       try {
         const res = await this.buildingRepository.save(building);
@@ -53,7 +65,7 @@ export class BuildingResolver {
           const buildingConstructionCosts = building.constructionCosts.map(
             (constructionCost) => {
               return {
-                constructionCost,
+                ...constructionCost,
                 building: res,
                 product: products.find(
                   (product) => product.name === constructionCost.product.name
@@ -70,7 +82,7 @@ export class BuildingResolver {
           const buildingMaintenanceCosts = building.maintenanceCosts.map(
             (maintenanceCost) => {
               return {
-                constructionCost: maintenanceCost,
+                ...maintenanceCost,
                 building: res,
                 product: products.find(
                   (product) => product.name === maintenanceCost.product.name
@@ -111,11 +123,19 @@ export class BuildingResolver {
         } else {
           // Revert all inserts
           console.error(
-            `Could not save mock building "${building.name}". Reson: `,
+            `Could not save mock building "${building.name}". Reason: `,
             errMsg
           );
         }
       }
     }
+  }
+
+  private async initMockProducts(): Promise<
+    (Partial<Product> & Product)[]
+  > {
+    const allProducts = Object.values(PRODUCTS);
+    const res = await this.productRepository.save(allProducts);
+    return res;
   }
 }

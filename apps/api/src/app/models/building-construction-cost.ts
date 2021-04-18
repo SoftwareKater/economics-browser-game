@@ -10,12 +10,15 @@ export class BuildingConstructionCost {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
 
+  @Field((type) => Number)
   @Column()
   amount!: number;
 
+  @Field(type => Building)
   @ManyToOne(() => Building, (building) => building.constructionCosts)
   building!: Building;
 
+  @Field(type => Building)
   @ManyToOne(() => Product, (product) => product.buildingConstructionCosts)
   product!: Product;
 }

@@ -1,5 +1,11 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
-import { Entity, Column, ManyToOne, PrimaryGeneratedColumn, CreateDateColumn } from 'typeorm';
+import {
+  Entity,
+  Column,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  CreateDateColumn,
+} from 'typeorm';
 import { Building } from './building.entity';
 import { City } from './city.entity';
 
@@ -10,14 +16,16 @@ import { City } from './city.entity';
 @Entity()
 export class CityDevelopment {
   @Field((type) => String)
-  @PrimaryGeneratedColumn("uuid")
+  @PrimaryGeneratedColumn('uuid')
   id!: string;
 
   /**
    * The building (accommodation, production site, ...) that is developed
    */
   @Field((type) => Building)
-  @ManyToOne(() => Building, building => building.developedIn)
+  @ManyToOne(() => Building, (building) => building.developedIn, {
+    eager: true,
+  })
   building!: Building;
 
   /**

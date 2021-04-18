@@ -1,7 +1,6 @@
 query cities {
   cities {
     id
-    uuid
     name
   }
 }
@@ -17,14 +16,18 @@ query getMyCity {
         id
         name
       }
-      starving
       accommodation {
         id
         name
       }
+      starving
     }
     developments {
-      buildingId
+      id
+      building {
+        name
+      }
+      createdOn
     }
   }
 }
