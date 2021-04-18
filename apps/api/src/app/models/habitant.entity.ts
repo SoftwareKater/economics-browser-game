@@ -39,6 +39,7 @@ export class Habitant {
   })
   @ManyToOne(() => CityBuilding, (cityBuilding) => cityBuilding.employees, {
     nullable: true,
+    eager: true
   })
   employment?: CityBuilding;
 
@@ -51,6 +52,7 @@ export class Habitant {
   })
   @ManyToOne(() => CityBuilding, (cityBuilding) => cityBuilding.residents, {
     nullable: true,
+    eager: true
   })
   accommodation?: CityBuilding;
 }

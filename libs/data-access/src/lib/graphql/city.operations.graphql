@@ -14,20 +14,35 @@ query getMyCity {
       name
       employment {
         id
-        name
+        building {
+          id
+          name
+        }
       }
       accommodation {
         id
-        name
+        building {
+          id
+          name
+        }
       }
       starving
     }
     developments {
       id
       building {
+        id
         name
       }
       createdOn
+    }
+    products {
+      id
+      product {
+        id
+        name
+      }
+      amount
     }
   }
 }

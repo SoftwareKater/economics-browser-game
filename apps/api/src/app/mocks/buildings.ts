@@ -32,6 +32,30 @@ export const BUILDINGS: Partial<Building>[] = [
     size: 10000,
   },
   {
+    name: 'cattle ranch',
+    description: 'a cattle ranch',
+    buildingType: BuildingType.PRODUCTION_SITE,
+    inputs: [
+      {
+        product: PRODUCTS.WATER,
+        amount: 200,
+      } as BuildingInput,
+      {
+        product: PRODUCTS.WHEAT,
+        amount: 100,
+      } as BuildingInput,
+    ],
+    outputs: [
+      {
+        product: PRODUCTS.CATTLE,
+        amount: 1,
+      } as BuildingOutput,
+    ],
+    constructionTime: 1,
+    places: 1,
+    size: 10000,
+  },
+  {
     name: 'well',
     description: '',
     buildingType: BuildingType.PRODUCTION_SITE,
@@ -85,17 +109,92 @@ export const BUILDINGS: Partial<Building>[] = [
     ],
     constructionTime: 1,
   },
-  // {
-  //   name: 'tent',
-  //   description: 'The most basic form of housing',
-  //   size: 5,
-  //   places: 1,
-  //   buildingType: BuildingType.ACCOMMODATION,
-  //   productivityMultiplicator: 0.2,
-  //   constructionTime: 1,
-  //   constructionCosts: [],
-  //   maintenanceCosts: [],
-  // },
+  {
+    name: 'butchery',
+    description:
+      'Produces meat and raw leather from cattle. Needs huge amounts of water.',
+    size: 100,
+    places: 5,
+    buildingType: BuildingType.PRODUCTION_SITE,
+    inputs: [
+      {
+        product: PRODUCTS.WATER,
+        amount: 800,
+      } as BuildingInput,
+      {
+        product: PRODUCTS.CATTLE,
+        amount: 1,
+      } as BuildingInput,
+    ],
+    outputs: [
+      {
+        product: PRODUCTS.RAW_LEATHER,
+        amount: 20,
+      } as BuildingOutput,
+      {
+        product: PRODUCTS.MEAT,
+        amount: 100,
+      } as BuildingOutput,
+    ],
+    constructionTime: 1,
+    constructionCosts: [
+      {
+        product: PRODUCTS.WOOD,
+        amount: 100,
+      } as BuildingConstructionCost,
+    ],
+  },
+  {
+    name: 'tannery',
+    description: 'Produces leather from raw leather',
+    size: 100,
+    places: 5,
+    buildingType: BuildingType.PRODUCTION_SITE,
+    inputs: [
+      {
+        product: PRODUCTS.WATER,
+        amount: 100,
+      } as BuildingInput,
+      {
+        product: PRODUCTS.RAW_LEATHER,
+        amount: 20,
+      } as BuildingInput,
+    ],
+    outputs: [
+      {
+        product: PRODUCTS.LEATHER,
+        amount: 20,
+      } as BuildingOutput,
+    ],
+    constructionTime: 1,
+    constructionCosts: [
+      {
+        product: PRODUCTS.WOOD,
+        amount: 100,
+      } as BuildingConstructionCost,
+    ],
+  },
+  {
+    name: 'tent',
+    description: 'The most basic form of housing',
+    size: 2,
+    places: 1,
+    buildingType: BuildingType.ACCOMMODATION,
+    productivityMultiplicator: 0.2,
+    constructionTime: 1,
+    constructionCosts: [
+      {
+        product: PRODUCTS.LEATHER,
+        amount: 20,
+      } as BuildingConstructionCost,
+    ],
+    maintenanceCosts: [
+      {
+        product: PRODUCTS.LEATHER,
+        amount: 1,
+      } as BuildingMaintenanceCost,
+    ],
+  },
   {
     name: 'shack',
     description: 'A simple house build from wood',

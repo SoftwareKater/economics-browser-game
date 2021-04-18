@@ -10,12 +10,17 @@ export class BuildingInput {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
 
+  @Field((type) => Number)
   @Column()
   amount!: number;
 
+  @Field((type) => Building)
   @ManyToOne(() => Building, (building) => building.inputs)
   building!: Building;
 
-  @ManyToOne(() => Product, (product) => product.buildingInputs)
+  @Field((type) => Product)
+  @ManyToOne(() => Product, (product) => product.buildingInputs, {
+    eager: true,
+  })
   product!: Product;
 }

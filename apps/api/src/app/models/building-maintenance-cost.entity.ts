@@ -10,12 +10,17 @@ export class BuildingMaintenanceCost {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
 
+  @Field((type) => Number)
   @Column()
   amount!: number;
 
+  @Field((type) => Building)
   @ManyToOne(() => Building, (building) => building.maintenanceCosts)
   building!: Building;
 
-  @ManyToOne(() => Product, (product) => product.buildingMaintenanceCosts)
+  @Field((type) => Product)
+  @ManyToOne(() => Product, (product) => product.buildingMaintenanceCosts, {
+    eager: true,
+  })
   product!: Product;
 }

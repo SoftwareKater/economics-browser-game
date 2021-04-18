@@ -38,7 +38,7 @@ export class CityResolver {
   @Query((returns) => City, { name: 'getMyCity' })
   async getMyCity() {
     const allCities = await this.cityRepository.find({
-      relations: ['habitants', 'developments'],
+      relations: ['habitants', 'developments', 'products'],
     });
     if (!allCities || allCities.length < 1) {
       throw new Error('404 not found');

@@ -33,14 +33,14 @@ export class BuildingResolver {
   @Query(() => [Building])
   async accommodations() {
     return this.buildingRepository.find({
-      where: { buildingType: BuildingType.ACCOMMODATION },
+      where: { buildingType: BuildingType.ACCOMMODATION }, relations: ['maintenanceCosts']
     });
   }
 
   @Query(() => [Building])
   async productionSites() {
     return this.buildingRepository.find({
-      where: { buildingType: BuildingType.PRODUCTION_SITE },
+      where: { buildingType: BuildingType.PRODUCTION_SITE }, relations: ['inputs', 'outputs']
     });
   }
 

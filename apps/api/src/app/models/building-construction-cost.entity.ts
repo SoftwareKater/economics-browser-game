@@ -14,11 +14,13 @@ export class BuildingConstructionCost {
   @Column()
   amount!: number;
 
-  @Field(type => Building)
+  @Field((type) => Building)
   @ManyToOne(() => Building, (building) => building.constructionCosts)
   building!: Building;
 
-  @Field(type => Building)
-  @ManyToOne(() => Product, (product) => product.buildingConstructionCosts)
+  @Field((type) => Product)
+  @ManyToOne(() => Product, (product) => product.buildingConstructionCosts, {
+    eager: true,
+  })
   product!: Product;
 }

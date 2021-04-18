@@ -5,8 +5,21 @@ query accommodations {
     description
     size
     places
+    capacity
     buildingType
     constructionTime
+    constructionCosts {
+      amount
+      product {
+        name
+      }
+    }
+    maintenanceCosts {
+      amount
+      product {
+        name
+      }
+    }
   }
 }
 
@@ -17,7 +30,26 @@ query productionSites {
     description
     size
     places
+    capacity
     buildingType
     constructionTime
+    constructionCosts {
+      amount
+      product {
+        name
+      }
+    }
+    inputs {
+      amount
+      product {
+        name
+      }
+    }
+    outputs {
+      amount
+      product {
+        name
+      }
+    }
   }
 }

@@ -77,7 +77,8 @@ export class Building {
   @Field((type) => [BuildingConstructionCost])
   @OneToMany(
     () => BuildingConstructionCost,
-    (buildingConstructionCost) => buildingConstructionCost.building
+    (buildingConstructionCost) => buildingConstructionCost.building,
+    { eager: true }
   )
   constructionCosts!: BuildingConstructionCost[];
 
