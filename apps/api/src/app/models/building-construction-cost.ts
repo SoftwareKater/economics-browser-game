@@ -11,12 +11,6 @@ export class BuildingConstructionCost {
   id!: string;
 
   @Column()
-  buildingId!: number;
-
-  @Column()
-  productId!: number;
-
-  @Column()
   amount!: number;
 
   @ManyToOne(() => Building, (building) => building.constructionCosts)

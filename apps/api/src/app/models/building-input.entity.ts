@@ -11,12 +11,6 @@ export class BuildingInput {
   id!: string;
 
   @Column()
-  buildingId!: string;
-
-  @Column()
-  productId!: string;
-
-  @Column()
   amount!: number;
 
   @ManyToOne(() => Building, (building) => building.inputs)
