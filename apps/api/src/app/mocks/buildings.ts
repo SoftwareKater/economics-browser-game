@@ -4,10 +4,7 @@ import { BuildingMaintenanceCost } from '../models/building-maintenance-cost';
 import { BuildingOutput } from '../models/building-output.entity';
 import { BuildingType } from '../models/building-type.enum';
 import { Building } from '../models/building.entity';
-import { STONE } from './products/stone';
-import { WATER } from './products/water';
-import { WHEAT } from './products/wheat';
-import { WOOD } from './products/wood';
+import { PRODUCTS } from './products';
 
 export const homelessProductivityMultiplicator = 0.1;
 export const homelessDescription =
@@ -20,13 +17,13 @@ export const BUILDINGS: Partial<Building>[] = [
     buildingType: BuildingType.PRODUCTION_SITE,
     inputs: [
       {
-        product: WATER,
+        product: PRODUCTS.WATER,
         amount: 1,
       } as BuildingInput,
     ],
     outputs: [
       {
-        product: WHEAT,
+        product: PRODUCTS.WHEAT,
         amount: 10,
       } as BuildingOutput,
     ],
@@ -41,13 +38,13 @@ export const BUILDINGS: Partial<Building>[] = [
     inputs: [],
     outputs: [
       {
-        product: WATER,
+        product: PRODUCTS.WATER,
         amount: 10,
       } as BuildingOutput,
     ],
     constructionCosts: [
       {
-        product: STONE,
+        product: PRODUCTS.STONE,
         amount: 40,
       } as BuildingConstructionCost,
     ],
@@ -63,13 +60,13 @@ export const BUILDINGS: Partial<Building>[] = [
     buildingType: BuildingType.PRODUCTION_SITE,
     outputs: [
       {
-        product: STONE,
+        product: PRODUCTS.STONE,
         amount: 200,
       } as BuildingOutput,
     ],
     constructionCosts: [
       {
-        product: WOOD,
+        product: PRODUCTS.WOOD,
         amount: 100,
       } as BuildingConstructionCost,
     ],
@@ -83,7 +80,7 @@ export const BUILDINGS: Partial<Building>[] = [
     buildingType: BuildingType.PRODUCTION_SITE,
     outputs: [
       {
-        product: WOOD,
+        product: PRODUCTS.WOOD,
         amount: 20,
       } as BuildingOutput,
     ],
@@ -110,13 +107,13 @@ export const BUILDINGS: Partial<Building>[] = [
     constructionTime: 1,
     constructionCosts: [
       {
-        product: WOOD,
+        product: PRODUCTS.WOOD,
         amount: 100,
       } as BuildingConstructionCost,
     ],
     maintenanceCosts: [
       {
-        product: WOOD,
+        product: PRODUCTS.WOOD,
         amount: 2,
       } as BuildingMaintenanceCost,
     ],

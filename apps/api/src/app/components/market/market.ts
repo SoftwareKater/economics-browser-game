@@ -12,7 +12,7 @@ export class MarketController {
    * @param salesOffers
    */
   clear(purchaseOffers: PlayersOffer[], salesOffers: PlayersOffer[]) {
-    for (const product of PRODUCTS) {
+    for (const product of Object.values(PRODUCTS)) {
       // filter all purchase offers by the product and sort them decreasing by price
       const productPurchaseOffers = purchaseOffers
         .filter((offer) => offer.offer.product.id === product.id)

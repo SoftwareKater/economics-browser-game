@@ -38,10 +38,6 @@ export class CityResolver {
       throw new Error('404 not found');
     }
     const myCity = allCities[0];
-    // const myHabitants: Habitant[] = await this.habitantRepository.find({
-    //   where: { cityId: myCity.id },
-    // });
-    // myCity.habitants = myHabitants;
     return myCity;
   }
 

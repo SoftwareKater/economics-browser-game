@@ -1,11 +1,51 @@
-import { STONE } from "./products/stone";
-import { WATER } from "./products/water";
-import { WHEAT } from "./products/wheat";
-import { WOOD } from "./products/wood";
+import { Product } from '../models/product.entity';
 
-export const PRODUCTS = [
-    WHEAT,
-    STONE,
-    WATER,
-    WOOD,
-]
+export const STONE = {
+  name: 'stone',
+};
+
+export const PRODUCTS: { [name: string]: Partial<Product> } = {
+  STONE: {
+    name: 'stone',
+  },
+
+  WATER: {
+    name: 'water',
+  },
+
+  WHEAT: {
+    name: 'wheat',
+  },
+
+  WOOD: {
+    name: 'wood',
+  },
+
+  COPPER: {
+    name: 'copper',
+  },
+
+  IRON: {
+    name: 'iron',
+  },
+
+  COPPER_PLATES: {
+    name: 'copper-plates',
+  },
+
+  COPPER_WIRE: {
+    name: 'copper-wire',
+  },
+
+  MEAT: {
+    name: 'meat',
+  },
+
+  LEATHER: {
+    name: 'leather',
+  },
+
+  OIL: {
+    name: 'oil',
+  },
+};

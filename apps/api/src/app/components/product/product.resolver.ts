@@ -1,20 +1,29 @@
-import { Args, Int, Query, Resolver } from '@nestjs/graphql';
+import { Query, Resolver } from '@nestjs/graphql';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { PRODUCTS } from '../../mocks/products';
 import { Product } from '../../models/product.entity';
-import { ProductService } from './product.service';
 
 @Resolver(() => Product)
 export class ProductResolver {
-  constructor(private productService: ProductService) {
-    this.productService.initMockProducts();
+  constructor(
+    @InjectRepository(Product)
+    private productRepository: Repository<Product>,) {
+    this.initMockProducts();
   }
 
   @Query(() => [Product])
   async products() {
-    return this.productService.findAll();
+    return this.productRepository.find();
   }
 
-  // @Query(() => Product)
-  // async product(@Args('id', { type: () => Int }) id: number) {
-  //   return this.productService.findOneById(id);
-  // }
+  async initMockProducts(): Promise<void> {
+    for (const product of Object.values(PRODUCTS)) {
+      try {
+        const res = await this.productRepository.save(product);
+      } catch (err) {
+        console.warn(err.message);
+      }
+    }
+  }
 }
