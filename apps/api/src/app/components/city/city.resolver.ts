@@ -4,8 +4,10 @@ import { Repository } from 'typeorm';
 import { City } from '../../models/city.entity';
 import { Habitant } from '../../models/habitant.entity';
 import { v4 as uuidv4 } from 'uuid';
-import { CityDevelopment } from '../../models/city-development.entity';
+import { CityBuilding } from '../../models/city-building.entity';
 import { Building } from '../../models/building.entity';
+import { Product } from '../../models/product.entity';
+import { CityProduct } from '../../models/city-product.entity';
 
 @Resolver(() => City)
 export class CityResolver {
@@ -14,10 +16,14 @@ export class CityResolver {
     private buildingRepository: Repository<Building>,
     @InjectRepository(City)
     private cityRepository: Repository<City>,
-    @InjectRepository(CityDevelopment)
-    private cityDevelRepository: Repository<CityDevelopment>,
+    @InjectRepository(CityBuilding)
+    private cityDevelRepository: Repository<CityBuilding>,
+    @InjectRepository(CityProduct)
+    private cityProductRepository: Repository<CityProduct>,
     @InjectRepository(Habitant)
-    private habitantRepository: Repository<Habitant>
+    private habitantRepository: Repository<Habitant>,
+    @InjectRepository(Product)
+    private productRepository: Repository<Product>,
   ) {}
 
   @Query(() => [City], { name: 'cities' })
@@ -55,6 +61,11 @@ export class CityResolver {
   //   // @todo start a counter and if the building is finished update city.development and(!) habitants.accommodation, habitants.employed
   // }
 
+  /**
+   * @todo refactor this method!!!
+   * @param name
+   * @returns
+   */
   @Mutation((returns) => City, { name: 'createCity' })
   async createCity(@Args({ name: 'name', type: () => String }) name: string) {
     const newCity: Partial<City> = {
@@ -76,6 +87,7 @@ export class CityResolver {
       habitants.push(habitant);
     }
 
+    // Initial development of the city
     const well = await this.buildingRepository.findOne({
       where: { name: 'well' },
     });
@@ -87,8 +99,7 @@ export class CityResolver {
         'Could not find buildings for inital development of the city. Aborting city creation.'
       );
     }
-    // Initial development of the city
-    const developments: Partial<CityDevelopment>[] = [
+    const developments: Partial<CityBuilding>[] = [
       {
         building: well,
         city: newCity as City,
@@ -107,13 +118,40 @@ export class CityResolver {
       },
     ];
 
+    // Initial Products of the new city
+    const wood = await this.productRepository.findOne({
+      where: { name: 'wood' },
+    });
+    const stone = await this.productRepository.findOne({
+      where: { name: 'stone' },
+    });
+    if (!wood || !stone) {
+      return console.error(
+        'Could not find buildings for inital development of the city. Aborting city creation.'
+      );
+    }
+    const products: Partial<CityProduct>[] = [
+      {
+        amount: 100,
+        city: newCity as City,
+        product: wood,
+      },
+      {
+        amount: 100,
+        city: newCity as City,
+        product: stone,
+      }
+    ];
+
     let insertResult: (Partial<City> & City) | undefined = undefined;
     try {
       insertResult = await this.cityRepository.save(newCity);
       await this.habitantRepository.insert(habitants);
       await this.cityDevelRepository.insert(developments);
+      await this.cityProductRepository.insert(products);
     } catch (err) {
-      // Revert everything
+      // Revert everything and log error
+      this.cityProductRepository.delete({ city: newCity });
       this.cityDevelRepository.delete({ city: newCity });
       this.habitantRepository.delete({ city: newCity });
       if (insertResult) {

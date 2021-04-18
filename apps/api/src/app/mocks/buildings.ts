@@ -1,6 +1,6 @@
-import { BuildingConstructionCost } from '../models/building-construction-cost';
+import { BuildingConstructionCost } from '../models/building-construction-cost.entity';
 import { BuildingInput } from '../models/building-input.entity';
-import { BuildingMaintenanceCost } from '../models/building-maintenance-cost';
+import { BuildingMaintenanceCost } from '../models/building-maintenance-cost.entity';
 import { BuildingOutput } from '../models/building-output.entity';
 import { BuildingType } from '../models/building-type.enum';
 import { Building } from '../models/building.entity';

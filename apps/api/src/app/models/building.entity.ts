@@ -1,11 +1,11 @@
 import { Field, Float, Int, ObjectType } from '@nestjs/graphql';
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
-import { BuildingConstructionCost } from './building-construction-cost';
+import { BuildingConstructionCost } from './building-construction-cost.entity';
 import { BuildingInput } from './building-input.entity';
-import { BuildingMaintenanceCost } from './building-maintenance-cost';
+import { BuildingMaintenanceCost } from './building-maintenance-cost.entity';
 import { BuildingOutput } from './building-output.entity';
 import { BuildingType } from './building-type.enum';
-import { CityDevelopment } from './city-development.entity';
+import { CityBuilding } from './city-building.entity';
 import { Habitant } from './habitant.entity';
 
 /* disable-eslint @typescript-eslint/no-unsued-vars */
@@ -118,17 +118,9 @@ export class Building {
   })
   buildingType!: BuildingType;
 
-  @Field((type) => [Habitant])
-  @OneToMany(() => Habitant, (habitant) => habitant.employment)
-  employees!: Habitant[];
-
-  @Field((type) => [Habitant])
-  @OneToMany(() => Habitant, (habitant) => habitant.accommodation)
-  residents!: Habitant[];
-
-  @Field((type) => [CityDevelopment])
-  @OneToMany(() => CityDevelopment, (cityDevel) => cityDevel.building)
-  developedIn!: CityDevelopment[];
+  @Field((type) => [CityBuilding])
+  @OneToMany(() => CityBuilding, (cityDevel) => cityDevel.building)
+  developedIn!: CityBuilding[];
 
   /**
    * if negative (default), there is no maximum amount for this building.

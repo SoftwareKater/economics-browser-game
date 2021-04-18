@@ -6,10 +6,11 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { BuildingConstructionCost } from './building-construction-cost';
+import { BuildingConstructionCost } from './building-construction-cost.entity';
 import { BuildingInput } from './building-input.entity';
-import { BuildingMaintenanceCost } from './building-maintenance-cost';
+import { BuildingMaintenanceCost } from './building-maintenance-cost.entity';
 import { BuildingOutput } from './building-output.entity';
+import { CityProduct } from './city-product.entity';
 
 @ObjectType()
 @Entity()
@@ -39,6 +40,10 @@ export class Product {
   @Field((type) => [BuildingMaintenanceCost])
   @OneToMany(() => BuildingMaintenanceCost, buildingMaintenanceCost => buildingMaintenanceCost.product)
   buildingMaintenanceCosts!: BuildingMaintenanceCost[];
+
+  @Field((type) => [CityProduct])
+  @OneToMany(() => CityProduct, cityProduct => cityProduct.product)
+  ownedBy!: CityProduct[];
 
   //size
 }

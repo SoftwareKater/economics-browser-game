@@ -5,16 +5,20 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
   CreateDateColumn,
+  OneToMany,
 } from 'typeorm';
 import { Building } from './building.entity';
 import { City } from './city.entity';
+import { Habitant } from './habitant.entity';
 
 /**
- * A city development is the creation of a building in a city.
+ * City Building
+ * While the Building table only contains prototypes of the various buildings,
+ * this table contains the actuals buildings that were built in a city.
  */
 @ObjectType()
 @Entity()
-export class CityDevelopment {
+export class CityBuilding {
   @Field((type) => String)
   @PrimaryGeneratedColumn('uuid')
   id!: string;
@@ -41,4 +45,12 @@ export class CityDevelopment {
   @Field((type) => Date)
   @CreateDateColumn({})
   createdOn!: Date;
+
+  @Field((type) => [Habitant])
+  @OneToMany(() => Habitant, (habitant) => habitant.employment)
+  employees!: Habitant[];
+
+  @Field((type) => [Habitant])
+  @OneToMany(() => Habitant, (habitant) => habitant.accommodation)
+  residents!: Habitant[];
 }

@@ -1,13 +1,15 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Building } from '../../models/building.entity';
-import { CityDevelopment } from '../../models/city-development.entity';
+import { CityBuilding } from '../../models/city-building.entity';
+import { CityProduct } from '../../models/city-product.entity';
 import { City } from '../../models/city.entity';
 import { Habitant } from '../../models/habitant.entity';
+import { Product } from '../../models/product.entity';
 import { CityResolver } from './city.resolver';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Building, City, CityDevelopment, Habitant])],
+  imports: [TypeOrmModule.forFeature([Building, City, CityBuilding, CityProduct, Habitant, Product])],
   providers: [CityResolver],
 })
 export class CityModule {}
