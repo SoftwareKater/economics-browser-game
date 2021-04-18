@@ -7,9 +7,10 @@ import { City } from '../../models/city.entity';
 import { Habitant } from '../../models/habitant.entity';
 import { Product } from '../../models/product.entity';
 import { CityResolver } from './city.resolver';
+import { CityService } from './city.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Building, City, CityBuilding, CityProduct, Habitant, Product])],
-  providers: [CityResolver],
+  providers: [CityResolver, CityService],
 })
 export class CityModule {}

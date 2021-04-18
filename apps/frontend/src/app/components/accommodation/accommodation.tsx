@@ -15,7 +15,7 @@ export const Accommodation = () => {
   }
   return (
     <BuildingMasterDetail
-      {...{ buildings: productionSitesResult.data?.accommodations, cityBuildings: myCityResult.data?.getMyCity.developments }}
+      {...{ buildings: productionSitesResult.data?.accommodations, city: myCityResult.data?.getMyCity }}
     />
   );
 };

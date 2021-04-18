@@ -1,12 +1,17 @@
 import React, { useState } from 'react';
 // import './accommodation.scss';
-import { Building, CityBuilding } from '@economics1k/data-access';
+import {
+  Building,
+  City,
+  CityBuilding,
+  useCreateBuildingMutation,
+} from '@economics1k/data-access';
 
 import { InfoCard, DetailCard, DetailCardProps } from '@economics1k/ui';
 
 export interface BuildingMasterDetailProps {
-    buildings: Building[],
-    cityBuildings: CityBuilding[],
+  city: City;
+  buildings: Building[];
 }
 
 interface BuildingMasterDetailComponentState {
@@ -25,14 +30,19 @@ export const BuildingMasterDetail = (props: BuildingMasterDetailProps) => {
       description: 'acc.description',
       buttonTitle: 'Build',
       buttonAction: () => {
-        window.alert('building a shack');
+        window.alert('Your building is build');
       },
     },
   });
 
-  function updateBuildingDetails(id: string): void {
+  const [
+    createBuildingMutation,
+    { data, loading, error },
+  ] = useCreateBuildingMutation();
+
+  function updateBuildingDetails(buildingId: string): void {
     const building = props.buildings.find(
-      (building) => building.id === id
+      (building) => building.id === buildingId
     );
     if (!building) {
       return;
@@ -47,7 +57,9 @@ export const BuildingMasterDetail = (props: BuildingMasterDetailProps) => {
         description: building.description,
         buttonTitle: 'Build',
         buttonAction: () => {
-          window.alert('building a shack');
+          createBuildingMutation({
+            variables: { cityId: props.city.id, buildingId },
+          });
         },
       },
     });
@@ -57,10 +69,7 @@ export const BuildingMasterDetail = (props: BuildingMasterDetailProps) => {
     <section>
       <div>
         {value.buidingDetails?.id ? (
-          <DetailCard
-            key={value.buidingDetails.id}
-            {...value.buidingDetails}
-          />
+          <DetailCard key={value.buidingDetails.id} {...value.buidingDetails} />
         ) : (
           <div></div>
         )}
@@ -73,7 +82,9 @@ export const BuildingMasterDetail = (props: BuildingMasterDetailProps) => {
               title: name,
               image: `assets/${name}`,
               alt: name,
-              amount: props.cityBuildings.filter(cityBuilding => cityBuilding.building.id === id).length,
+              amount: props.city.developments.filter(
+                (cityBuilding) => cityBuilding.building.id === id
+              ).length,
               primaryAction: () => {
                 updateBuildingDetails(id);
               },

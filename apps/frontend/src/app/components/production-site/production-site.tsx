@@ -18,8 +18,8 @@ export const ProductionSite = () => {
   return (
     <BuildingMasterDetail
       {...{
+        city: myCityResult.data?.getMyCity,
         buildings: productionSitesResult.data?.productionSites,
-        cityBuildings: myCityResult.data?.getMyCity.developments,
       }}
     />
   );

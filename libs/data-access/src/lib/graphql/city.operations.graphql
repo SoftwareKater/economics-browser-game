@@ -5,6 +5,13 @@ query cities {
   }
 }
 
+mutation createCity($name: String!) {
+  createCity(name: $name) {
+    id
+    name
+  }
+}
+
 query getMyCity {
   getMyCity {
     id
@@ -47,9 +54,16 @@ query getMyCity {
   }
 }
 
-mutation createCity($name: String!) {
-  createCity(name: $name) {
+mutation createBuilding($cityId: String!, $buildingId: String!) {
+  createBuilding(cityId: $cityId, buildingId: $buildingId) {
     id
-    name
+    createdOn
+    building {
+      id
+    }
+    city {
+      id
+    }
   }
 }
+
