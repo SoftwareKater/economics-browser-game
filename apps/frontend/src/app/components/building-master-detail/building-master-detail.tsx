@@ -2,38 +2,40 @@ import React, { useState } from 'react';
 // import './accommodation.scss';
 import {
   Building,
+  BuildingType,
   City,
   CityBuilding,
   useCreateBuildingMutation,
 } from '@economics1k/data-access';
 
-import { InfoCard, DetailCard, DetailCardProps } from '@economics1k/ui';
-
-export interface BuildingMasterDetailProps {
-  city: City;
-  buildings: Building[];
-}
-
-interface BuildingMasterDetailComponentState {
-  selectedBuildingId: string;
-  buidingDetails?: DetailCardProps;
-}
+import { InfoCard, DetailCard } from '@economics1k/ui';
+import { BuildingMasterDetailProps } from './building-master-detail-component-props.interface';
+import { BuildingMasterDetailComponentState } from './building-master-detail-component-state.interface';
 
 export const BuildingMasterDetail = (props: BuildingMasterDetailProps) => {
+  function getSpaceUsage(): number {
+    let spaceUsedForBuildingType: number;
+    const buildingsOfType = props.city.buildings.filter(
+      (building) => building.building.buildingType === props.buildingType
+    );
+    if (!buildingsOfType || buildingsOfType.length < 1) {
+      spaceUsedForBuildingType = 0;
+    } else {
+      spaceUsedForBuildingType =
+        props.city.buildings.length > 0
+          ? buildingsOfType
+              .map((building) => building.building.size)
+              .reduce((a, b) => a + b)
+          : 0;
+    }
+    return spaceUsedForBuildingType;
+  }
+
   const [value, setValue] = useState<BuildingMasterDetailComponentState>({
     selectedBuildingId: '',
-    buidingDetails: {
-      id: '',
-      title: 'Your building here!',
-      image: 'assets/placeholder.png',
-      alt: 'dummy',
-      description: 'acc.description',
-      buttonTitle: 'Build',
-      buttonAction: () => {
-        window.alert('Your building is build');
-      },
-    },
+    spaceUsedForBuildingType: getSpaceUsage() ?? 0,
   });
+
 
   const [
     createBuildingMutation,
@@ -67,6 +69,16 @@ export const BuildingMasterDetail = (props: BuildingMasterDetailProps) => {
 
   return (
     <section>
+      <h2>
+        {props.buildingType === BuildingType.Accommodation
+          ? 'Accommodations'
+          : 'Production Sites'}
+      </h2>
+      <p>
+        Space used for Accommodations:
+        {` ${value.spaceUsedForBuildingType} `}
+        m^2
+      </p>
       <div>
         {value.buidingDetails?.id ? (
           <DetailCard key={value.buidingDetails.id} {...value.buidingDetails} />
@@ -82,7 +94,7 @@ export const BuildingMasterDetail = (props: BuildingMasterDetailProps) => {
               title: name,
               image: `assets/${name}`,
               alt: name,
-              amount: props.city.developments.filter(
+              amount: props.city.buildings.filter(
                 (cityBuilding) => cityBuilding.building.id === id
               ).length,
               primaryAction: () => {

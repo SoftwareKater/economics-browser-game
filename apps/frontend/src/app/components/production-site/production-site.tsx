@@ -1,5 +1,6 @@
 import {
-  useGetMyCityQuery,
+  BuildingType,
+  useGetMyCityWithBuildingsQuery,
   useProductionSitesQuery,
 } from '@economics1k/data-access';
 
@@ -7,7 +8,7 @@ import BuildingMasterDetail from '../building-master-detail/building-master-deta
 
 export const ProductionSite = () => {
   const productionSitesResult = useProductionSitesQuery();
-  const myCityResult = useGetMyCityQuery();
+  const myCityResult = useGetMyCityWithBuildingsQuery();
 
   if (productionSitesResult.loading || myCityResult.loading) {
     return <p>Loading...</p>;
@@ -18,8 +19,9 @@ export const ProductionSite = () => {
   return (
     <BuildingMasterDetail
       {...{
-        city: myCityResult.data?.getMyCity,
+        city: myCityResult.data?.getMyCityWithBuildings,
         buildings: productionSitesResult.data?.productionSites,
+        buildingType: BuildingType.ProductionSite,
       }}
     />
   );

@@ -1,9 +1,9 @@
-import { useProductsQuery, useGetMyCityQuery } from '@economics1k/data-access';
+import { useProductsQuery, useGetMyCityWithProductsQuery } from '@economics1k/data-access';
 import React from 'react';
 
 const Product = () => {
     const allProductsResult = useProductsQuery();
-  const myCityResult = useGetMyCityQuery();
+  const myCityResult = useGetMyCityWithProductsQuery();
 
   if (myCityResult.loading || allProductsResult.loading) {
     return <p>Loading...</p>;
@@ -26,7 +26,7 @@ const Product = () => {
             return (
               <tr key={id}>
                 <td>{name}</td>
-                <td>{myCityResult.data?.getMyCity.products.find(cityProduct => cityProduct.product.id === id)?.amount ?? 0}</td>
+                <td>{myCityResult.data?.getMyCityWithProducts.products.find(cityProduct => cityProduct.product.id === id)?.amount ?? 0}</td>
                 <td>[ ]</td>
               </tr>
             );

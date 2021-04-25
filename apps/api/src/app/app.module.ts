@@ -26,6 +26,7 @@ import { Product } from './models/product.entity';
       autoSchemaFile: join(process.cwd(), 'tools/graphql/schema.gql'),
     }),
     TypeOrmModule.forRoot({
+      // logging: true,
       type: 'mysql',
       host: 'localhost',
       port: 3306,

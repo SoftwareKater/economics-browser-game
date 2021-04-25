@@ -1,10 +1,10 @@
-import { Field, ObjectType } from '@nestjs/graphql';
+import { Field, Float, ObjectType } from '@nestjs/graphql';
 import {
   Entity,
   ManyToOne,
   PrimaryGeneratedColumn,
-  CreateDateColumn,
   Column,
+  UpdateDateColumn,
 } from 'typeorm';
 import { City } from './city.entity';
 import { Product } from './product.entity';
@@ -27,6 +27,7 @@ export class CityProduct {
   @Field((type) => Product)
   @ManyToOne(() => Product, (product) => product.ownedBy, {
     eager: true,
+    primary: true,
   })
   product!: Product;
 
@@ -41,6 +42,10 @@ export class CityProduct {
    * Amount of the product owned by the city
    */
   @Field((type) => Number)
-  @Column()
+  @Column({type: 'float'})
   amount!: number;
+
+  @Field((type) => Date)
+  @UpdateDateColumn()
+  lastUpdate!: Date;
 }

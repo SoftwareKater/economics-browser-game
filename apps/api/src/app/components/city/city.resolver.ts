@@ -35,19 +35,51 @@ export class CityResolver {
 
   /**
    * @todo This needs to be secured with oauth, city to fetch should be read from token
+   * @todo This query runs >20 sec and that needs to be reduced by at least 19sec
+   *      Analysis: fetching one city with all its relations results in a typeorm query
+   *      with #habitants x #buildings x #products result rows (way too much)
    * @returns The city of the player that send the query
    */
   @Query((returns) => City, { name: 'getMyCity' })
   async getMyCity() {
-    const allCities = await this.cityRepository.find({
-      relations: ['habitants', 'developments', 'products'],
+    const myCity = await this.cityRepository.findOne({
+      relations: ['habitants', 'buildings', 'products'],
     });
-    if (!allCities || allCities.length < 1) {
-      throw new Error('404 not found');
-    }
-    const myCity = allCities[0];
     return myCity;
   }
+
+  @Query((returns) => City, { name: 'getMyCityWithHabitants' })
+  async getMyCityWithHabitants() {
+    const myCity = await this.cityRepository.findOne({
+      relations: ['habitants'],
+    });
+    return myCity;
+  }
+
+  @Query((returns) => City, { name: 'getMyCityWithBuildings' })
+  async getMyCityWithBuildings() {
+    const myCity = await this.cityRepository.findOne({
+      relations: ['buildings'],
+    });
+    return myCity;
+  }
+
+  @Query((returns) => City, { name: 'getMyCityWithProducts' })
+  async getMyCityWithProducts() {
+    const myCity = await this.cityRepository.findOne({
+      relations: ['products'],
+    });
+    return myCity;
+  }
+
+  // @Query((returns) => CityCounts)
+  // async getMyCityCounts(
+  //   @Args({ name: 'cityId', type: () => String }) cityId: string
+  // ) {
+  //   const myHabitants = await this.habitantRepository.find({
+  //     city: { id: cityId },
+  //   });
+  // }
 
   @Mutation((returns) => String, { name: 'createBuilding' })
   async createBuilding(
@@ -67,7 +99,7 @@ export class CityResolver {
    * @param name
    * @returns
    */
-  @Mutation((returns) => City, { name: 'createCity' })
+  @Mutation((returns) => String, { name: 'createCity' })
   async createCity(@Args({ name: 'name', type: () => String }) name: string) {
     return this.cityService.createCity(name);
   }

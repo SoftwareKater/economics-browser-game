@@ -4,9 +4,6 @@ import { CityBuilding } from './city-building.entity';
 import { CityProduct } from './city-product.entity';
 import { Habitant } from './habitant.entity';
 
-/**
- * @todo maybe habitants and developments should be "eager", so habitants will always be fetched together with the city
- */
 @ObjectType()
 @Entity()
 export class City {
@@ -24,7 +21,7 @@ export class City {
 
   @Field((type) => [CityBuilding])
   @OneToMany(() => CityBuilding, (cityBuilding) => cityBuilding.city)
-  developments!: CityBuilding[];
+  buildings!: CityBuilding[];
 
   @Field((type) => [CityProduct])
   @OneToMany(() => CityProduct, (cityProduct) => cityProduct.city)

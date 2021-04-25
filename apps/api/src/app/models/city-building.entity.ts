@@ -36,7 +36,7 @@ export class CityBuilding {
    * The city that the development was made in
    */
   @Field((type) => City)
-  @ManyToOne(() => City, (city) => city.developments)
+  @ManyToOne(() => City, (city) => city.buildings)
   city!: City;
 
   /**

@@ -64,14 +64,20 @@ export class Building {
    * The inputs that are needed per day (only applies to production sites)
    */
   @Field((type) => [BuildingInput])
-  @OneToMany(() => BuildingInput, (buildingInput) => buildingInput.building)
+  @OneToMany(() => BuildingInput, (buildingInput) => buildingInput.building, {
+    eager: true,
+  })
   inputs!: BuildingInput[];
 
   /**
    * The outputs that are produced each day (only applies to production sites)
    */
   @Field((type) => [BuildingOutput])
-  @OneToMany(() => BuildingOutput, (buildingOutput) => buildingOutput.building)
+  @OneToMany(
+    () => BuildingOutput,
+    (buildingOutput) => buildingOutput.building,
+    { eager: true }
+  )
   outputs!: BuildingOutput[];
 
   @Field((type) => [BuildingConstructionCost])
@@ -104,7 +110,8 @@ export class Building {
   @Field((type) => [BuildingMaintenanceCost])
   @OneToMany(
     () => BuildingMaintenanceCost,
-    (buildingMaintenance) => buildingMaintenance.building
+    (buildingMaintenance) => buildingMaintenance.building,
+    { eager: true }
   )
   maintenanceCosts!: BuildingMaintenanceCost[];
 

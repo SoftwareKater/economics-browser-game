@@ -10,6 +10,9 @@ export class BuildingOutput {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
 
+  /**
+   * Amount per hour
+   */
   @Field((type) => Number)
   @Column()
   amount!: number;
