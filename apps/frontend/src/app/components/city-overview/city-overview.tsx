@@ -42,15 +42,6 @@ export const CityOverview = () => {
   //     return productivity;
   //   }
 
-  function getSpaceUsage(city: {
-    development: { buildingId: string; amount: number }[];
-  }): number {
-    // const spaceUsage = city.development
-    //   .map((dev) => dev.buildingId)
-    //   .reduce((a, b) => a + b);
-    return 10000000 - 4684135;
-  }
-
   return (
     <section>
       <h2>{data.getMyCityWithHabitants.name} - Dashboard</h2>
@@ -77,14 +68,6 @@ export const CityOverview = () => {
                 ? `${getHomelessCount(data.getMyCityWithHabitants) * 100 /
                   data.getMyCityWithHabitants.habitants.length} %`
                 : `${getHomelessCount(data.getMyCityWithHabitants)} people`}
-            </td>
-          </tr>
-          <tr>
-            <td>Space Usage</td>
-            <td>
-              {value.showPercent
-                ? `${getSpaceUsage({ development: [] }) * 100 / 10000000} %`
-                : `${getSpaceUsage({ development: [] })} m^2`}
             </td>
           </tr>
         </tbody>

@@ -15,7 +15,7 @@ export function InfoCard(props: InfoCardProps) {
     <div className="info-card" onClick={props.primaryAction}>
       <img src={props.image} alt={props.alt}></img>
       <div>{props.amount}</div>
-      <button onClick={props.secondaryAction}>secondary</button>
+      {/* <button onClick={props.secondaryAction}>secondary</button> */}
     </div>
   );
 }
