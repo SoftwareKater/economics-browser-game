@@ -13,7 +13,7 @@ export const homelessDescription =
 export const BUILDINGS: Partial<Building>[] = [
   {
     name: 'wheat field',
-    description: 'a wheat field',
+    description: 'Produces wheat from water',
     buildingType: BuildingType.PRODUCTION_SITE,
     inputs: [
       {
@@ -32,8 +32,52 @@ export const BUILDINGS: Partial<Building>[] = [
     size: 10000,
   },
   {
+    name: 'mill',
+    description: 'Produces flour from wheat',
+    buildingType: BuildingType.PRODUCTION_SITE,
+    inputs: [
+      {
+        product: PRODUCTS.WHEAT,
+        amount: 100,
+      } as BuildingInput,
+    ],
+    outputs: [
+      {
+        product: PRODUCTS.FLOUR,
+        amount: 100,
+      } as BuildingOutput,
+    ],
+    constructionTime: 1,
+    places: 20,
+    size: 64,
+  },
+  {
+    name: 'bakery',
+    description: 'Produces bread from flour and wheat',
+    buildingType: BuildingType.PRODUCTION_SITE,
+    inputs: [
+      {
+        product: PRODUCTS.FLOUR,
+        amount: 6,
+      } as BuildingInput,
+      {
+        product: PRODUCTS.WATER,
+        amount: 9,
+      } as BuildingInput,
+    ],
+    outputs: [
+      {
+        product: PRODUCTS.BREAD,
+        amount: 15,
+      } as BuildingOutput,
+    ],
+    constructionTime: 1,
+    places: 3,
+    size: 64,
+  },
+  {
     name: 'cattle ranch',
-    description: 'a cattle ranch',
+    description: 'Produces cattle. Heavy land usage, considerable wheat and water usage.',
     buildingType: BuildingType.PRODUCTION_SITE,
     inputs: [
       {
@@ -48,7 +92,7 @@ export const BUILDINGS: Partial<Building>[] = [
     outputs: [
       {
         product: PRODUCTS.CATTLE,
-        amount: 1,
+        amount: 0.05,
       } as BuildingOutput,
     ],
     constructionTime: 1,
@@ -57,7 +101,7 @@ export const BUILDINGS: Partial<Building>[] = [
   },
   {
     name: 'well',
-    description: '',
+    description: 'Produces water.',
     buildingType: BuildingType.PRODUCTION_SITE,
     outputs: [
       {
@@ -73,38 +117,38 @@ export const BUILDINGS: Partial<Building>[] = [
     ],
     constructionTime: 2,
     places: 1,
-    size: 4,
+    size: 16,
   },
   {
     name: 'quarry',
-    description: '',
+    description: 'Produces stone. Heavy land usage.',
     size: 50000,
     places: 100,
     buildingType: BuildingType.PRODUCTION_SITE,
     outputs: [
       {
         product: PRODUCTS.STONE,
-        amount: 200,
+        amount: 10,
       } as BuildingOutput,
     ],
     constructionCosts: [
       {
         product: PRODUCTS.WOOD,
-        amount: 100,
+        amount: 1000,
       } as BuildingConstructionCost,
     ],
     constructionTime: 10,
   },
   {
     name: 'forestry',
-    description: '',
+    description: 'Produces wood. Heavy land usage.',
     size: 100000,
     places: 5,
     buildingType: BuildingType.PRODUCTION_SITE,
     outputs: [
       {
         product: PRODUCTS.WOOD,
-        amount: 20,
+        amount: 40,
       } as BuildingOutput,
     ],
     constructionTime: 1,
@@ -176,9 +220,9 @@ export const BUILDINGS: Partial<Building>[] = [
   },
   {
     name: 'tent',
-    description: 'The most basic form of housing',
+    description: 'A sleeping spot made from leather.',
     size: 2,
-    places: 1,
+    places: 2,
     buildingType: BuildingType.ACCOMMODATION,
     productivityMultiplicator: 0.2,
     constructionTime: 1,
@@ -197,11 +241,11 @@ export const BUILDINGS: Partial<Building>[] = [
   },
   {
     name: 'shack',
-    description: 'A simple house build from wood',
+    description: 'A crude "house" build from wood.',
     buildingType: BuildingType.ACCOMMODATION,
     productivityMultiplicator: 0.3,
     size: 10,
-    places: 2,
+    places: 5,
     constructionTime: 1,
     constructionCosts: [
       {
@@ -213,6 +257,56 @@ export const BUILDINGS: Partial<Building>[] = [
       {
         product: PRODUCTS.WOOD,
         amount: 2,
+      } as BuildingMaintenanceCost,
+    ],
+  },
+  {
+    name: 'cabin',
+    description: 'A simple house build from wood.',
+    buildingType: BuildingType.ACCOMMODATION,
+    productivityMultiplicator: 0.4,
+    size: 10,
+    places: 6,
+    constructionTime: 1,
+    constructionCosts: [
+      {
+        product: PRODUCTS.WOOD,
+        amount: 200,
+      } as BuildingConstructionCost,
+    ],
+    maintenanceCosts: [
+      {
+        product: PRODUCTS.WOOD,
+        amount: 2,
+      } as BuildingMaintenanceCost,
+    ],
+  },
+  {
+    name: 'cottage',
+    description: 'A simple house build from wood and stone.',
+    buildingType: BuildingType.ACCOMMODATION,
+    productivityMultiplicator: 0.6,
+    size: 10,
+    places: 4,
+    constructionTime: 1,
+    constructionCosts: [
+      {
+        product: PRODUCTS.WOOD,
+        amount: 300,
+      } as BuildingConstructionCost,
+      {
+        product: PRODUCTS.STONE,
+        amount: 100,
+      } as BuildingConstructionCost,
+    ],
+    maintenanceCosts: [
+      {
+        product: PRODUCTS.WOOD,
+        amount: 3,
+      } as BuildingMaintenanceCost,
+      {
+        product: PRODUCTS.STONE,
+        amount: 1,
       } as BuildingMaintenanceCost,
     ],
   },

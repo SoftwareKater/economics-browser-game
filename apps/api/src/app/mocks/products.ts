@@ -8,6 +8,8 @@ export const PRODUCTS: { [name: string]: Partial<Product> } = {
   STONE: { name: 'stone' },
   WATER: { name: 'water' },
   WHEAT: { name: 'wheat' },
+  FLOUR: { name: 'flour' },
+  BREAD: { name: 'bread' },
   WOOD: { name: 'wood' },
   COPPER: { name: 'copper' },
   IRON: { name: 'iron' },
