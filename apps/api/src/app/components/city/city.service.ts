@@ -8,9 +8,18 @@ import { City } from '../../models/city.entity';
 import { Habitant } from '../../models/habitant.entity';
 import { Product } from '../../models/product.entity';
 
+// Fixed constants
 const TIME_OFFSET = 2 * 60 * 60 * 1000;
 const MS_IN_H = 60 * 60 * 1000;
 const MIN_PRODUCT_FRACTION = 0.01;
+
+// Configurable constants
+/**
+ * Standard game speed is 1 round = 1 hour.
+ * By increasing ECONOMY_SPEED_FACTOR the game progresses faster.
+ * E.g. 60 -> 1 round = 1 minute
+ */
+const ECONOMY_SPEED_FACTOR = 1 / 60;
 
 export class CityService {
   constructor(
@@ -42,41 +51,8 @@ export class CityService {
       );
     }
 
-    // Check if all outputs of the new building already exist in the city.
-    // In any case: Update the row, so that lastUpdate is initialized/reset.
-    // (otherwise on next update of products the city would produce to much)
-    const allCityProducts = await this.cityProductRepository.find();
-    for (const output of newBuilding.outputs) {
-      const cityProduct = allCityProducts.find(
-        (cityProduct) => cityProduct.product.id === output.product.id
-      );
-      if (!cityProduct) {
-        // if not existing: create!
-        await this.cityProductRepository
-          .save({
-            city: { id: cityId },
-            product: { id: output.product.id },
-            amount: 0,
-          })
-          .catch((reason) => {
-            throw new Error(
-              `Could not create new city product for product ${output.product.id}. Reason: ${reason}`
-            );
-          });
-      } else {
-        // if exsists: bump lastUpdate column
-        await this.cityProductRepository
-          .update({ product: output.product }, cityProduct)
-          .catch((reason) => {
-            console.warn(
-              `Could not update city product for product ${output.product.id} (next products update on city will product wrong numbers). Reason: ${reason}`
-            );
-          });
-      }
-    }
-
     // update the city products before checking whether construction costs can be paid
-    this.updateCityProducts(cityId);
+    this.updateCity(cityId);
 
     // Check whether construction cost can be paid
     const products = await this.cityProductRepository.find();
@@ -100,6 +76,27 @@ export class CityService {
         ...hasProduct,
         amount: hasProduct.amount - constructionCost.amount,
       });
+    }
+
+    // Check if all outputs of the new building already exist in the city, if not create them!
+    const allCityProducts = await this.cityProductRepository.find();
+    for (const output of newBuilding.outputs) {
+      const cityProduct = allCityProducts.find(
+        (cityProduct) => cityProduct.product.id === output.product.id
+      );
+      if (!cityProduct) {
+        await this.cityProductRepository
+          .save({
+            city: { id: cityId },
+            product: { id: output.product.id },
+            amount: 0,
+          })
+          .catch((reason) => {
+            throw new Error(
+              `Could not create new city product for product ${output.product.id}. Reason: ${reason}`
+            );
+          });
+      }
     }
 
     // prepare the new building (find employees or residents)
@@ -156,6 +153,7 @@ export class CityService {
     console.log(`Creating a new city with the name ${name}`);
     const newCity: Partial<City> = {
       name,
+      lastCityUpdate: new Date(),
     };
 
     // Habitants of the new city
@@ -193,86 +191,225 @@ export class CityService {
   }
 
   /**
-   * For all products: add the produced amount since the last update to the products of the city
+   * This method calculates the new state of the city.
+   * This includes calculating the products that the city owns, whether buildings are suspended because
+   * their maintenance costs cannot be paid, and whether habitants are starving and thus have a reduced productivity.
+   * This has to be calculated on a per "round" (e.g per minute or per hour) basis (if you have 10 wood and two
+   * buildings that require wood, then both should be running 5 rounds, instead of one running 10 rounds and the other 0).
+   * @todo solve problem: if players are offline for hours, this method has to calculate 10000 rounds...
+   *        This will result in the loading spinner of death on first login after long offline time.
+   *        -> use redis for periodic updates?
+   * @todo save lastCityUpdate time at the city object
    * @todo subtract habitants food needs
+   * @todo subtract building maintenance costs
+   * @todo subtract production site inputs
+   * @todo take habitants productivity into account
+   * @todo only allowed products can be used to pay maintenance costs and inputs
    * @param cityId
    */
-  public async updateCityProducts(cityId: string): Promise<void> {
-    console.log(`Updating products for city with id ${cityId}`);
-    const productionSites = (
-      await this.cityBuildingRepository.find({
-        where: {
-          city: { id: cityId },
-        },
-      })
-    ).filter(
-      // @todo would be better to run this filter directly on the db
+  public async updateCity(cityId: string): Promise<void> {
+    console.log(`Updating city with id ${cityId}`);
+    const city = await this.cityRepository.findOneOrFail(cityId);
+    const now = new Date().getTime();
+    const lastUpdate = city.lastCityUpdate.getTime();
+    const timeSinceLastUpdate = now - lastUpdate;
+    const fullRoundsSinceLastUpdate = Math.floor(
+      timeSinceLastUpdate / (ECONOMY_SPEED_FACTOR * MS_IN_H)
+    );
+    if (fullRoundsSinceLastUpdate < 1) {
+      // at least one round must have passed
+      console.log(
+        `Will not update city. Reason: Last update is less than 1 round ago.`
+      );
+      return;
+    }
+    const newLastUpdate =
+      lastUpdate + fullRoundsSinceLastUpdate * (ECONOMY_SPEED_FACTOR * MS_IN_H);
+
+    const buildings = await this.cityBuildingRepository.find({
+      where: {
+        city: { id: cityId },
+      },
+    });
+    const accommodations = buildings.filter(
+      (building) =>
+        building.building.buildingType === BuildingType.ACCOMMODATION
+    );
+    const productionSites = buildings.filter(
       (building) =>
         building.building.buildingType === BuildingType.PRODUCTION_SITE
     );
-    if (!productionSites || productionSites.length < 1) {
-      console.log('City has no production sites, so no products are produced');
-      return;
-    }
-
-    const allProducts = await this.productRepository.find();
+    const habitants = await this.habitantRepository.find({ where: { city } });
     const cityProducts = await this.cityProductRepository.find();
-    const updateProducts: CityProduct[] = [];
-    const now = new Date().getTime();
-    const outputs = productionSites.map(
-      (productionSite) => productionSite.building.outputs
+    const updateProducts: CityProduct[] = [...cityProducts];
+
+    console.table(
+      cityProducts.map((cityProduct) => ({
+        name: cityProduct.product.name,
+        amount: cityProduct.amount,
+      }))
     );
 
-    for (const product of allProducts) {
-      const productionSiteOutputAmountsOfProduct = outputs
-        .filter((productionSiteOutputs) =>
-          productionSiteOutputs
-            .map((output) => output.product.id)
-            .includes(product.id)
-        )
-        .map(
-          (productionSiteOutputs) =>
-            productionSiteOutputs.filter(
-              (output) => output.product.id === product.id
-            )[0].amount
-        );
+    for (let round = 0; round < fullRoundsSinceLastUpdate; round++) {
+      console.log('=================');
+      console.log('Calculating round: ', round);
+      // Production sites whose required inputs were available
+      const workingProductionSites = [];
+      // Accommodations whose maintenance costs were not paid
+      const pausedAccommodations = [];
 
-      const totalOutput =
-        productionSiteOutputAmountsOfProduct.length > 0
-          ? productionSiteOutputAmountsOfProduct.reduce((a, b) => a + b)
-          : 0;
-      let cityProduct: CityProduct | undefined;
-      if (totalOutput > 0) {
-        cityProduct = cityProducts.find(
-          (cityProduct) => cityProduct.product.id === product.id
-        );
-        if (!cityProduct) {
-          console.warn(
-            `There is a production site that produces ${product.id}, but the product is not listed in city products. That should never happen - fixing...!`
+      // step #0: market transactions
+
+      // step #1: Feed habitants if 8 rounds have passed since lastFeed
+      // @todo update starving levels.
+      // for (const habitant of habitants) {
+      //   // get random products that have a combined nutirtion value of at least 1
+      // }
+
+      // step #2: Pay maintenance costs for buildings
+      let maintenanceCostPaymentForAccommodation: {
+        index: number;
+        amount: number;
+      }[] = [];
+      for (const accommodation of accommodations) {
+        const maintenanceCosts = accommodation.building.maintenanceCosts;
+        for (const cost of maintenanceCosts) {
+          const index = updateProducts.findIndex(
+            (cityProduct) => cityProduct.product.id === cost.product.id
           );
-          const newCityProduct = { city: { id: cityId }, product, amount: 0 };
-          cityProduct = await this.cityProductRepository.save(newCityProduct);
+          if (
+            !updateProducts[index] ||
+            updateProducts[index].amount < cost.amount
+          ) {
+            // maintenance costs for this building cannot be paid
+            // habitants loose productivity bonus
+            pausedAccommodations.push(accommodation);
+            maintenanceCostPaymentForAccommodation = [];
+            break;
+          }
+          // save the required inputs in the transactions array
+          maintenanceCostPaymentForAccommodation.push({
+            index,
+            amount: cost.amount,
+          });
         }
-        // @todo time offset +2h should not be hard coded
-        const lastUpdate = cityProduct.lastUpdate.getTime() + TIME_OFFSET;
-        const delta = lastUpdate
-          ? (totalOutput * (now - lastUpdate)) / MS_IN_H
-          : 0;
-        if (delta > MIN_PRODUCT_FRACTION) {
-          updateProducts.push({
-            city: { id: cityId } as City,
-            product: product,
-            amount: (cityProduct.amount ?? 0) + delta,
-          } as CityProduct);
+        if (maintenanceCostPaymentForAccommodation.length > 0) {
+          // realize all saved transactions
+          for (const cost of maintenanceCostPaymentForAccommodation) {
+            updateProducts[cost.index].amount -= cost.amount;
+          }
+          maintenanceCostPaymentForAccommodation = [];
         }
       }
+      console.log('---------------');
+      console.log('After maintenance costs were paid: ');
+      console.table(
+        updateProducts.map((cityProduct) => ({
+          name: cityProduct.product.name,
+          amount: cityProduct.amount,
+        }))
+      );
+
+      // step #3: pay inputs of production sites
+      let transactions: { index: number; amount: number }[];
+      let working: boolean;
+      for (const productionSite of productionSites) {
+        transactions = [];
+        working = true;
+        const requiredInputs = productionSite.building.inputs;
+
+        // For each input, check if enough is available
+        for (const input of requiredInputs) {
+          const index = updateProducts.findIndex(
+            (cityProduct) => cityProduct.product.id === input.product.id
+          );
+          if (
+            !updateProducts[index] ||
+            updateProducts[index].amount < input.amount
+          ) {
+            // required inputs are not available
+            working = false;
+            break;
+          }
+          // save the required inputs in the transactions array
+          transactions.push({ index, amount: input.amount });
+        }
+
+        // remember the production site as working
+        if (working) {
+          workingProductionSites.push(productionSite);
+        }
+
+        // save the transactions to the updateProducts array
+        if (transactions.length > 0) {
+          for (const transaction of transactions) {
+            updateProducts[transaction.index].amount -= transaction.amount;
+          }
+        }
+      }
+      console.log('---------------');
+      console.log('After inputs for production sites were subtracted: ');
+      console.table(
+        updateProducts.map((cityProduct) => ({
+          name: cityProduct.product.name,
+          amount: cityProduct.amount,
+        }))
+      );
+
+      // step #4: receive outputs of working production sites
+      // @todo productivity of habitants must be regarded!
+      // @todo performance refactoring: it suffices to regard one representative of every production site and multiply that with the number of working production sites of this type.
+      for (const productionSite of workingProductionSites) {
+        const outputs = productionSite.building.outputs;
+        const productivity = 1;
+        for (const output of outputs) {
+          const index = updateProducts.findIndex(
+            (cityProduct) => cityProduct.product.id === output.product.id
+          );
+          if (index < 0) {
+            console.warn(
+              `There is a production site that produces ${output.product.id}, but the product is not listed in city products. That should never happen - fixing...!`
+            );
+            const newCityProduct = {
+              city: { id: cityId },
+              product: output.product,
+              amount: 0,
+            };
+            const cityProduct = await this.cityProductRepository.save(
+              newCityProduct
+            );
+            updateProducts.push(cityProduct);
+          }
+          updateProducts[index].amount += productivity * output.amount;
+        }
+      }
+      console.log('---------------');
+      console.log('After outputs of production sites were added: ');
+      console.table(
+        updateProducts.map((cityProduct) => ({
+          name: cityProduct.product.name,
+          amount: cityProduct.amount,
+        }))
+      );
     }
+    console.log('=================');
+    console.table(
+      updateProducts.map((cityProduct) => ({
+        name: cityProduct.product.name,
+        amount: cityProduct.amount,
+      }))
+    );
+
     for (const updateProduct of updateProducts) {
       await this.cityProductRepository.update(
         { product: updateProduct.product },
         updateProduct
       );
     }
+    await this.cityRepository.update(
+      { id: cityId },
+      { lastCityUpdate: new Date(newLastUpdate) }
+    );
   }
 
   /**

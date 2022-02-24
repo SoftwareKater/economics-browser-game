@@ -14,25 +14,26 @@
 ### Cities
 - Each habitant needs 3 nutrition units per day
 - Each type of food yields a different amount of nutrition
-- To build new  buildings (production sites, storages, and housing) players need building materials
+- To build new buildings (production sites, storages, and housing) players need building materials
 - Building materials include wood, steel, sand, etc.
 - To research new buildings players need "tech?" materials
 - Tech materials include paper, ink, computerchips, etc.
 
 ### Start
-- population of 1000 habitants
-- 10qkm (10.000.000 qm) land to build stuff on
-- each habitant lives in a tent
+- population of 10000 (100) habitants
+- 10qkm (1qkm) land to build stuff on
+- some basic buildings as a starting point
 
-## Housing
+## Buildings
 
-Examples
-- a homeless habitant will not work
-- 5 habitants can live in one villa, they will all receive a great boost to their productivity
+- for exact values see <a href="./apps/api/src/app/mocks/buildings.ts">buildings.ts<a>
 
-## Production
--
-- for exact values see <a href="./constants/production-sites.ts">production-sites.ts<a>
+### Accommodations
+
+Housing is the main driver of productivity gains. Better housing increaes the productivity of habitants. But better housing is also more costly to maintain. The increase in maintenance cost reflects the higher needs of people living in developed and productive countries.
+
+### Production Sites
+
 
 ## Habitants
 
@@ -46,10 +47,6 @@ Examples
 - (just like they are not born, your city will always house 1000 habitants)
 - for exact values see <a href="./constants/starving.ts">starving.ts<a>
 
-### Well fed
-
-- habitants that eat more that 3 nutrition units will receive a productivity boost
-
 ## Market
 
 - the currency is Habitrons (H with two horzontal lines)
@@ -61,14 +58,15 @@ Examples
   - all offers and bids are sorted by product
   - then the offers and bids for each product are sorted (offers are sorted increasing by price, bids are sorted decreasing by price)
   - the highest bidder gets served first, the lowest offerer my serve first
-  - the price will be the arithmetic mean betwenn the offer and bid price
+  - the price will be the arithmetic mean between the offer and bid price
   - when the bidder is saturated, the next is served; when the offerer is sold out, the next will serve
   - this goes on until there is no bidder willing to buy at a price
 
 
 ## Open Questions
 
-Every day/hour/tick the current state of each city should be saved to a db, so that we can do macro economic analysis on the data
+- Every day/hour/tick the current state of each city should be saved to a db, so that we can do macro economic analysis on the data
+- What is one round actually?
 
 
 

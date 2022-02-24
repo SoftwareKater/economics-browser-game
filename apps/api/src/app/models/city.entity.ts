@@ -26,4 +26,8 @@ export class City {
   @Field((type) => [CityProduct])
   @OneToMany(() => CityProduct, (cityProduct) => cityProduct.city)
   products!: CityProduct[];
+
+  @Field((type) => Date)
+  @Column()
+  lastCityUpdate!: Date;
 }

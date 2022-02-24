@@ -65,8 +65,10 @@ export class CityResolver {
   }
 
   @Query((returns) => City, { name: 'getMyCityWithProducts' })
-  async getMyCityWithProducts() {
-    const myCity = await this.cityRepository.findOne({
+  async getMyCityWithProducts() {11
+    let myCity = await this.cityRepository.findOneOrFail();
+    await this.cityService.updateCity(myCity.id);
+    myCity = await this.cityRepository.findOneOrFail({
       relations: ['products'],
     });
     return myCity;

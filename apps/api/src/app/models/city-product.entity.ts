@@ -42,10 +42,19 @@ export class CityProduct {
    * Amount of the product owned by the city
    */
   @Field((type) => Number)
-  @Column({type: 'float'})
+  @Column({ type: 'float' })
   amount!: number;
 
   @Field((type) => Date)
   @UpdateDateColumn()
   lastUpdate!: Date;
+
+  /**
+   * If false, this product can only be used via direct action on the client by the player
+   * (e.g. construction a building, trade on the market), but cannot be used by habitants
+   * as food, or by production sites as inputs, or any other automatic game-controled mechanism.
+   */
+  @Field((type) => Boolean)
+  @Column({ default: true })
+  allow!: boolean;
 }

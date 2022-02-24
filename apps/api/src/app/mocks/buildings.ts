@@ -77,7 +77,8 @@ export const BUILDINGS: Partial<Building>[] = [
   },
   {
     name: 'cattle ranch',
-    description: 'Produces cattle. Heavy land usage, considerable wheat and water usage.',
+    description:
+      'Produces cattle. Heavy land usage, considerable wheat and water usage.',
     buildingType: BuildingType.PRODUCTION_SITE,
     inputs: [
       {
@@ -138,6 +139,125 @@ export const BUILDINGS: Partial<Building>[] = [
       } as BuildingConstructionCost,
     ],
     constructionTime: 10,
+  },
+  {
+    name: 'coal-mine',
+    description: 'Produces coal. Medium land usage.',
+    size: 10000,
+    places: 100,
+    buildingType: BuildingType.PRODUCTION_SITE,
+    outputs: [
+      {
+        product: PRODUCTS.COAL,
+        amount: 10,
+      } as BuildingOutput,
+    ],
+    constructionCosts: [
+      {
+        product: PRODUCTS.WOOD,
+        amount: 1000,
+      } as BuildingConstructionCost,
+    ],
+    constructionTime: 10,
+    maxPerCity: 5,
+  },
+  {
+    name: 'iron-mine',
+    description: 'Produces iron. Medium land usage.',
+    size: 10000,
+    places: 100,
+    buildingType: BuildingType.PRODUCTION_SITE,
+    outputs: [
+      {
+        product: PRODUCTS.IRON,
+        amount: 10,
+      } as BuildingOutput,
+    ],
+    constructionCosts: [
+      {
+        product: PRODUCTS.WOOD,
+        amount: 1000,
+      } as BuildingConstructionCost,
+    ],
+    constructionTime: 10,
+    maxPerCity: 5,
+  },
+  {
+    name: 'coal-fired iron smelter',
+    description: 'Produces iron plates. Heavy pollution, but who cares?',
+    size: 10000,
+    places: 100,
+    buildingType: BuildingType.PRODUCTION_SITE,
+    inputs: [
+      {
+        product: PRODUCTS.COAL,
+        amount: 10,
+      } as BuildingInput,
+      {
+        product: PRODUCTS.IRON,
+        amount: 20,
+      } as BuildingInput,
+    ],
+    outputs: [
+      {
+        product: PRODUCTS.IRON_PLATES,
+        amount: 10,
+      } as BuildingOutput,
+    ],
+    constructionCosts: [
+      {
+        product: PRODUCTS.STONE,
+        amount: 1000,
+      } as BuildingConstructionCost,
+    ],
+    constructionTime: 10,
+  },
+  // {
+  //   name: 'coal-fired power station',
+  //   description: 'Produces energy. Heavy pollution, but who cares?',
+  //   size: 10000,
+  //   places: 100,
+  //   buildingType: BuildingType.PRODUCTION_SITE,
+  //   inputs: [
+  //     {
+  //       product: PRODUCTS.COAL,
+  //       amount: 10,
+  //     } as BuildingInput
+  //   ],
+  //   outputs: [
+  //     {
+  //       product: PRODUCTS.IRON,
+  //       amount: 10,
+  //     } as BuildingOutput,
+  //   ],
+  //   constructionCosts: [
+  //     {
+  //       product: PRODUCTS.WOOD,
+  //       amount: 1000,
+  //     } as BuildingConstructionCost,
+  //   ],
+  //   constructionTime: 10,
+  // },
+  {
+    name: 'copper-mine',
+    description: 'Produces copper. Medium land usage.',
+    size: 10000,
+    places: 100,
+    buildingType: BuildingType.PRODUCTION_SITE,
+    outputs: [
+      {
+        product: PRODUCTS.COPPER,
+        amount: 10,
+      } as BuildingOutput,
+    ],
+    constructionCosts: [
+      {
+        product: PRODUCTS.WOOD,
+        amount: 1000,
+      } as BuildingConstructionCost,
+    ],
+    constructionTime: 10,
+    maxPerCity: 5,
   },
   {
     name: 'forestry',
