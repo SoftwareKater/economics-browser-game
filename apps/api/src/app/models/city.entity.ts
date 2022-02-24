@@ -4,6 +4,8 @@ import { CityBuilding } from './city-building.entity';
 import { CityProduct } from './city-product.entity';
 import { Habitant } from './habitant.entity';
 
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 @ObjectType()
 @Entity()
 export class City {

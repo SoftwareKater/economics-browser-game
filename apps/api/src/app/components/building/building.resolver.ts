@@ -33,14 +33,16 @@ export class BuildingResolver {
   @Query(() => [Building])
   async accommodations() {
     return this.buildingRepository.find({
-      where: { buildingType: BuildingType.ACCOMMODATION }, relations: ['maintenanceCosts']
+      where: { buildingType: BuildingType.ACCOMMODATION },
+      relations: ['maintenanceCosts'],
     });
   }
 
   @Query(() => [Building])
   async productionSites() {
     return this.buildingRepository.find({
-      where: { buildingType: BuildingType.PRODUCTION_SITE }, relations: ['inputs', 'outputs']
+      where: { buildingType: BuildingType.PRODUCTION_SITE },
+      relations: ['inputs', 'outputs'],
     });
   }
 
@@ -131,9 +133,7 @@ export class BuildingResolver {
     }
   }
 
-  private async initMockProducts(): Promise<
-    (Partial<Product> & Product)[]
-  > {
+  private async initMockProducts(): Promise<(Partial<Product> & Product)[]> {
     const allProducts = Object.values(PRODUCTS);
     const res = await this.productRepository.save(allProducts);
     return res;

@@ -11,6 +11,8 @@ import { Building } from './building.entity';
 import { City } from './city.entity';
 import { Habitant } from './habitant.entity';
 
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 /**
  * City Building
  * While the Building table only contains prototypes of the various buildings,

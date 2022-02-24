@@ -6,7 +6,6 @@ import { BuildingMaintenanceCost } from './building-maintenance-cost.entity';
 import { BuildingOutput } from './building-output.entity';
 import { BuildingType } from './building-type.enum';
 import { CityBuilding } from './city-building.entity';
-import { Habitant } from './habitant.entity';
 
 /* disable-eslint @typescript-eslint/no-unsued-vars */
 

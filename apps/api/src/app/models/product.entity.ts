@@ -12,6 +12,8 @@ import { BuildingMaintenanceCost } from './building-maintenance-cost.entity';
 import { BuildingOutput } from './building-output.entity';
 import { CityProduct } from './city-product.entity';
 
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 @ObjectType()
 @Entity()
 export class Product {

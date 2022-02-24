@@ -9,6 +9,8 @@ import {
 import { City } from './city.entity';
 import { Product } from './product.entity';
 
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 /**
  * City Product
  * While the Product table only contains prototypes of the various products,
