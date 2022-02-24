@@ -1,8 +1,9 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { Entity, Column, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { Building } from './building.entity';
 import { CityBuilding } from './city-building.entity';
 import { City } from './city.entity';
+
+/* eslint-disable @typescript-eslint/no-unused-vars */
 
 @ObjectType()
 @Entity()

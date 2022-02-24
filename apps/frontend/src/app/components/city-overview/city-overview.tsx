@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useGetMyCityWithHabitantsQuery } from '@economics1k/data-access';
+import { CityBuilding, useGetMyCityWithHabitantsQuery } from '@economics1k/data-access';
 
 export const CityOverview = () => {
   const [value, setValue] = useState({ showPercent: false });
@@ -10,20 +10,25 @@ export const CityOverview = () => {
   if (error || !data) return <p>Error :(</p>;
 
   /**
-   * where to put these functions?
-   * I think it makes sense to not make an api call for this, but maybe I also need this funciton in the backend?
+   * where to put this function?
    * @param city
-   * @returns
+   * @returns The number of unemployed habitants
    */
   function getUnemploymentCount(city: {
-    habitants: { employment?: any }[];
+    habitants: { employment?: CityBuilding }[];
   }): number {
     const unemployedHabitants = city.habitants
       .filter((habitant) => !habitant.employment).length;
     return unemployedHabitants;
   }
+
+  /**
+   * where to put this function?
+   * @param city
+   * @returns the number of homeless habitants
+   */
   function getHomelessCount(city: {
-    habitants: { accommodation?: any }[];
+    habitants: { accommodation?: CityBuilding }[];
   }): number {
     const homelessHabitants = city.habitants
       .filter((habitant) => !habitant.accommodation).length;

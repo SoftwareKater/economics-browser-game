@@ -7,7 +7,7 @@ import { BuildingOutput } from './building-output.entity';
 import { BuildingType } from './building-type.enum';
 import { CityBuilding } from './city-building.entity';
 
-/* disable-eslint @typescript-eslint/no-unsued-vars */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 
 /**
  * All buildings in economics1k.

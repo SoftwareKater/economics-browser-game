@@ -3,6 +3,8 @@ import { Entity, Column, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Building } from './building.entity';
 import { Product } from './product.entity';
 
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 @ObjectType()
 @Entity()
 export class BuildingConstructionCost {

@@ -1,5 +1,6 @@
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { ECONOMY_SPEED_FACTOR, MS_IN_H } from '../../constants';
 import { BuildingType } from '../../models/building-type.enum';
 import { Building } from '../../models/building.entity';
 import { CityBuilding } from '../../models/city-building.entity';
@@ -8,18 +9,6 @@ import { City } from '../../models/city.entity';
 import { Habitant } from '../../models/habitant.entity';
 import { Product } from '../../models/product.entity';
 
-// Fixed constants
-const TIME_OFFSET = 2 * 60 * 60 * 1000;
-const MS_IN_H = 60 * 60 * 1000;
-const MIN_PRODUCT_FRACTION = 0.01;
-
-// Configurable constants
-/**
- * Standard game speed is 1 round = 1 hour.
- * By increasing ECONOMY_SPEED_FACTOR the game progresses faster.
- * E.g. 60 -> 1 round = 1 minute
- */
-const ECONOMY_SPEED_FACTOR = 1 / 60;
 
 export class CityService {
   constructor(
@@ -239,7 +228,7 @@ export class CityService {
       (building) =>
         building.building.buildingType === BuildingType.PRODUCTION_SITE
     );
-    const habitants = await this.habitantRepository.find({ where: { city } });
+    // const habitants = await this.habitantRepository.find({ where: { city } });
     const cityProducts = await this.cityProductRepository.find();
     const updateProducts: CityProduct[] = [...cityProducts];
 
