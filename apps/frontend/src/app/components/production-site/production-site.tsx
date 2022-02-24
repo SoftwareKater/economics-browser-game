@@ -1,4 +1,5 @@
 import {
+  Building,
   BuildingType,
   City,
   useGetMyCityWithBuildingsQuery,
@@ -17,12 +18,15 @@ export const ProductionSite = () => {
   if (productionSitesResult.error || myCityResult.error) {
     return <p>Error :(</p>;
   }
+  if (!productionSitesResult.data || !myCityResult.data) {
+    return <p>No Data</p>;
+  }
   return (
     <BuildingMasterDetail
       {...{
-        city: myCityResult.data?.getMyCityWithBuildings,
-        buildings: productionSitesResult.data?.productionSites,
+        buildings: productionSitesResult.data?.productionSites as Building[],
         buildingType: BuildingType.ProductionSite,
+        city: myCityResult.data?.getMyCityWithBuildings as City,
       }}
     />
   );

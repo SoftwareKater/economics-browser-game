@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import './accommodation.scss';
 import {
+  Building,
   BuildingType,
+  City,
   useAccommodationsQuery,
   useGetMyCityWithBuildingsQuery,
 } from '@economics1k/data-access';
@@ -17,12 +19,15 @@ export const Accommodation = () => {
   if (accommodationsResult.error || myCityResult.error) {
     return <p>Error :(</p>;
   }
+  if (!accommodationsResult.data || !myCityResult.data) {
+    return <p>No Data</p>;
+  }
   return (
     <BuildingMasterDetail
       {...{
-        buildings: accommodationsResult.data?.accommodations,
-        city: myCityResult.data?.getMyCityWithBuildings,
+        buildings: accommodationsResult.data.accommodations as Building[],
         buildingType: BuildingType.Accommodation,
+        city: myCityResult.data.getMyCityWithBuildings as City,
       }}
     />
   );

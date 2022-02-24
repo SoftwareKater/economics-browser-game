@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { CityBuilding, useGetMyCityWithHabitantsQuery } from '@economics1k/data-access';
+import { City, useGetMyCityWithHabitantsQuery } from '@economics1k/data-access';
 
 export const CityOverview = () => {
   const [value, setValue] = useState({ showPercent: false });
@@ -14,9 +14,7 @@ export const CityOverview = () => {
    * @param city
    * @returns The number of unemployed habitants
    */
-  function getUnemploymentCount(city: {
-    habitants: { employment?: CityBuilding }[];
-  }): number {
+  function getUnemploymentCount(city: City): number {
     const unemployedHabitants = city.habitants
       .filter((habitant) => !habitant.employment).length;
     return unemployedHabitants;
@@ -27,9 +25,7 @@ export const CityOverview = () => {
    * @param city
    * @returns the number of homeless habitants
    */
-  function getHomelessCount(city: {
-    habitants: { accommodation?: CityBuilding }[];
-  }): number {
+  function getHomelessCount(city: City): number {
     const homelessHabitants = city.habitants
       .filter((habitant) => !habitant.accommodation).length;
     return homelessHabitants;
@@ -61,18 +57,18 @@ export const CityOverview = () => {
             <td>Unemployment</td>
             <td>
               {value.showPercent
-                ? `${getUnemploymentCount(data.getMyCityWithHabitants) * 100 /
+                ? `${getUnemploymentCount(data.getMyCityWithHabitants as City) * 100 /
                   data.getMyCityWithHabitants.habitants.length}  %`
-                : `${getUnemploymentCount(data.getMyCityWithHabitants)} people`}
+                : `${getUnemploymentCount(data.getMyCityWithHabitants as City)} people`}
             </td>
           </tr>
           <tr>
             <td>Homeless</td>
             <td>
               {value.showPercent
-                ? `${getHomelessCount(data.getMyCityWithHabitants) * 100 /
+                ? `${getHomelessCount(data.getMyCityWithHabitants as City) * 100 /
                   data.getMyCityWithHabitants.habitants.length} %`
-                : `${getHomelessCount(data.getMyCityWithHabitants)} people`}
+                : `${getHomelessCount(data.getMyCityWithHabitants as City)} people`}
             </td>
           </tr>
         </tbody>

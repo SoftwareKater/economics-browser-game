@@ -16,4 +16,4 @@
 - chose a better name
 - pitch idea to René
 - fix update city method (see todos in js docstring)
--
+- generated types (gql responses) are really fucked up
