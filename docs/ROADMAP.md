@@ -1,7 +1,8 @@
 # Roadmap
 
-## Todo
+## To Do
 
+- create a dockerfile / compose
 - more buildings
   - tailor
   - smithy
@@ -9,11 +10,15 @@
   - apparel
   - tools
 - automate creation of cities
-- add adobe component library
+  - https://react-spectrum.adobe.com/react-spectrum/getting-started.html
   - add loading spinner
 - authentication and authorization
-- multiplayer
-- chose a better name
+- use redis (nestjs bull) to queue city updates
 - pitch idea to René
 - fix update city method (see todos in js docstring)
 - generated types (gql responses) are really fucked up
+
+
+## Done
+
+- add adobe spectrum
