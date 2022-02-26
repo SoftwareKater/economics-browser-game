@@ -33,6 +33,7 @@
   },
   "private": true,
   "dependencies": {
+    "@adobe/react-spectrum": "^3.16.3",
     "@apollo/client": "^3.3.14",
     "@nestjs/common": "^7.0.0",
     "@nestjs/core": "^7.0.0",
