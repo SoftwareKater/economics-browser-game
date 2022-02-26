@@ -1,15 +1,44 @@
-export const SideNav = () => {
+import '@spectrum-web-components/sidenav/sp-sidenav.js';
+import '@spectrum-web-components/sidenav/sp-sidenav-heading.js';
+import '@spectrum-web-components/sidenav/sp-sidenav-item.js';
+import { DOMAttributes } from 'react';
 
+type CustomElement<T> = Partial<T & DOMAttributes<T> & { children: any }>;
+
+/**
+ * This is to make typescript recognise the web component
+ * https://coryrylan.com/blog/how-to-use-web-components-with-typescript-and-react
+ */
+declare global {
+  namespace JSX {
+    interface IntrinsicElements {
+      ['sp-sidenav']: CustomElement<any>;
+      ['sp-sidenav-item']: CustomElement<any>;
+    }
+  }
+}
+
+/**
+ * Side navigation menu
+ * @returns
+ */
+export const SideNavMenu = () => {
   return (
-    <ol>
-        <li><a href="/city">City</a></li>
-        <li><a href="/accommodations">Accommodations</a></li>
-        <li><a href="/production-sites">Production Sites</a></li>
-        {/* <li><a href="/storages">Storages</a></li> */}
-        <li><a href="/products">Products</a></li>
-        <li><a href="/market">Market</a></li>
-    </ol>
+    <sp-sidenav defaultValue="City">
+      <sp-sidenav-item value="City" href="/city">
+          City
+      </sp-sidenav-item>
+      <sp-sidenav-item value="Accommodations" href="/accommodations">
+          Accommodations
+      </sp-sidenav-item>
+      <sp-sidenav-item value="Production Sites" href="/production-sites">
+          Production Sites
+      </sp-sidenav-item>
+      <sp-sidenav-item value="Products" href="/products" target="_blank">
+          Products
+      </sp-sidenav-item>
+    </sp-sidenav>
   );
 };
 
-export default SideNav;
+export default SideNavMenu;

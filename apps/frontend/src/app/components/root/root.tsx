@@ -8,7 +8,7 @@ import './root.scss';
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 
 import Accommodation from '../accommodation/accommodation';
-import SideNav from '../side-nav/side-nav';
+import SideNavMenu from '../side-nav/side-nav';
 import {Header} from '@economics1k/ui';
 import CityOverview from '../city-overview/city-overview';
 import ProductionSite from '../production-site/production-site';
@@ -27,7 +27,7 @@ export const Root = () => {
       <Provider theme={defaultTheme}>
         <Header />
         <div className="content">
-          <SideNav />
+          <SideNavMenu />
           <div>
             <Route path="/city" exact component={CityOverview} />
             <Route path="/accommodations" exact component={Accommodation} />
