@@ -11,3 +11,4 @@ export const MIN_PRODUCT_FRACTION = 0.01;
  * E.g. 60 -> 1 round = 1 minute
  */
 export const ECONOMY_SPEED_FACTOR = 1 / 60;
+export const INIT_HABITANTS_AMOUNT_PER_CITY = 100;

@@ -1,5 +1,6 @@
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { INIT_HABITANTS_AMOUNT_PER_CITY } from '../../constants';
 import { BuildingType } from '../../models/building-type.enum';
 import { Building } from '../../models/building.entity';
 import { CityBuilding } from '../../models/city-building.entity';
@@ -221,10 +222,10 @@ export class CityService {
   private getInitialHabitants(newCity: Partial<City>): Partial<Habitant>[] {
     const habitants: Partial<Habitant>[] = [];
     let habitant: Partial<Habitant>;
-    for (let i = 1; i <= 10000; i++) {
+    for (let i = 1; i <= INIT_HABITANTS_AMOUNT_PER_CITY; i++) {
       habitant = {
         // id: uuidv4(),
-        name: `Habitant ${i}`,
+        name: `${newCity.name} Habitant ${i}`,
         accommodation: undefined,
         starving: 0,
         employment: undefined,
