@@ -1,10 +1,17 @@
 
 # Economics1k
 
+## Setup
+
+- Create mysql docker container `λ docker run --name economics1k-mysql -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=test -p 3306:3306 -d mysql:latest`
+- run `npm run start:api` to generate graphql schema
+- run `npm run codegen` to generate client from graphql schema
+- run `npm run start:frontend` to start the frontend
+
+Then
+- graphql sandbox can be accessed via 
 
 ## Intro
-
-- Browser / Handy game
 
 ### Players
 - rule a city
@@ -17,11 +24,11 @@
 - To build new buildings (production sites, storages, and housing) players need building materials
 - Building materials include wood, steel, sand, etc.
 - To research new buildings players need "tech?" materials
-- Tech materials include paper, ink, computerchips, etc.
+- Tech materials include paper, ink, computer chips, etc.
 
 ### Start
 - population of 10000 (100) habitants
-- 10qkm (1qkm) land to build stuff on
+- 10sqkm (1 square km) land to build stuff on
 - some basic buildings as a starting point
 
 ## Buildings
@@ -30,7 +37,7 @@
 
 ### Accommodations
 
-Housing is the main driver of productivity gains. Better housing increaes the productivity of habitants. But better housing is also more costly to maintain. The increase in maintenance cost reflects the higher needs of people living in developed and productive countries.
+Housing is the main driver of productivity gains. Better housing increases the productivity of habitants. But better housing is also more costly to maintain. The increase in maintenance cost reflects the higher needs of people living in developed and productive countries.
 
 ### Production Sites
 
