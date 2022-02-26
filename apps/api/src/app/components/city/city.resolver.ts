@@ -2,12 +2,14 @@ import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { City } from '../../models/city.entity';
+import { CityUpdateService } from './city-update.service';
 import { CityService } from './city.service';
 
 @Resolver(() => City)
 export class CityResolver {
   constructor(
     private readonly cityService: CityService,
+    private readonly cityUpdateService: CityUpdateService,
     @InjectRepository(City)
     private cityRepository: Repository<City>
   ) {}
@@ -56,7 +58,7 @@ export class CityResolver {
   async getMyCityWithProducts() {
     11;
     let myCity = await this.cityRepository.findOneOrFail();
-    await this.cityService.updateCity(myCity.id);
+    await this.cityUpdateService.updateCity(myCity.id);
     myCity = await this.cityRepository.findOneOrFail({
       relations: ['products'],
     });
