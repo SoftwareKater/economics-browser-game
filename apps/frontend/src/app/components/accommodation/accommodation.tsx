@@ -8,13 +8,14 @@ import {
   useGetMyCityWithBuildingsQuery,
 } from '@economics1k/data-access';
 import BuildingMasterDetail from '../building-master-detail/building-master-detail';
+import { ProgressCircle } from '@adobe/react-spectrum';
 
 export const Accommodation = () => {
   const accommodationsResult = useAccommodationsQuery();
   const myCityResult = useGetMyCityWithBuildingsQuery();
 
   if (accommodationsResult.loading || myCityResult.loading) {
-    return <p>Loading...</p>;
+    return <ProgressCircle aria-label="Loading…" isIndeterminate />;
   }
   if (accommodationsResult.error || myCityResult.error) {
     return <p>Error :(</p>;

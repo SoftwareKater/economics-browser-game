@@ -5,7 +5,7 @@ import {
   useGetMyCityWithBuildingsQuery,
   useProductionSitesQuery,
 } from '@economics1k/data-access';
-
+import { ProgressCircle } from '@adobe/react-spectrum';
 import BuildingMasterDetail from '../building-master-detail/building-master-detail';
 
 export const ProductionSite = () => {
@@ -13,7 +13,7 @@ export const ProductionSite = () => {
   const myCityResult = useGetMyCityWithBuildingsQuery();
 
   if (productionSitesResult.loading || myCityResult.loading) {
-    return <p>Loading...</p>;
+    return <ProgressCircle aria-label="Loading…" isIndeterminate />;
   }
   if (productionSitesResult.error || myCityResult.error) {
     return <p>Error :(</p>;

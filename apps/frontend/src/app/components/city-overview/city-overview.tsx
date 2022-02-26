@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { City, useGetMyCityWithHabitantsQuery } from '@economics1k/data-access';
+import { ProgressCircle } from '@adobe/react-spectrum';
 
 export const CityOverview = () => {
   const [value, setValue] = useState({ showPercent: false });
 
   const { loading, error, data } = useGetMyCityWithHabitantsQuery();
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <ProgressCircle aria-label="Loading…" isIndeterminate />;
   if (error || !data) return <p>Error :(</p>;
 
   /**

@@ -14,6 +14,8 @@ import CityOverview from '../city-overview/city-overview';
 import ProductionSite from '../production-site/production-site';
 import Product from '../product/product';
 
+import {defaultTheme, Provider} from '@adobe/react-spectrum';
+
 const client = new ApolloClient({
   uri: 'http://localhost:3333/graphql', // sandbox gql server: https://48p1r2roz4.sse.codesandbox.io
   cache: new InMemoryCache(),
@@ -22,16 +24,18 @@ const client = new ApolloClient({
 export const Root = () => {
   return (
     <ApolloProvider client={client}>
-      <Header />
-      <div className="content">
-        <SideNav />
-        <div>
-          <Route path="/city" exact component={CityOverview} />
-          <Route path="/accommodations" exact component={Accommodation} />
-          <Route path="/production-sites" exact component={ProductionSite} />
-          <Route path="/products" exact component={Product} />
+      <Provider theme={defaultTheme}>
+        <Header />
+        <div className="content">
+          <SideNav />
+          <div>
+            <Route path="/city" exact component={CityOverview} />
+            <Route path="/accommodations" exact component={Accommodation} />
+            <Route path="/production-sites" exact component={ProductionSite} />
+            <Route path="/products" exact component={Product} />
+          </div>
         </div>
-      </div>
+      </Provider>
     </ApolloProvider>
   );
 };

@@ -1,5 +1,7 @@
+import {Heading} from '@adobe/react-spectrum'
+
 export function Header() {
-  return <h1>Economics1k</h1>;
+  return <Heading level={1}>Economics1k</Heading>;
 }
 
 export default Header;
