@@ -8,7 +8,7 @@ import './root.scss';
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 
 import Accommodation from '../accommodation/accommodation';
-import SideNavMenu from '../side-nav/side-nav';
+import SideNavMenu from '../side-nav-menu/side-nav-menu';
 import {Header} from '@economics1k/ui';
 import CityOverview from '../city-overview/city-overview';
 import ProductionSite from '../production-site/production-site';
