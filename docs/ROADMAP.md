@@ -13,6 +13,9 @@
   - https://react-spectrum.adobe.com/react-spectrum/getting-started.html
   - add loading spinner
 - authentication and authorization
+  - guard api routes
+  - add token to api request headers
+  - get auth state in frontend components
 - use redis (nestjs bull) to queue city updates
 - pitch idea to René
 - fix update city method (see todos in js docstring)
@@ -21,4 +24,5 @@
 
 ## Done
 
+- landing page with mock auth
 - add adobe spectrum

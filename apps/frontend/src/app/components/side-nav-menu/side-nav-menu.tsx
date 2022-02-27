@@ -13,7 +13,9 @@ declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace JSX {
     interface IntrinsicElements {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       ['sp-sidenav']: CustomElement<any>;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       ['sp-sidenav-item']: CustomElement<any>;
     }
   }
@@ -25,18 +27,21 @@ declare global {
  */
 export const SideNavMenu = () => {
   return (
-    <sp-sidenav defaultValue="City">
+    <sp-sidenav defaultValue="Home">
+      <sp-sidenav-item value="Home" href="/home">
+        Home
+      </sp-sidenav-item>
       <sp-sidenav-item value="City" href="/city">
-          City
+        City
       </sp-sidenav-item>
       <sp-sidenav-item value="Accommodations" href="/accommodations">
-          Accommodations
+        Accommodations
       </sp-sidenav-item>
       <sp-sidenav-item value="Production Sites" href="/production-sites">
-          Production Sites
+        Production Sites
       </sp-sidenav-item>
       <sp-sidenav-item value="Products" href="/products" target="_blank">
-          Products
+        Products
       </sp-sidenav-item>
     </sp-sidenav>
   );
