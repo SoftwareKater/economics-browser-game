@@ -54,7 +54,7 @@ export const BuildingMasterDetail = (props: BuildingMasterDetailProps) => {
       buidingDetails: {
         id: building.id,
         title: building.name,
-        image: 'assets/shack.png',
+        image: `assets/img/${building.name.trim().toLowerCase().replace(" ", "_")}.png`,
         alt: building.name,
         description: building.description,
         buttonTitle: 'Build',
@@ -92,7 +92,6 @@ export const BuildingMasterDetail = (props: BuildingMasterDetailProps) => {
             key={id}
             {...{
               title: name,
-              image: `assets/${name}`,
               alt: name,
               amount: props.city.buildings.filter(
                 (cityBuilding) => cityBuilding.building.id === id
