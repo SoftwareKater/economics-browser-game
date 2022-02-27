@@ -12,3 +12,4 @@ export const MIN_PRODUCT_FRACTION = 0.01;
  */
 export const ECONOMY_SPEED_FACTOR = 1 / 60;
 export const INIT_HABITANTS_AMOUNT_PER_CITY = 100;
+export const INIT_CITY_SIZE_IN_SQUARE_METER = 1000000;

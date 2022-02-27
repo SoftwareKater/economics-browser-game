@@ -37,6 +37,7 @@ query getMyCity {
       building {
         id
         name
+        size
       }
       createdOn
     }

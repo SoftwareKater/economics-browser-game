@@ -1,52 +1,21 @@
 import React, { useState } from 'react';
-import { City, useGetMyCityWithHabitantsQuery } from '@economics1k/data-access';
+import { City, useGetMyCityQuery, useGetMyCityWithHabitantsQuery } from '@economics1k/data-access';
 import { ProgressCircle } from '@adobe/react-spectrum';
+import { CityStatistics } from './city-statistics';
 
 export const CityOverview = () => {
+  const cityStatistics = new CityStatistics();
+
   const [value, setValue] = useState({ showPercent: false });
 
-  const { loading, error, data } = useGetMyCityWithHabitantsQuery();
+  const { loading, error, data } = useGetMyCityQuery();
 
   if (loading) return <ProgressCircle aria-label="Loading…" isIndeterminate />;
   if (error || !data) return <p>Error :(</p>;
 
-  /**
-   * where to put this function?
-   * @param city
-   * @returns The number of unemployed habitants
-   */
-  function getUnemploymentCount(city: City): number {
-    const unemployedHabitants = city.habitants
-      .filter((habitant) => !habitant.employment).length;
-    return unemployedHabitants;
-  }
-
-  /**
-   * where to put this function?
-   * @param city
-   * @returns the number of homeless habitants
-   */
-  function getHomelessCount(city: City): number {
-    const homelessHabitants = city.habitants
-      .filter((habitant) => !habitant.accommodation).length;
-    return homelessHabitants;
-  }
-
-  //   function getMeanProductivity(habitant: Habitant) {
-  //     const starvingMultiplier = getMalusFromStarving(
-  //       habitant.starving,
-  //       habitant.starvingFor
-  //     );
-  //     const productivity =
-  //       habitant.baseProductivity *
-  //       habitant.accommodation.productivityMultiplicator *
-  //       starvingMultiplier;
-  //     return productivity;
-  //   }
-
   return (
     <section>
-      <h2>{data.getMyCityWithHabitants.name} - Dashboard</h2>
+      <h2>{data.getMyCity.name} - Dashboard</h2>
       <h3>Economic Data</h3>
 
       <button onClick={() => (setValue({showPercent: false}))}>absolute</button>
@@ -58,18 +27,27 @@ export const CityOverview = () => {
             <td>Unemployment</td>
             <td>
               {value.showPercent
-                ? `${getUnemploymentCount(data.getMyCityWithHabitants as City) * 100 /
-                  data.getMyCityWithHabitants.habitants.length}  %`
-                : `${getUnemploymentCount(data.getMyCityWithHabitants as City)} people`}
+                ? `${cityStatistics.getUnemploymentCount(data.getMyCity as City) * 100 /
+                  data.getMyCity.habitants.length}  %`
+                : `${cityStatistics.getUnemploymentCount(data.getMyCity as City)} people`}
             </td>
           </tr>
           <tr>
             <td>Homeless</td>
             <td>
               {value.showPercent
-                ? `${getHomelessCount(data.getMyCityWithHabitants as City) * 100 /
-                  data.getMyCityWithHabitants.habitants.length} %`
-                : `${getHomelessCount(data.getMyCityWithHabitants as City)} people`}
+                ? `${cityStatistics.getHomelessCount(data.getMyCity as City) * 100 /
+                  data.getMyCity.habitants.length} %`
+                : `${cityStatistics.getHomelessCount(data.getMyCity as City)} people`}
+            </td>
+          </tr>
+          <tr>
+            <td>Land Usage</td>
+            <td>
+              {value.showPercent
+                ? `${cityStatistics.getLandUsage(data.getMyCity as City) * 100 /
+                  10 ** 6} %`
+                : `${cityStatistics.getLandUsage(data.getMyCity as City)} sqm`}
             </td>
           </tr>
         </tbody>

@@ -9,7 +9,7 @@
 - run `npm run start:frontend` to start the frontend
 
 Then
-- graphql sandbox can be accessed via 
+- graphql sandbox can be accessed via
 
 ## Intro
 
@@ -27,13 +27,15 @@ Then
 - Tech materials include paper, ink, computer chips, etc.
 
 ### Start
-- population of 10000 (100) habitants
-- 10sqkm (1 square km) land to build stuff on
+- population of 100 habitants
+- 1 square km land to build stuff on
 - some basic buildings as a starting point
+
+For exact values see <a href="./apps/api/src/app/constants.ts">constants.ts<a>
 
 ## Buildings
 
-- for exact values see <a href="./apps/api/src/app/mocks/buildings.ts">buildings.ts<a>
+For exact values see <a href="./apps/api/src/app/mocks/buildings.ts">buildings.ts<a>
 
 ### Accommodations
 
