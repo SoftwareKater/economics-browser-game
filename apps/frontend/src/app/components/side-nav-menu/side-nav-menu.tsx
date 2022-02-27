@@ -3,13 +3,14 @@ import '@spectrum-web-components/sidenav/sp-sidenav-heading.js';
 import '@spectrum-web-components/sidenav/sp-sidenav-item.js';
 import { DOMAttributes } from 'react';
 
-type CustomElement<T> = Partial<T & DOMAttributes<T> & { children: any }>;
+type CustomElement<T> = Partial<T & DOMAttributes<T> & { children: unknown }>;
 
 /**
  * This is to make typescript recognise the web component
  * https://coryrylan.com/blog/how-to-use-web-components-with-typescript-and-react
  */
 declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace JSX {
     interface IntrinsicElements {
       ['sp-sidenav']: CustomElement<any>;
