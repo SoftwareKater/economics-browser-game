@@ -109,7 +109,12 @@ query getMyCityWithProducts {
     }
   }
 }
+
 mutation createBuilding($cityId: String!, $buildingId: String!) {
   createBuilding(cityId: $cityId, buildingId: $buildingId)
+}
+
+mutation deleteBuildings($cityBuildingIds: [String!]!) {
+  deleteBuildings(cityBuildingIds: $cityBuildingIds)
 }
 

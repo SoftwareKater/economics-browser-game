@@ -6,6 +6,7 @@ import {
   City,
   CityBuilding,
   useCreateBuildingMutation,
+  useDeleteBuildingsMutation,
 } from '@economics1k/data-access';
 
 import { InfoCard, DetailCard } from '@economics1k/ui';
@@ -21,10 +22,9 @@ export const BuildingMasterDetail = (props: BuildingMasterDetailProps) => {
     spaceUsedForBuildingType: buildingStatistics.getSpaceUsage() ?? 0,
   });
 
-  const [
-    createBuildingMutation,
-    { data, loading, error },
-  ] = useCreateBuildingMutation();
+  const [createBuildingMutation] = useCreateBuildingMutation();
+
+  const [deleteBuildingsMutation] = useDeleteBuildingsMutation();
 
   function updateBuildingDetails(buildingId: string): void {
     const building = props.buildings.find(
@@ -62,10 +62,18 @@ export const BuildingMasterDetail = (props: BuildingMasterDetailProps) => {
           });
         },
         destroyAction: () => {
-          console.log('destory one building');
+          console.error('Not implemented');
         },
         destroyAllAction: () => {
-          console.log('destory all buildings');
+          deleteBuildingsMutation({
+            variables: {
+              cityBuildingIds: props.city.buildings
+                .filter(
+                  (cityBuilding) => cityBuilding.building.id === buildingId
+                )
+                .map((cityBuilding) => cityBuilding.id),
+            },
+          });
         },
       },
     });
