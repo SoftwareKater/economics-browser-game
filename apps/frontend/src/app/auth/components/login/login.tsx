@@ -9,7 +9,7 @@ import Logout from '../logout/logout';
 export const Login = () => {
   const authService = new AuthService();
   const tokenStore = new TokenStore();
-  console.log(tokenStore.getToken())
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [userToken, setUserToken] = useState(tokenStore.getToken());
@@ -38,14 +38,22 @@ export const Login = () => {
           inputMode="email"
           onChange={(email) => setEmail(email)}
         />
-        <TextField label="Password" />
+        <TextField
+          label="Password"
+          onChange={(password) => setPassword(password)}
+        />
         <Button variant="cta" type="submit">
           Login
         </Button>
       </Form>
     );
   }
-  return <p>You are logged in as {userToken.name} <Logout /></p>;
+  return (
+    <p>
+      You are logged in as {userToken.name}
+      @todo redirect to /home and force refresh
+    </p>
+  );
 };
 
 export default Login;

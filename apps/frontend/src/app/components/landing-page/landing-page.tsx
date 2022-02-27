@@ -1,18 +1,22 @@
 import React, { useState } from 'react';
 import Login from '../../auth/components/login/login';
+import TokenStore from '../../auth/token-store';
+import CreateCity from '../create-city/create-city';
 
 export const LandingPage = () => {
-  const isLoggedIn = false;
+  const tokenStore = new TokenStore();
 
-  if (!isLoggedIn) {
+  const [userToken, setUserToken] = useState(tokenStore.getToken());
+
+  if (!userToken) {
     return (
       <div>
         <p>Welcome to Economics1k the economic simulation browser game!</p>
-        <Login></Login>
+        <Login />
       </div>
     );
   }
-  return <p>Welcome back!</p>;
+  return <CreateCity />;
 };
 
 export default LandingPage;
