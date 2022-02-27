@@ -2,6 +2,7 @@ import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { City } from '../../models/city.entity';
+import { CityCreationService } from './city-creation.service';
 import { CityUpdateService } from './city-update.service';
 import { CityService } from './city.service';
 
@@ -9,6 +10,7 @@ import { CityService } from './city.service';
 export class CityResolver {
   constructor(
     private readonly cityService: CityService,
+    private readonly cityCreationService: CityCreationService,
     private readonly cityUpdateService: CityUpdateService,
     @InjectRepository(City)
     private cityRepository: Repository<City>
@@ -95,7 +97,7 @@ export class CityResolver {
   /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
   @Mutation((returns) => String, { name: 'createCity' })
   async createCity(@Args({ name: 'name', type: () => String }) name: string) {
-    return this.cityService.createCity(name);
+    return this.cityCreationService.createCity(name);
   }
 
   /**

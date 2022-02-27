@@ -6,6 +6,7 @@ import { CityProduct } from '../../models/city-product.entity';
 import { City } from '../../models/city.entity';
 import { Habitant } from '../../models/habitant.entity';
 import { Product } from '../../models/product.entity';
+import { CityCreationService } from './city-creation.service';
 import { CityUpdateService } from './city-update.service';
 import { CityResolver } from './city.resolver';
 import { CityService } from './city.service';
@@ -21,6 +22,11 @@ import { CityService } from './city.service';
       Product,
     ]),
   ],
-  providers: [CityResolver, CityService, CityUpdateService],
+  providers: [
+    CityResolver,
+    CityService,
+    CityCreationService,
+    CityUpdateService,
+  ],
 })
 export class CityModule {}
