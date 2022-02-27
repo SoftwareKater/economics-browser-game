@@ -1,5 +1,10 @@
 import { City } from '@economics1k/data-access';
 
+  /**
+   * Move this into a lib that can be accessed by both frontend and backend
+   * @param city
+   * @returns the number of homeless habitants
+   */
 export class CityStatistics {
   /**
    * where to put this function?
@@ -13,11 +18,6 @@ export class CityStatistics {
     return unemployedHabitants;
   }
 
-  /**
-   * where to put this function?
-   * @param city
-   * @returns the number of homeless habitants
-   */
   getHomelessCount(city: City): number {
     const homelessHabitants = city.habitants.filter(
       (habitant) => !habitant.accommodation

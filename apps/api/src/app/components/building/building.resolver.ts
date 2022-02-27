@@ -50,7 +50,7 @@ export class BuildingResolver {
     let products: Product[] = [];
     try {
       products = await this.initMockProducts();
-    } catch (err) {
+    } catch (err: any) {
       if (err.message.startsWith('Duplicate entry')) {
         products = await this.productRepository.find();
       }
@@ -118,7 +118,7 @@ export class BuildingResolver {
           });
           await this.buildingOutputRepository.insert(buildingOutputs);
         }
-      } catch (err) {
+      } catch (err: any) {
         const errMsg: string = err.message;
         if (errMsg.startsWith('Duplicate entry')) {
           // console.warn(`Building ${building.name} already exists.`)

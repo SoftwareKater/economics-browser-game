@@ -9,7 +9,16 @@ import { Product } from '../../models/product.entity';
 import { BuildingResolver } from './building.resolver';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Building, BuildingConstructionCost, BuildingInput, BuildingMaintenanceCost, BuildingOutput, Product])],
+  imports: [
+    TypeOrmModule.forFeature([
+      Building,
+      BuildingConstructionCost,
+      BuildingInput,
+      BuildingMaintenanceCost,
+      BuildingOutput,
+      Product,
+    ]),
+  ],
   providers: [BuildingResolver],
 })
 export class BuildingModule {}

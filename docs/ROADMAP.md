@@ -4,6 +4,7 @@
 
 - create a dockerfile / compose
 - destroy buildings
+- add checks (frontend and backend) when building
 - more images of buildings and products
 - more buildings
   - tailor

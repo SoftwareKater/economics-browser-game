@@ -67,15 +67,13 @@ export class CityResolver {
     return myCity;
   }
 
-  // @Query((returns) => CityCounts)
-  // async getMyCityCounts(
-  //   @Args({ name: 'cityId', type: () => String }) cityId: string
-  // ) {
-  //   const myHabitants = await this.habitantRepository.find({
-  //     city: { id: cityId },
-  //   });
-  // }
-
+  /**
+   * Create a new building in the city
+   * @todo implement construction time: start a counter and if the building is finished update city.development and(!) habitants.accommodation, habitants.employed
+   * @param cityId
+   * @param buildingId
+   * @returns
+   */
   /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
   @Mutation((returns) => String, { name: 'createBuilding' })
   async createBuilding(
@@ -87,7 +85,6 @@ export class CityResolver {
     } catch (err) {
       console.error(err);
     }
-    // @todo start a counter and if the building is finished update city.development and(!) habitants.accommodation, habitants.employed
   }
 
   /**
@@ -100,6 +97,24 @@ export class CityResolver {
     return this.cityCreationService.createCity(name);
   }
 
+  /**
+   * Destroy buildings in the city
+   * @todo check if user is owner of the city that the buildings stand in
+   * @param cityId
+   * @param buildingId
+   * @returns
+   */
+  /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
+  @Mutation((returns) => String, { name: 'deleteBuildings' })
+  async deleteBuildings(
+    @Args({ name: 'cityBuildingIds', type: () => [String] }) cityBuildingIds: string[]
+  ): Promise<number | undefined> {
+    try {
+      return this.cityService.destroyCityBuildings(cityBuildingIds);
+    } catch (err) {
+      console.error(err);
+    }
+  }
   /**
    * Delete a city by uuid
    * @param uuid the identifier of a city
