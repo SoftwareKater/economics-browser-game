@@ -5,6 +5,7 @@ import CityOverview from '../city-overview/city-overview';
 import ProductionSite from '../production-site/production-site';
 import Product from '../product/product';
 import GuardedRoute from './guarded-route';
+import HabitantsOverview from '../habitants-overview/habitants-overview';
 
 /**
  * Router Outlet
@@ -23,7 +24,7 @@ const RouterContainer = () => {
         auth
         {...isAutheticated}
       />
-      {/* <Route path="/city" exact component={CityOverview} /> */}
+      <Route path="/habitants" exact component={HabitantsOverview} />
       <Route path="/accommodations" exact component={Accommodation} />
       <Route path="/production-sites" exact component={ProductionSite} />
       <Route path="/products" exact component={Product} />

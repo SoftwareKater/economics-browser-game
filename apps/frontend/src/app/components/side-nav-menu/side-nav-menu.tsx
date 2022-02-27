@@ -34,6 +34,9 @@ export const SideNavMenu = () => {
       <sp-sidenav-item value="City" href="/city">
         City
       </sp-sidenav-item>
+      <sp-sidenav-item value="Habitants" href="/habitants">
+        Habitants
+      </sp-sidenav-item>
       <sp-sidenav-item value="Accommodations" href="/accommodations">
         Accommodations
       </sp-sidenav-item>
