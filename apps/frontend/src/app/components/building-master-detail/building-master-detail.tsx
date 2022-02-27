@@ -11,31 +11,15 @@ import {
 import { InfoCard, DetailCard } from '@economics1k/ui';
 import { BuildingMasterDetailProps } from './building-master-detail-component-props.interface';
 import { BuildingMasterDetailComponentState } from './building-master-detail-component-state.interface';
+import { BuildingStatistics } from './building-statistics';
 
 export const BuildingMasterDetail = (props: BuildingMasterDetailProps) => {
-  function getSpaceUsage(): number {
-    let spaceUsedForBuildingType: number;
-    const buildingsOfType = props.city.buildings.filter(
-      (building) => building.building.buildingType === props.buildingType
-    );
-    if (!buildingsOfType || buildingsOfType.length < 1) {
-      spaceUsedForBuildingType = 0;
-    } else {
-      spaceUsedForBuildingType =
-        props.city.buildings.length > 0
-          ? buildingsOfType
-              .map((building) => building.building.size)
-              .reduce((a, b) => a + b)
-          : 0;
-    }
-    return spaceUsedForBuildingType;
-  }
+  const buildingStatistics = new BuildingStatistics(props);
 
   const [value, setValue] = useState<BuildingMasterDetailComponentState>({
     selectedBuildingId: '',
-    spaceUsedForBuildingType: getSpaceUsage() ?? 0,
+    spaceUsedForBuildingType: buildingStatistics.getSpaceUsage() ?? 0,
   });
-
 
   const [
     createBuildingMutation,
@@ -54,7 +38,10 @@ export const BuildingMasterDetail = (props: BuildingMasterDetailProps) => {
       buidingDetails: {
         id: building.id,
         title: building.name,
-        image: `assets/img/${building.name.trim().toLowerCase().replace(" ", "_")}.png`,
+        image: `assets/img/${building.name
+          .trim()
+          .toLowerCase()
+          .replace(' ', '_')}.png`,
         alt: building.name,
         description: building.description,
         buttonTitle: 'Build',
@@ -87,12 +74,13 @@ export const BuildingMasterDetail = (props: BuildingMasterDetailProps) => {
         )}
       </div>
       <div className="master">
-        {props.buildings.map(({ id, name }) => (
+        {props.buildings.map(({ id, name, places, buildingType }) => (
           <InfoCard
             key={id}
             {...{
               title: name,
               alt: name,
+              status: buildingStatistics.getBuildingStatus(id, buildingType, places),
               amount: props.city.buildings.filter(
                 (cityBuilding) => cityBuilding.building.id === id
               ).length,
