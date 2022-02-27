@@ -5,6 +5,12 @@ import { BuildingMasterDetailProps } from './building-master-detail-component-pr
 export class BuildingStatistics {
   constructor(private readonly props: BuildingMasterDetailProps) {}
 
+  public getBuildingAmount(buildingId: string): number {
+    return this.props.city.buildings.filter(
+      (cityBuilding) => cityBuilding.building.id === buildingId
+    ).length;
+  }
+
   public getSpaceUsage(): number {
     let spaceUsedForBuildingType: number;
     const buildingsOfType = this.props.city.buildings.filter(

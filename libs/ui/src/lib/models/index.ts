@@ -1,1 +1,1 @@
-export * from './building-status.interface';
+export * from './building-status.type';

@@ -1,5 +1,9 @@
-import React from 'react';
-import './detail-card.scss';
+import React, { Key } from 'react';
+import { Heading } from '@adobe/react-spectrum';
+import { View } from '@adobe/react-spectrum';
+import { ActionGroup, Item } from '@adobe/react-spectrum';
+import { Content } from '@adobe/react-spectrum';
+import { BuildingCost } from '../../models/building-cost.interface';
 
 /* eslint-disable-next-line */
 export interface DetailCardProps {
@@ -7,10 +11,16 @@ export interface DetailCardProps {
   title: string;
   image: string;
   alt: string;
+  buildingType: string;
   description: string;
-  amount?: number;
-  buttonTitle: string;
-  buttonAction: () => void;
+  amount: number;
+  constructionCosts: BuildingCost[];
+  maintenanceCosts: BuildingCost[];
+  places: number;
+  size: number;
+  buildAction: () => void;
+  destroyAction: () => void;
+  destroyAllAction: () => void;
 }
 
 export class DetailCard extends React.Component {
@@ -21,17 +31,58 @@ export class DetailCard extends React.Component {
     this.props = props;
   }
 
+  private onActionPress(action: Key): void {
+    if (action === 'build') {
+      this.props.buildAction();
+    }
+    if (action === 'destroy') {
+      this.props.destroyAction();
+    }
+    if (action === 'destroyAll') {
+      this.props.destroyAllAction();
+    }
+  }
+
   render() {
     return (
-      <div className="detail-card">
+      <View
+        borderWidth="thin"
+        borderColor="dark"
+        borderRadius="medium"
+        paddingBottom="size-250"
+        paddingX="size-250"
+      >
+        <Heading level={3}>{this.props.title}</Heading>
+        <Content>{this.props.description}</Content>
         <img src={this.props.image} alt={this.props.alt}></img>
-        <h3>{this.props.title}</h3>
-        <p>{this.props.description}</p>
-        <div>{this.props.amount}</div>
-        <button onClick={this.props.buttonAction}>
-          {this.props.buttonTitle}
-        </button>
-      </div>
+        <Content>
+          You have: {this.props.amount} {this.props.title}s
+        </Content>
+        <Content>
+          Construction Costs:{' '}
+          {this.props.constructionCosts?.length > 0
+            ? this.props.constructionCosts
+                .map((cost) => `${cost.productName} (${cost.amount})`)
+                .join(', ')
+            : '-'}
+        </Content>
+        <Content>
+          Maintenance Costs:{' '}
+          {this.props.maintenanceCosts?.length > 0
+            ? this.props.maintenanceCosts
+                .map((cost) => `${cost.productName} (${cost.amount})`)
+                .join(', ')
+            : '-'}
+        </Content>
+        <Content>Size: {this.props.size} sqm</Content>
+        <Content>Places (work / housing): {this.props.places}</Content>
+        <div></div>
+        <ActionGroup onAction={this.onActionPress.bind(this)}>
+          <Item key="build">Build</Item>
+          <Item key="destroy">Destroy</Item>
+          <Item key="destroyAll">Destroy All</Item>
+        </ActionGroup>
+      </View>
     );
   }
 }

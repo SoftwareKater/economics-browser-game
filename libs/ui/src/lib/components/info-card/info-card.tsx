@@ -1,6 +1,6 @@
 import './info-card.scss';
 import { StatusLight } from '@adobe/react-spectrum';
-import { BuildingStatus } from '../../models/building-status.interface';
+import { BuildingStatus } from '../../models/building-status.type';
 
 /* eslint-disable-next-line */
 export interface InfoCardProps {

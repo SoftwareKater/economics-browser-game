@@ -3,6 +3,7 @@
 ## To Do
 
 - create a dockerfile / compose
+- destroy buildings
 - more images of buildings and products
 - more buildings
   - tailor

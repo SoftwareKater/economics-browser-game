@@ -43,12 +43,29 @@ export const BuildingMasterDetail = (props: BuildingMasterDetailProps) => {
           .toLowerCase()
           .replace(' ', '_')}.png`,
         alt: building.name,
+        buildingType: building.buildingType,
+        amount: buildingStatistics.getBuildingAmount(building.id),
+        constructionCosts: building.constructionCosts?.map((cost) => ({
+          productName: cost.product.name,
+          amount: cost.amount,
+        })),
+        maintenanceCosts: building.maintenanceCosts?.map((cost) => ({
+          productName: cost.product.name,
+          amount: cost.amount,
+        })),
+        places: building.places,
+        size: building.size,
         description: building.description,
-        buttonTitle: 'Build',
-        buttonAction: () => {
+        buildAction: () => {
           createBuildingMutation({
             variables: { cityId: props.city.id, buildingId },
           });
+        },
+        destroyAction: () => {
+          console.log('destory one building');
+        },
+        destroyAllAction: () => {
+          console.log('destory all buildings');
         },
       },
     });
@@ -80,7 +97,11 @@ export const BuildingMasterDetail = (props: BuildingMasterDetailProps) => {
             {...{
               title: name,
               alt: name,
-              status: buildingStatistics.getBuildingStatus(id, buildingType, places),
+              status: buildingStatistics.getBuildingStatus(
+                id,
+                buildingType,
+                places
+              ),
               amount: props.city.buildings.filter(
                 (cityBuilding) => cityBuilding.building.id === id
               ).length,
