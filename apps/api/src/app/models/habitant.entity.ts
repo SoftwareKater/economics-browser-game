@@ -40,7 +40,8 @@ export class Habitant {
   })
   @ManyToOne(() => CityBuilding, (cityBuilding) => cityBuilding.employees, {
     nullable: true,
-    eager: true
+    eager: true,
+    onDelete: 'SET NULL',
   })
   employment?: CityBuilding;
 
@@ -53,7 +54,8 @@ export class Habitant {
   })
   @ManyToOne(() => CityBuilding, (cityBuilding) => cityBuilding.residents, {
     nullable: true,
-    eager: true
+    eager: true,
+    onDelete: 'SET NULL',
   })
   accommodation?: CityBuilding;
 }

@@ -37,10 +37,8 @@ export class CityService {
   }
 
   /**
-   * Destroy a building in the city.
-   * @todo work around foreign key constraint
-   *  -> delete must be cascading
-   *  -> or first delete all references (make habitants unemployed/homeless) and then the city building
+   * Destroy a building in the city. Construction Costs are not refunded.
+   * @todo find a new accommodation/workpace for the habitants that lived/worked at the city buildng.
    * @param cityBuildingId
    */
   public async destroyCityBuildings(cityBuildingIds: string[]): Promise<number> {
