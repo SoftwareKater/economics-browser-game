@@ -8,6 +8,7 @@ import { AppService } from './app.service';
 import { BuildingModule } from './components/building/building.module';
 import { CityModule } from './components/city/city.module';
 import { ProductModule } from './components/product/product.module';
+import { UserModule } from './components/user/user.module';
 import { BuildingConstructionCost } from './models/building-construction-cost.entity';
 import { BuildingInput } from './models/building-input.entity';
 import { BuildingMaintenanceCost } from './models/building-maintenance-cost.entity';
@@ -18,6 +19,7 @@ import { CityProduct } from './models/city-product.entity';
 import { City } from './models/city.entity';
 import { Habitant } from './models/habitant.entity';
 import { Product } from './models/product.entity';
+import { User } from './models/user.entity';
 
 @Module({
   imports: [
@@ -44,6 +46,7 @@ import { Product } from './models/product.entity';
         CityProduct,
         Habitant,
         Product,
+        User,
       ],
       synchronize: true,
       migrations: ['migration/*.js'],
@@ -54,6 +57,7 @@ import { Product } from './models/product.entity';
     ProductModule,
     CityModule,
     BuildingModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService],

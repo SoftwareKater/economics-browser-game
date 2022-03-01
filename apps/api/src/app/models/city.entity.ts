@@ -1,8 +1,9 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-import { Entity, Column, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, OneToMany, PrimaryGeneratedColumn, OneToOne } from 'typeorm';
 import { CityBuilding } from './city-building.entity';
 import { CityProduct } from './city-product.entity';
 import { Habitant } from './habitant.entity';
+import { User } from './user.entity';
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
@@ -32,4 +33,11 @@ export class City {
   @Field((type) => Date)
   @Column()
   lastCityUpdate!: Date;
+
+  /**
+   * The owner of the city
+   */
+  @Field((type) => User)
+  @OneToOne(() => User, (user) => user.city)
+  user!: User;
 }
