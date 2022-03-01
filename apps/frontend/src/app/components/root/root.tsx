@@ -1,10 +1,8 @@
-import './root.scss';
-
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 import SideNavMenu from '../side-nav-menu/side-nav-menu';
 import { Header } from '@economics1k/ui';
 
-import { defaultTheme, Provider } from '@adobe/react-spectrum';
+import { Content, defaultTheme, Flex, Provider } from '@adobe/react-spectrum';
 import RouterContainer from '../router-container/router-container';
 import Logout from '../../auth/components/logout/logout';
 
@@ -18,10 +16,14 @@ export const Root = () => {
     <ApolloProvider client={client}>
       <Provider theme={defaultTheme}>
         <Header />
-        <div className="content">
-          <SideNavMenu />
-          <RouterContainer />
-        </div>
+        <Flex direction="row" gap="size-100" >
+          <Content width="size-3000">
+            <SideNavMenu />
+          </Content>
+          <Content minWidth="size-3000">
+            <RouterContainer />
+          </Content>
+        </Flex>
         <Logout />
       </Provider>
     </ApolloProvider>

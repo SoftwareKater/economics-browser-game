@@ -6,6 +6,8 @@ import ProductionSite from '../production-site/production-site';
 import Product from '../product/product';
 import GuardedRoute from './guarded-route';
 import HabitantsOverview from '../habitants-overview/habitants-overview';
+import About from '../about/about';
+import { Content } from '@adobe/react-spectrum';
 
 /**
  * Router Outlet
@@ -16,7 +18,7 @@ const RouterContainer = () => {
   const isAutheticated = false;
 
   return (
-    <div>
+    <Content>
       <Route path="/home" exact component={LandingPage} />
       <GuardedRoute
         path="/city"
@@ -28,7 +30,8 @@ const RouterContainer = () => {
       <Route path="/accommodations" exact component={Accommodation} />
       <Route path="/production-sites" exact component={ProductionSite} />
       <Route path="/products" exact component={Product} />
-    </div>
+      <Route path="/about" exact component={About} />
+    </Content>
   );
 };
 

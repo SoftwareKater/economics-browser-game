@@ -46,6 +46,9 @@ export const SideNavMenu = () => {
       <sp-sidenav-item value="Products" href="/products" target="_blank">
         Products
       </sp-sidenav-item>
+      <sp-sidenav-item value="About" href="/about">
+        About
+      </sp-sidenav-item>
     </sp-sidenav>
   );
 };
