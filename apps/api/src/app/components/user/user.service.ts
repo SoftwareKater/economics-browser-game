@@ -20,8 +20,9 @@ export class UserService {
       passwordHash: '****',
       city: { id: cityId } as City,
     };
+
+    console.log("Creating new user with name ", newUser.name);
     const res = await this.userRepository.save(newUser);
-    console.log(res);
     return true;
   }
 

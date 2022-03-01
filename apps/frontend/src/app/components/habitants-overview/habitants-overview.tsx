@@ -54,8 +54,11 @@ export const HabitantsOverview = () => {
     },
     async sort({ items, sortDescriptor }) {
       return {
+        // @ts-ignore
         items: items.sort((a: HabitantsTableItem, b: HabitantsTableItem) => {
+          // @ts-ignore
           const first = a[sortDescriptor.column];
+          // @ts-ignore
           const second = b[sortDescriptor.column];
           let cmp = collator.compare(first, second);
           if (sortDescriptor.direction === 'descending') {
@@ -94,6 +97,7 @@ export const HabitantsOverview = () => {
         )}
       </TableHeader>
       <TableBody items={rows}>
+        {/* @ts-ignore */}
         {(item) => <Row>{(columnKey) => <Cell>{item[columnKey]}</Cell>}</Row>}
       </TableBody>
     </TableView>

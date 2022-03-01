@@ -41,7 +41,9 @@ export class CityService {
    * @todo find a new accommodation/workpace for the habitants that lived/worked at the city buildng.
    * @param cityBuildingId
    */
-  public async destroyCityBuildings(cityBuildingIds: string[]): Promise<number> {
+  public async destroyCityBuildings(
+    cityBuildingIds: string[]
+  ): Promise<number> {
     const res = await this.cityBuildingRepository.delete(cityBuildingIds);
     console.log(res);
     return res.affected || 0;
@@ -213,10 +215,15 @@ export class CityService {
     if (!city) {
       return false;
     }
+    let spaceUsed = 0;
+    if (!city.buildings || city.buildings.length < 1) {
+      spaceUsed = 0;
+    } else {
+      spaceUsed = city.buildings
+        .map((building) => building.building.size)
+        .reduce((a, b) => a + b);
+    }
     const spaceNeeded = newBuilding.size;
-    const spaceUsed = city.buildings
-      .map((building) => building.building.size)
-      .reduce((a, b) => a + b);
     const spaceAvailable = INIT_CITY_SIZE_IN_SQUARE_METER - spaceUsed;
     return spaceAvailable > spaceNeeded;
   }

@@ -1,10 +1,10 @@
 import { City } from '@economics1k/data-access';
 
-  /**
-   * Move this into a lib that can be accessed by both frontend and backend
-   * @param city
-   * @returns the number of homeless habitants
-   */
+/**
+ * Move this into a lib that can be accessed by both frontend and backend
+ * @param city
+ * @returns the number of homeless habitants
+ */
 export class CityStatistics {
   /**
    * where to put this function?
@@ -26,6 +26,9 @@ export class CityStatistics {
   }
 
   getLandUsage(city: City): number {
+    if (!city.buildings || city.buildings.length < 1) {
+      return 0;
+    }
     const landUsage = city.buildings
       .map((building) => building.building.size)
       .reduce((a, b) => a + b);

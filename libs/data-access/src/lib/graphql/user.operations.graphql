@@ -3,6 +3,17 @@ mutation createUser($nickName: String!, $cityName: String!, $email: String!, $pa
   createUser(nickName: $nickName, cityName: $cityName, email: $email, password: $password)
 }
 
+mutation login($email: String!, $password: String!) {
+  login(email: $email, password: $password) {
+    id
+    name
+    city {
+      id
+    }
+  }
+}
+
+
 query getUserById($userId: String!) {
   getUserById(userId: $userId) {
     id
