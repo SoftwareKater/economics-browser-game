@@ -88,16 +88,6 @@ export class CityResolver {
   }
 
   /**
-   * @param name
-   * @returns
-   */
-  /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
-  @Mutation((returns) => String, { name: 'createCity' })
-  async createCity(@Args({ name: 'name', type: () => String }) name: string) {
-    return this.cityCreationService.createCity(name);
-  }
-
-  /**
    * Destroy buildings in the city
    * @todo check if user is owner of the city that the buildings stand in
    * @param cityId
