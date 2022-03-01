@@ -5,6 +5,7 @@ import CityOverview from '../city-overview/city-overview';
 import ProductionSite from '../production-site/production-site';
 import Product from '../product/product';
 import GuardedRoute from './guarded-route';
+import About from '../about/about';
 
 /**
  * Router Outlet
@@ -27,6 +28,7 @@ const RouterContainer = () => {
       <Route path="/accommodations" exact component={Accommodation} />
       <Route path="/production-sites" exact component={ProductionSite} />
       <Route path="/products" exact component={Product} />
+      <Route path="/about" exact component={About} />
     </div>
   );
 };
