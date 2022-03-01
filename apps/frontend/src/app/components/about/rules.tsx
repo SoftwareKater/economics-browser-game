@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Content, Heading, Item } from '@adobe/react-spectrum';
+import { Content, Heading, Item, ListBox, Text } from '@adobe/react-spectrum';
 
 export const Rules = () => {
   return (
@@ -12,16 +12,20 @@ export const Rules = () => {
 
       <Heading level={4}>Starting Endowment of Cities</Heading>
       <Content>
-        - population of 100 habitants
-        - 1 square km land
-        - some basic buildings as a starting point
+        <ListBox aria-label="Alignment">
+          <Item>population of 100 habitants</Item>
+          <Item>1 square km land</Item>
+          <Item>5 shacks</Item>
+          <Item>1000 wood</Item>
+          <Item>500 stone</Item>
+          <Item>200 bread</Item>
+        </ListBox>
       </Content>
 
       <Heading level={3}>Buildings</Heading>
-        - Have a size
-        - To build a building, the city must have
-          - the necessary products to pay the construction cost
-          - enough space to fit the buildings size
+      <Text>
+        There are two types of buildings: accommodations and production sites. Each building has a fixed size in square kilometer that it occupies. In order to build a building the city must have the necessary products to pay the construction cost and enough space to fit the buildings size.
+      </Text>
 
       <Heading level={4}>Accommodations</Heading>
       <Content>
@@ -31,9 +35,25 @@ export const Rules = () => {
       </Content>
 
       <Heading level={4}>Production Sites</Heading>
-      <Content>
-        - Produce Output
-      </Content>
+      <Text>
+        The output of a production sites is influenced by various factors. The formula for the overall productivity of a production site is
+
+        sum (habitantBaseProductivity * accommodationProductivityMultiplier * starvingProductivityMultiplier) / # workplaces
+
+        Example:
+        A forestry has a base output of 10 wood per round and has 5 workplaces. Assume that it employs 3 habitants. One of them is living in a shack, the other is homeless and the last is homeless and starving since 2 rounds. Thus the output multiplier of the forestry is
+
+        (1 * productionMultiplierOfShack + 1 * productionMultiplierOfHomeless + 1 * productionMultiplierOfHomeless * productionMultiplierOfStarving2 + 2 * 0) / 5
+        = (1 * 0.7 + 1 * 0.1 + 1 * 0.1 * 0.8 + 2 * 0) / 5
+        = 0.88 / 5
+        = 0.176
+
+        After developing the city this may greatly increase. It can even rise above 1, so that the forestry produces more than 10 wood. Assume that again only 3 habitants are working at the forestry. But now all of them live in fincas and noone is starving.
+
+        (3 * productionMultiplierOfFinca + 2 * 0) / 5
+        = (3 * 2 + 2 * 0) / 5
+        = 6/5
+      </Text>
 
       <Heading level={3}>Habitants</Heading>
       <Content>
@@ -44,11 +64,9 @@ export const Rules = () => {
       </Content>
 
       <Heading level={4}>Starving</Heading>
-      <Content>
-        - habitants that do not get enough nutrition units starve
-        - starving greatly decreases productivity until it reaches 0
-        - (just like they are not born, your city will always house 1000 habitants)
-      </Content>
+      <Text>
+        Habitants that do not get enough food starve. Starving greatly decreases productivity until it reaches 0. This does not cause the habitant to die, but he will not contribute to the production of outputs in the production site that he is employed with.
+      </Text>
 
       <Heading level={3}>Market</Heading>
       <Content>
