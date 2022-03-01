@@ -1,0 +1,25 @@
+
+mutation createUser($nickName: String!, $cityName: String!, $email: String!, $password: String!) {
+  createUser(nickName: $nickName, cityName: $cityName, email: $email, password: $password)
+}
+
+query getUserById($userId: String!) {
+  getUserById(userId: $userId) {
+    id
+    name
+    city {
+      id
+    }
+  }
+}
+
+query getUserByEmail($email: String!) {
+  getUserByEmail(email: $email) {
+    id
+    name
+    city {
+      id
+    }
+  }
+}
+

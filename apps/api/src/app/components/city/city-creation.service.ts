@@ -28,7 +28,7 @@ export class CityCreationService {
   /**
    * Create a new city with initial values for products, buildings and habitants.
    * @param name
-   * @returns
+   * @returns id of the new city
    */
   public async createCity(name: string): Promise<string> {
     console.log(`Creating a new city with the name ${name}`);

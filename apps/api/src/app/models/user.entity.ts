@@ -1,5 +1,11 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-import { Entity, Column, PrimaryGeneratedColumn, OneToOne } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  OneToOne,
+  JoinColumn,
+} from 'typeorm';
 import { City } from './city.entity';
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
@@ -27,6 +33,7 @@ export class User {
    * The city of the user
    */
   @Field((type) => City)
-  @OneToOne(() => City, (city) => city.user)
+  @OneToOne(() => City, (city) => city.user, { eager: true })
+  @JoinColumn()
   city!: City;
 }

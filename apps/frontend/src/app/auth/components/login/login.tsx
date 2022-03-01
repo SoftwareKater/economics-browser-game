@@ -4,18 +4,39 @@ import { TextField } from '@adobe/react-spectrum';
 import { Button } from '@adobe/react-spectrum';
 import { AuthService } from '../../auth-service';
 import TokenStore from '../../token-store';
-import Logout from '../logout/logout';
+import { useGetUserByEmailQuery } from '@economics1k/data-access';
+import { UserToken } from '../../user-token.interface';
 
 export const Login = () => {
-  const authService = new AuthService();
   const tokenStore = new TokenStore();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loginError, setLoginError] = useState('');
   const [userToken, setUserToken] = useState(tokenStore.getToken());
 
-  function login(email: string, password: string) {
-    const token = authService.login(email, password);
+  const { loading, error, data } = useGetUserByEmailQuery({
+    variables: { email },
+  });
+
+  /**
+   * @todo getUserByEmail query is constantly fired when typing in the email field. how to do this correct?
+   * @returns
+   */
+  function login(): void {
+    if (error) {
+      console.error(error);
+      return;
+    }
+    if (!data) {
+      return;
+    }
+    const res = data?.getUserByEmail;
+    const token: UserToken = {
+      name: res.name,
+      id: res.id,
+      cityId: res.city.id,
+    };
     tokenStore.saveToken(token);
     setUserToken(token);
   }
@@ -24,7 +45,7 @@ export const Login = () => {
     event.preventDefault();
 
     try {
-      login(email, password);
+      login();
     } catch (err: any) {
       console.error(err.message);
     }
