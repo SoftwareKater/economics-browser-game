@@ -97,8 +97,13 @@ export const HabitantsOverview = () => {
         )}
       </TableHeader>
       <TableBody items={rows}>
-        {/* @ts-ignore */}
-        {(item) => <Row>{(columnKey) => <Cell>{item[columnKey]}</Cell>}</Row>}
+        {(item) => (
+          <Row>
+            {(columnKey) => (
+              <Cell>{item[columnKey as keyof HabitantsTableItem]}</Cell>
+            )}
+          </Row>
+        )}
       </TableBody>
     </TableView>
   );
