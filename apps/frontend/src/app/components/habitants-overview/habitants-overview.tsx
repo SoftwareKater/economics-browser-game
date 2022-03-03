@@ -74,7 +74,7 @@ export const HabitantsOverview = () => {
     return <div></div>;
   }
   const rows = data?.getMyCity.habitants.map((habitant, index) => ({
-    id: index,
+    id: index + 1,
     name: habitant.name,
     housing: habitant.accommodation?.building.name ?? '',
     employer: habitant.employment?.building.name ?? '',
