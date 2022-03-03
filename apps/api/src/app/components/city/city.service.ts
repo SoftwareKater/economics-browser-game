@@ -66,7 +66,13 @@ export class CityService {
     }
 
     // Check if enough space is available for the new building
-    if (!this.checkSpace(newBuilding, cityId)) {
+    const city = await this.getCity(cityId);
+    if (!city) {
+      throw Error(
+        `Cannot create building, because there is no city with id ${cityId}`
+      );
+    }
+    if (!this.checkSpace(newBuilding, city)) {
       throw new Error(
         `Cannot create Building. Reason: Not enough space available.`
       );
@@ -207,14 +213,7 @@ export class CityService {
     return newCityBuilding;
   }
 
-  private async checkSpace(
-    newBuilding: Building,
-    cityId: string
-  ): Promise<boolean> {
-    const city = await this.getCity(cityId);
-    if (!city) {
-      return false;
-    }
+  private checkSpace(newBuilding: Building, city: City): boolean {
     let spaceUsed = 0;
     if (!city.buildings || city.buildings.length < 1) {
       spaceUsed = 0;
