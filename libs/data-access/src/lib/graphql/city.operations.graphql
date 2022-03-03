@@ -102,6 +102,7 @@ query getMyCityWithProducts {
         name
       }
       amount
+      allow
     }
   }
 }

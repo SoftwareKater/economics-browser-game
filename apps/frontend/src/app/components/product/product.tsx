@@ -1,8 +1,5 @@
-import React from 'react';
-import {
-  useProductsQuery,
-  useGetMyCityWithProductsQuery,
-} from '@economics1k/data-access';
+import React, { useState } from 'react';
+import { useGetMyCityWithProductsQuery } from '@economics1k/data-access';
 import {
   Cell,
   Column,
@@ -12,11 +9,14 @@ import {
   TableHeader,
   Content,
   ProgressCircle,
-  Checkbox,
+  ActionGroup,
+  Item,
 } from '@adobe/react-spectrum';
+import LockClosed from '@spectrum-icons/workflow/LockClosed';
+import LockOpen from '@spectrum-icons/workflow/LockClosed';
 
 interface CityProductTableItem {
-  id: number;
+  id: string;
   name: string;
   amount: number;
   allow: boolean;
@@ -29,9 +29,13 @@ interface CityProductsTableColumn {
 
 /**
  * @todo make table multiselectable and add action like "disallow/allow" as action buttons below the table.
-  */
+ */
 const Product = () => {
   const myCityResult = useGetMyCityWithProductsQuery();
+
+  const [selectedKeys, setSelectedKeys] = React.useState<Set<React.Key>>(
+    new Set()
+  );
 
   if (myCityResult.loading) {
     return <ProgressCircle aria-label="Loading Products" isIndeterminate />;
@@ -53,50 +57,70 @@ const Product = () => {
 
   const rows: CityProductTableItem[] = myCityResult.data.getMyCityWithProducts.products.map(
     (cityProduct, index) => ({
-      id: index,
+      id: '' + (index + 1),
       name: cityProduct.product.name,
       amount: cityProduct.amount,
-      allow: true,
+      allow: cityProduct.allow,
     })
   );
 
-  function changeAllowItem(tableRow: CityProductTableItem): void {
-    const row = rows.find((row) => row.id === tableRow.id);
-    if (!row) {
-      return;
-    }
-    const currentAllowState = row.allow;
-    row.allow = !currentAllowState;
-
-    console.log('change the allow state of the product');
+  function changeAllowItem(rowKeys: Set<React.Key>): CityProductTableItem[] {
+    const newRows: CityProductTableItem[] = [];
+    rowKeys.forEach((key) => {
+      const row = rows.find((row) => row.id === key);
+      if (!row) {
+        console.warn(`Cannot find row with key ${key}`);
+        return;
+      }
+      const currentAllowState = row.allow;
+      row.allow = !currentAllowState;
+      newRows.push(row);
+    });
+    return newRows;
   }
 
-  console.log(columns, rows);
+  function onActionPress(action: React.Key) {
+    if (action === 'allow') {
+      const res = changeAllowItem(selectedKeys);
+      console.error(`Not implemented API call to persist `, res);
+    }
+  }
+
+  function onSelectionChange(selection: unknown) {
+    const keys = selection as Set<React.Key>;
+    setSelectedKeys(keys);
+  }
 
   return (
     <Content>
       <TableView
         aria-label="Table of all products of the city."
         maxWidth="size-6000"
+        selectionMode="multiple"
+        onSelectionChange={onSelectionChange}
       >
         <TableHeader columns={columns}>
           {(column) => <Column key={column.uid}>{column.name}</Column>}
         </TableHeader>
         <TableBody items={rows}>
           {(item) => (
-            <Row>
+            <Row key={item.id}>
               <Cell>{item.name}</Cell>
               <Cell>{item.amount}</Cell>
               <Cell>
-                <Checkbox
-                  isSelected={item.allow}
-                  onChange={() => changeAllowItem(item)}
-                ></Checkbox>
+                {item.allow
+                  ? // <LockOpen size="S" aria-label="Allowed" />
+                    'yes'
+                  : // <LockClosed size="S" aria-label="Locked" />
+                    'no'}
               </Cell>
             </Row>
           )}
         </TableBody>
       </TableView>
+      <ActionGroup onAction={onActionPress}>
+        <Item key="allow">Allow/Disallow</Item>
+      </ActionGroup>
     </Content>
   );
 };
