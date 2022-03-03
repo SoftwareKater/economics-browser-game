@@ -51,6 +51,9 @@ export const SideNavMenu = () => {
         <sp-sidenav-item value="Economy" href="/economy">
           Overview
         </sp-sidenav-item>
+        <sp-sidenav-item value="Newspaper" href="/newspaper">
+          Newspaper
+        </sp-sidenav-item>
         <sp-sidenav-item value="Market" href="/market">
           Market
         </sp-sidenav-item>
