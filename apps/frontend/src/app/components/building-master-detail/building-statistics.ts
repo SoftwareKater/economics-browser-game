@@ -29,7 +29,7 @@ export class BuildingStatistics {
     return spaceUsedForBuildingType;
   }
 
-  public getBuildingStatus(
+  public getBuildingStatusLightColor(
     buildingId: string,
     buildingType: BuildingType,
     places: number

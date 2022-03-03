@@ -8,7 +8,7 @@ import {
   useCreateBuildingMutation,
   useDeleteBuildingsMutation,
 } from '@economics1k/data-access';
-
+import { Content, Flex, Heading } from '@adobe/react-spectrum';
 import { InfoCard, DetailCard } from '@economics1k/ui';
 import { BuildingMasterDetailProps } from './building-master-detail-component-props.interface';
 import { BuildingMasterDetailComponentState } from './building-master-detail-component-state.interface';
@@ -79,48 +79,55 @@ export const BuildingMasterDetail = (props: BuildingMasterDetailProps) => {
     });
   }
 
+  /**
+   * @todo NO! Use concrete components for the different building types
+   */
+  function getPageTitle(): string {
+    if (props.buildingType === BuildingType.Accommodation) {
+      return 'Accommodations';
+    }
+    return 'Production Sites';
+  }
+
   return (
-    <section>
-      <h2>
-        {props.buildingType === BuildingType.Accommodation
-          ? 'Accommodations'
-          : 'Production Sites'}
-      </h2>
+    <Content>
+      <Heading level={2}>{getPageTitle()}</Heading>
       <p>
-        Space used for Accommodations:
-        {` ${value.spaceUsedForBuildingType} `}
+        Space used for {getPageTitle()}:{` ${value.spaceUsedForBuildingType} `}
         m^2
       </p>
-      <div>
+      <Content minHeight="size-6000" marginBottom="size-100">
         {value.buidingDetails?.id ? (
           <DetailCard key={value.buidingDetails.id} {...value.buidingDetails} />
         ) : (
-          <div></div>
+          <Content><p></p></Content>
         )}
-      </div>
-      <div className="master">
+      </Content>
+      <Flex direction="row" minWidth="size-4600" gap="size-100" wrap="wrap">
         {props.buildings.map(({ id, name, places, buildingType }) => (
-          <InfoCard
-            key={id}
-            {...{
-              title: name,
-              alt: name,
-              status: buildingStatistics.getBuildingStatus(
-                id,
-                buildingType,
-                places
-              ),
-              amount: props.city.buildings.filter(
-                (cityBuilding) => cityBuilding.building.id === id
-              ).length,
-              primaryAction: () => {
-                updateBuildingDetails(id);
-              },
-            }}
-          ></InfoCard>
+          <Content key={id}>
+            <InfoCard
+              {...{
+                title: name,
+                alt: name,
+                statusLightColor: buildingStatistics.getBuildingStatusLightColor(
+                  id,
+                  buildingType,
+                  places
+                ),
+                status: 'status',
+                amount: props.city.buildings.filter(
+                  (cityBuilding) => cityBuilding.building.id === id
+                ).length,
+                primaryAction: () => {
+                  updateBuildingDetails(id);
+                },
+              }}
+            ></InfoCard>
+          </Content>
         ))}
-      </div>
-    </section>
+      </Flex>
+    </Content>
   );
 };
 
