@@ -24,5 +24,6 @@ import { UserService } from './user.service';
     ]),
   ],
   providers: [UserResolver, CityCreationService, UserService],
+  exports: [UserService],
 })
 export class UserModule {}

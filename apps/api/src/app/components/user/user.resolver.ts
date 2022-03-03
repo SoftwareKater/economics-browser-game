@@ -1,10 +1,9 @@
+import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { City } from '../../models/city.entity';
 import { User } from '../../models/user.entity';
-import { CityCreationService } from '../city/city-creation.service';
 import { UserService } from './user.service';
+import { AuthGuard } from '@nestjs/passport';
+import { LocalAuthGuard } from '../auth/local-auth.guard';
 
 @Resolver(() => User)
 export class UserResolver {
@@ -52,10 +51,8 @@ export class UserResolver {
   async getUserByEmail(
     @Args({ name: 'email', type: () => String }) email: string
   ): Promise<User | undefined> {
-    console.log("Getting user by email")
     try {
       const res = await this.userService.getUserByEmail(email);
-      console.log('Found user', res);
       return res;
     } catch (err: any) {
       console.error(err);
@@ -69,15 +66,16 @@ export class UserResolver {
    * @param password
    * @returns
    */
-   @Mutation(() => User)
-   async login(
-     @Args({ name: 'email', type: () => String }) email: string,
-     @Args({ name: 'password', type: () => String }) password: string
-   ): Promise<User | undefined> {
-     try {
-       return this.userService.getUserByEmail(email);
-     } catch (err: any) {
-       console.error(err);
-     }
-   }
+  @UseGuards(LocalAuthGuard)
+  @Mutation(() => User)
+  async login(
+    @Args({ name: 'email', type: () => String }) email: string,
+    @Args({ name: 'password', type: () => String }) password: string
+  ): Promise<User | undefined> {
+    try {
+      return this.userService.getUserByEmail(email);
+    } catch (err: any) {
+      console.error(err);
+    }
+  }
 }
