@@ -4,10 +4,15 @@ import { Header } from '@economics1k/ui';
 
 import { Content, defaultTheme, Flex, Provider } from '@adobe/react-spectrum';
 import RouterContainer from '../router-container/router-container';
+import TokenStore from '../../auth/token-store';
+
+const tokenStore = new TokenStore();
 
 const client = new ApolloClient({
   uri: 'http://localhost:3333/graphql', // sandbox gql server: https://48p1r2roz4.sse.codesandbox.io
   cache: new InMemoryCache(),
+  headers: { "Authorization": `Bearer ${tokenStore.getToken()}` }
+
 });
 
 export const Root = () => {

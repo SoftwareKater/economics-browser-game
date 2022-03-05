@@ -4,7 +4,6 @@ import { TextField } from '@adobe/react-spectrum';
 import { Button, Content, Text } from '@adobe/react-spectrum';
 import TokenStore from '../../token-store';
 import { useLoginMutation, User } from '@economics1k/data-access';
-import { UserToken } from '../../user-token.interface';
 import { useHistory } from 'react-router-dom';
 import Logout from '../logout/logout';
 
@@ -33,12 +32,7 @@ export const Login = () => {
       return;
     }
 
-    const user = res.data.login as User;
-    const token: UserToken = {
-      name: user.name,
-      id: user.id,
-      cityId: user.city.id,
-    };
+    const token = res.data.login;
     tokenStore.saveToken(token);
     setUserToken(token);
     history.push('/city')
@@ -73,7 +67,7 @@ export const Login = () => {
   return (
     <Content>
       <Text>
-        You are logged in as {userToken.name}
+        You are logged in as {userToken}
       </Text>
       <Logout />
     </Content>

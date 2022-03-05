@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { City, useGetMyCityQuery, useGetMyCityWithHabitantsQuery } from '@economics1k/data-access';
+import { City, useGetMyCityQuery } from '@economics1k/data-access';
 import { ProgressCircle } from '@adobe/react-spectrum';
 import { CityStatistics } from './city-statistics';
 

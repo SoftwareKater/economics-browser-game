@@ -1,8 +1,11 @@
+import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { City } from '../../models/city.entity';
-import { CityCreationService } from './city-creation.service';
+import { User } from '../../models/user.entity';
+import { GqlAuthGuard } from '../auth/gql-auth.guard';
+import { GqlCurrentUser } from '../auth/gql-current-user.decorator';
 import { CityUpdateService } from './city-update.service';
 import { CityService } from './city.service';
 
@@ -10,7 +13,6 @@ import { CityService } from './city.service';
 export class CityResolver {
   constructor(
     private readonly cityService: CityService,
-    private readonly cityCreationService: CityCreationService,
     private readonly cityUpdateService: CityUpdateService,
     @InjectRepository(City)
     private cityRepository: Repository<City>
@@ -29,9 +31,11 @@ export class CityResolver {
    * @returns The city of the player that send the query
    */
   /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
+  @UseGuards(GqlAuthGuard)
   @Query((returns) => City, { name: 'getMyCity' })
-  async getMyCity() {
-    const myCity = await this.cityRepository.findOne({
+  async getMyCity(@GqlCurrentUser() user: User) {
+    const myCity = await this.cityRepository.findOneOrFail({
+      where: { id: user.city.id },
       relations: ['habitants', 'buildings', 'products'],
     });
     return myCity;
@@ -97,7 +101,8 @@ export class CityResolver {
   /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
   @Mutation((returns) => String, { name: 'deleteBuildings' })
   async deleteBuildings(
-    @Args({ name: 'cityBuildingIds', type: () => [String] }) cityBuildingIds: string[]
+    @Args({ name: 'cityBuildingIds', type: () => [String] })
+    cityBuildingIds: string[]
   ): Promise<number | undefined> {
     try {
       return this.cityService.destroyCityBuildings(cityBuildingIds);

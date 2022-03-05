@@ -1,8 +1,7 @@
 import { JWT_SESSION_STORAGE_KEY } from './constants';
-import { UserToken } from './user-token.interface';
 
 export default class TokenStore {
-  public getToken(): UserToken | undefined {
+  public getToken(): string | undefined {
     const tokenString = sessionStorage.getItem(JWT_SESSION_STORAGE_KEY);
     if (!tokenString) {
       return undefined;
@@ -11,7 +10,7 @@ export default class TokenStore {
     return userToken;
   }
 
-  public saveToken(userToken: UserToken): void {
+  public saveToken(userToken: string): void {
     sessionStorage.setItem(JWT_SESSION_STORAGE_KEY, JSON.stringify(userToken));
   }
 
