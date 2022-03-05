@@ -5,6 +5,7 @@ import { join } from 'path';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { AuthModule } from './components/auth/auth.module';
 import { BuildingModule } from './components/building/building.module';
 import { CityModule } from './components/city/city.module';
 import { ProductModule } from './components/product/product.module';
@@ -26,6 +27,7 @@ import { User } from './models/user.entity';
     GraphQLModule.forRoot({
       installSubscriptionHandlers: true,
       autoSchemaFile: join(process.cwd(), 'tools/graphql/schema.gql'),
+      context: ({ req }) => ({ req }),
     }),
     TypeOrmModule.forRoot({
       // logging: true,
@@ -58,6 +60,7 @@ import { User } from './models/user.entity';
     CityModule,
     BuildingModule,
     UserModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

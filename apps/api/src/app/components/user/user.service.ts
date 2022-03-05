@@ -12,16 +12,19 @@ export class UserService {
     private readonly cityCreationService: CityCreationService
   ) {}
 
-  public async createUserAndCity(input: CreateUserAndCityInput) {
+  public async createUserAndCity(
+    input: CreateUserAndCityInput
+  ): Promise<boolean> {
     const cityId = await this.cityCreationService.createCity(input.cityName);
+    const passwordHash = input.password; // @todo hash password
     const newUser: Partial<User> = {
       email: input.email,
       name: input.nickName,
-      passwordHash: '****',
+      passwordHash: passwordHash,
       city: { id: cityId } as City,
     };
 
-    console.log("Creating new user with name ", newUser.name);
+    console.log('Creating new user with name ', newUser.name);
     const res = await this.userRepository.save(newUser);
     return true;
   }
@@ -31,8 +34,9 @@ export class UserService {
   }
 
   public async getUserById(userId: string) {
-    return this.userRepository.findOne({
+    return this.userRepository.findOneOrFail({
       where: { id: userId },
+      relations: ['city'],
     });
   }
 
@@ -43,7 +47,6 @@ export class UserService {
   public async getUserByEmail(email: string): Promise<User> {
     const res = await this.userRepository.findOneOrFail({
       where: { email },
-      relations: ['city'],
     });
     return res;
   }

@@ -2,12 +2,14 @@ import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { User } from '../../models/user.entity';
 import { UserService } from './user.service';
-import { AuthGuard } from '@nestjs/passport';
-import { LocalAuthGuard } from '../auth/local-auth.guard';
+import { GqlAuthGuard } from '../auth/gql-auth.guard';
+import { GqlCurrentUser } from '../auth/gql-current-user.decorator';
 
 @Resolver(() => User)
 export class UserResolver {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+  ) {}
 
   /**
    * @todo HASH THE F***ING PASSWORD
@@ -35,47 +37,9 @@ export class UserResolver {
     }
   }
 
-  @Query(() => [User])
-  async getAllUsers(): Promise<User[]> {
-    return this.userService.get();
-  }
-
+  @UseGuards(GqlAuthGuard)
   @Query(() => User)
-  async getUserById(
-    @Args({ name: 'userId', type: () => String }) userId: string
-  ): Promise<User | undefined> {
-    return this.userService.getUserById(userId);
-  }
-
-  @Query(() => User)
-  async getUserByEmail(
-    @Args({ name: 'email', type: () => String }) email: string
-  ): Promise<User | undefined> {
-    try {
-      const res = await this.userService.getUserByEmail(email);
-      return res;
-    } catch (err: any) {
-      console.error(err);
-    }
-  }
-
-  /**
-   * @todo HASH AND COMPARE THE F***ING PASSWORD
-   * @param name
-   * @param email
-   * @param password
-   * @returns
-   */
-  @UseGuards(LocalAuthGuard)
-  @Mutation(() => User)
-  async login(
-    @Args({ name: 'email', type: () => String }) email: string,
-    @Args({ name: 'password', type: () => String }) password: string
-  ): Promise<User | undefined> {
-    try {
-      return this.userService.getUserByEmail(email);
-    } catch (err: any) {
-      console.error(err);
-    }
+  async getUser(@GqlCurrentUser() user: User) {
+    return this.userService.getUserById(user.id);
   }
 }
