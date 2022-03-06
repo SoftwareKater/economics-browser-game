@@ -84,24 +84,8 @@ query getMyCityWithBuildings {
   }
 }
 
-query getMyCityWithProducts {
-  getMyCityWithProducts {
-    id
-    name
-    products {
-      id
-      product {
-        id
-        name
-      }
-      amount
-      allow
-    }
-  }
-}
-
-mutation createBuilding($cityId: String!, $buildingId: String!) {
-  createBuilding(cityId: $cityId, buildingId: $buildingId)
+mutation createBuilding($buildingId: String!) {
+  createBuilding(buildingId: $buildingId)
 }
 
 mutation deleteBuildings($cityBuildingIds: [String!]!) {

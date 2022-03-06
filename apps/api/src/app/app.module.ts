@@ -21,6 +21,7 @@ import { Habitant } from './models/habitant.entity';
 import { Product } from './models/product.entity';
 import { User } from './models/user.entity';
 import { DbSeedModule } from './components/db-seed/db-seed.module';
+import { TYPEORM_MODULE_CONFIG } from './constants';
 
 @Module({
   imports: [
@@ -36,7 +37,7 @@ import { DbSeedModule } from './components/db-seed/db-seed.module';
       port: 3306,
       username: 'root',
       password: 'root',
-      database: 'test',
+      database: TYPEORM_MODULE_CONFIG.databaseName,
       entities: [
         Building,
         BuildingConstructionCost,

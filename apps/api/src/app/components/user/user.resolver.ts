@@ -13,6 +13,7 @@ export class UserResolver {
 
   /**
    * @todo HASH THE F***ING PASSWORD
+   * @todo add error handling (e.g. email / username already taken)
    * @param name
    * @param email
    * @param password

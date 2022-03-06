@@ -36,33 +36,24 @@ export class CityResolver {
     return myCity;
   }
 
+  @UseGuards(GqlAuthGuard)
   /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
   @Query((returns) => City, { name: 'getMyCityWithHabitants' })
-  async getMyCityWithHabitants() {
-    const myCity = await this.cityRepository.findOne({
+  async getMyCityWithHabitants(@GqlCurrentUser() user: User) {
+    const myCity = await this.cityRepository.findOneOrFail({
+      where: { id: user.city.id },
       relations: ['habitants'],
-    });
-    return myCity;
-  }
-
-  /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
-  @Query((returns) => City, { name: 'getMyCityWithBuildings' })
-  async getMyCityWithBuildings() {
-    const myCity = await this.cityRepository.findOne({
-      relations: ['buildings'],
     });
     return myCity;
   }
 
   @UseGuards(GqlAuthGuard)
   /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
-  @Query((returns) => City, { name: 'getMyCityWithProducts' })
-  async getMyCityWithProducts() {
-    11;
-    let myCity = await this.cityRepository.findOneOrFail();
-    await this.cityUpdateService.updateCity(myCity.id);
-    myCity = await this.cityRepository.findOneOrFail({
-      relations: ['products'],
+  @Query((returns) => City, { name: 'getMyCityWithBuildings' })
+  async getMyCityWithBuildings(@GqlCurrentUser() user: User) {
+    const myCity = await this.cityRepository.findOne({
+      where: { id: user.city.id },
+      relations: ['buildings'],
     });
     return myCity;
   }
@@ -74,12 +65,14 @@ export class CityResolver {
    * @param buildingId
    * @returns
    */
+  @UseGuards(GqlAuthGuard)
   /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
   @Mutation((returns) => String, { name: 'createBuilding' })
   async createBuilding(
-    @Args({ name: 'cityId', type: () => String }) cityId: string,
+    @GqlCurrentUser() user: User,
     @Args({ name: 'buildingId', type: () => String }) buildingId: string
   ): Promise<string | undefined> {
+    const cityId = user.city.id;
     try {
       return this.cityService.createBuilding(cityId, buildingId);
     } catch (err) {
@@ -94,9 +87,11 @@ export class CityResolver {
    * @param buildingId
    * @returns
    */
+  @UseGuards(GqlAuthGuard)
   /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
   @Mutation((returns) => String, { name: 'deleteBuildings' })
   async deleteBuildings(
+    @GqlCurrentUser() user: User,
     @Args({ name: 'cityBuildingIds', type: () => [String] })
     cityBuildingIds: string[]
   ): Promise<number | undefined> {
@@ -107,13 +102,14 @@ export class CityResolver {
     }
   }
   /**
-   * Delete a city by uuid
-   * @param uuid the identifier of a city
+   * Delete a user's city
    */
+  @UseGuards(GqlAuthGuard)
   /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
   @Mutation((returns) => Boolean)
-  async deleteCity(@Args({ name: 'uuid', type: () => String }) uuid: string) {
-    const deleteResult = await this.cityRepository.delete(uuid);
+  async deleteMyCity(@GqlCurrentUser() user: User) {
+    const cityId = user.city.id;
+    const deleteResult = await this.cityRepository.delete(cityId);
     return deleteResult.affected === 1;
   }
 }

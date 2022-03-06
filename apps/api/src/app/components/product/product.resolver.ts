@@ -3,6 +3,10 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Product } from '../../models/product.entity';
 
+/**
+ * endpoint to GET all products
+ * (on purpose un-authenticated)
+ */
 @Resolver(() => Product)
 export class ProductResolver {
   constructor(
