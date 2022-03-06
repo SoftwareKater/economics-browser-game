@@ -3,8 +3,28 @@
 ## To Do
 
 ### MVP
+- remove tailwind which is superfluous when using adobe spectrum
 - create a dockerfile / compose
+- imporve views
+  - habitants
+  - accommodations
+  - production-sites
 - destroy buildings
+- add the market
+  - add view/form for placing an offer
+  - add view/form for placing a bid
+  - add market clearing algorithm
+- add endpoint to dis-/allow products
+- habitants nutrition
+  - add nutrition values to consumable products
+  - add habitants nutrition to city update loop
+  - add the starving mechanism
+- accommodations maintenance costs
+  - if not paid, the accommodation must be abandoned
+  - all residents must find a new accommodation
+- add the government
+  - add the newspaper view where government requests are placed
+  - add an admin endpoint to create government requests
 - add checks (frontend and backend) for building city buildings
   - only show buildings that are constructed using resources that the player has
   - ...
