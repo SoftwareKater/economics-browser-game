@@ -1,0 +1,11 @@
+query getMyCityProducts {
+    getMyCityProducts {
+        id
+        amount
+        allow
+        product {
+            id
+            name
+        }
+    }
+}

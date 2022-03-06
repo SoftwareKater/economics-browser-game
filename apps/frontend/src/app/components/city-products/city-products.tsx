@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useGetMyCityWithProductsQuery } from '@economics1k/data-access';
+import { useGetMyCityProductsQuery } from '@economics1k/data-access';
 import {
   Cell,
   Column,
@@ -30,22 +30,22 @@ interface CityProductsTableColumn {
 /**
  * @todo make table multiselectable and add action like "disallow/allow" as action buttons below the table.
  */
-const Product = () => {
-  const myCityResult = useGetMyCityWithProductsQuery();
+const CityProducts = () => {
+  const myCityProductsResult = useGetMyCityProductsQuery();
 
   const [selectedKeys, setSelectedKeys] = React.useState<Set<React.Key>>(
     new Set()
   );
 
-  if (myCityResult.loading) {
+  if (myCityProductsResult.loading) {
     return <ProgressCircle aria-label="Loading Products" isIndeterminate />;
   }
 
-  if (myCityResult.error) {
+  if (myCityProductsResult.error) {
     return <p>Error :(</p>;
   }
 
-  if (!myCityResult.data) {
+  if (!myCityProductsResult.data) {
     return <p>Not Found :/</p>;
   }
 
@@ -55,7 +55,7 @@ const Product = () => {
     { name: 'Allow?', uid: 'allow' },
   ];
 
-  const rows: CityProductTableItem[] = myCityResult.data.getMyCityWithProducts.products.map(
+  const rows: CityProductTableItem[] = myCityProductsResult.data.getMyCityProducts.map(
     (cityProduct, index) => ({
       id: '' + (index + 1),
       name: cityProduct.product.name,
@@ -125,4 +125,4 @@ const Product = () => {
   );
 };
 
-export default Product;
+export default CityProducts;

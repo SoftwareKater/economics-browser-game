@@ -18,11 +18,6 @@ export class CityResolver {
     private cityRepository: Repository<City>
   ) {}
 
-  @Query(() => [City], { name: 'cities' })
-  async cities() {
-    return this.cityRepository.find();
-  }
-
   /**
    * @todo This needs to be secured with oauth, city to fetch should be read from token
    * @todo This query runs >20 sec and that needs to be reduced by at least 19sec
@@ -30,8 +25,8 @@ export class CityResolver {
    *      with #habitants x #buildings x #products result rows (way too much)
    * @returns The city of the player that send the query
    */
-  /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
   @UseGuards(GqlAuthGuard)
+  /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
   @Query((returns) => City, { name: 'getMyCity' })
   async getMyCity(@GqlCurrentUser() user: User) {
     const myCity = await this.cityRepository.findOneOrFail({
@@ -59,6 +54,7 @@ export class CityResolver {
     return myCity;
   }
 
+  @UseGuards(GqlAuthGuard)
   /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
   @Query((returns) => City, { name: 'getMyCityWithProducts' })
   async getMyCityWithProducts() {

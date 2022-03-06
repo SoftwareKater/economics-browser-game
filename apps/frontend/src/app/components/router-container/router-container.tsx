@@ -3,7 +3,7 @@ import LandingPage from '../landing-page/landing-page';
 import Accommodation from '../accommodation/accommodation';
 import CityOverview from '../city-overview/city-overview';
 import ProductionSite from '../production-site/production-site';
-import Product from '../product/product';
+import CityProducts from '../city-products/city-products';
 import GuardedRoute from './guarded-route';
 import HabitantsOverview from '../habitants-overview/habitants-overview';
 import About from '../about/about';
@@ -29,7 +29,7 @@ const RouterContainer = () => {
       <Route path="/habitants" exact component={HabitantsOverview} />
       <Route path="/accommodations" exact component={Accommodation} />
       <Route path="/production-sites" exact component={ProductionSite} />
-      <Route path="/products" exact component={Product} />
+      <Route path="/products" exact component={CityProducts} />
       <Route path="/about" exact component={About} />
     </Content>
   );

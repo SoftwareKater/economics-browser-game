@@ -7,6 +7,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './components/auth/auth.module';
 import { BuildingModule } from './components/building/building.module';
+import { CityProductModule } from './components/city-product/city-product.module';
 import { CityModule } from './components/city/city.module';
 import { ProductModule } from './components/product/product.module';
 import { UserModule } from './components/user/user.module';
@@ -61,6 +62,7 @@ import { User } from './models/user.entity';
     BuildingModule,
     UserModule,
     AuthModule,
+    CityProductModule,
   ],
   controllers: [AppController],
   providers: [AppService],
