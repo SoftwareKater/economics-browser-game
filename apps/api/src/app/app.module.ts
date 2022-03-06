@@ -3,8 +3,6 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { join } from 'path';
 
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { AuthModule } from './components/auth/auth.module';
 import { BuildingModule } from './components/building/building.module';
 import { CityProductModule } from './components/city-product/city-product.module';
@@ -22,6 +20,7 @@ import { City } from './models/city.entity';
 import { Habitant } from './models/habitant.entity';
 import { Product } from './models/product.entity';
 import { User } from './models/user.entity';
+import { DbSeedModule } from './components/db-seed/db-seed.module';
 
 @Module({
   imports: [
@@ -63,8 +62,7 @@ import { User } from './models/user.entity';
     UserModule,
     AuthModule,
     CityProductModule,
+    DbSeedModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
 })
 export class AppModule {}
