@@ -19,6 +19,8 @@
   - add nutrition values to consumable products
   - add habitants nutrition to city update loop
   - add the starving mechanism
+- habitants utility function
+- firms production function
 - accommodations maintenance costs
   - if not paid, the accommodation must be abandoned
   - all residents must find a new accommodation
@@ -42,6 +44,9 @@
 - automatic city updates
 - fix update city method (see todos in js docstring)
 - generated types (gql responses) are really f***ed up
+- auth
+  - hash passwords before writing to db
+  - validate jwts
 
 ### Future
 
