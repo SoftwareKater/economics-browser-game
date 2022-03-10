@@ -9,7 +9,7 @@
 - run `npm run start:frontend` to start the frontend
 
 Then
-- graphql sandbox can be accessed via localhost:3000/graphql
+- graphql sandbox can be accessed via localhost:3333/graphql
 
 # Generated Readme
 

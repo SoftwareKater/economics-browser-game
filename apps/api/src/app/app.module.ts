@@ -33,10 +33,10 @@ import { TYPEORM_MODULE_CONFIG } from './constants';
     TypeOrmModule.forRoot({
       // logging: true,
       type: 'mysql',
-      host: 'localhost',
-      port: 3306,
-      username: 'root',
-      password: 'root',
+      host: TYPEORM_MODULE_CONFIG.databaseHost,
+      port: TYPEORM_MODULE_CONFIG.databasePort,
+      username: TYPEORM_MODULE_CONFIG.databaseUser,
+      password: TYPEORM_MODULE_CONFIG.databasePassword,
       database: TYPEORM_MODULE_CONFIG.databaseName,
       entities: [
         Building,

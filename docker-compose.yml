@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  mysqldb:
+    container_name: economics1k-db
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'test'
+      MYSQL_USER: 'user'
+      MYSQL_PASSWORD: 'password'
+      MYSQL_ROOT_PASSWORD: 'root'
+    ports:
+      - 3306:3306
+      - 33060:33060
+    expose:
+      - 3306
+    networks:
+      - db-api-network
+  api:
+    depends_on:
+      - mysqldb
+    environment:
+      - DB_HOST=mysqldb
+    container_name: economics1k-api
+    # image: economics1k-api-dev:1.0.0
+    build:
+      context: .
+      target: development
+      dockerfile: ./apps/api/Dockerfile
+    command: npm run start:api
+    ports:
+      - 3000:3000
+      - 3333:3333
+      - 9229:9229
+    networks:
+      - db-api-network
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    restart: unless-stopped
+
+networks:
+  db-api-network:

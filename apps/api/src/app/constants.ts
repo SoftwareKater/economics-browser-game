@@ -23,4 +23,8 @@ export const JWT_MODULE_CONFIG = {
 
 export const TYPEORM_MODULE_CONFIG = {
     databaseName: 'test',
+    databasePort: 3306,
+    databaseUser: 'root',
+    databasePassword: 'root',
+    databaseHost: process.env.DB_HOST || 'localhost',
 }
