@@ -14,6 +14,9 @@ import { CITY_UPDATES_QUEUE_NAME, CITY_UPDATE_JOB_NAME } from './constants';
 import { InjectQueue } from '@nestjs/bull';
 import { Queue } from 'bull';
 
+/**
+ * Processes jobs in the CITY_UPDATES_QUEUE_NAME queue
+ */
 @Processor(CITY_UPDATES_QUEUE_NAME)
 export class CityUpdateProcessor {
   constructor(
@@ -25,6 +28,9 @@ export class CityUpdateProcessor {
   @Process(CITY_UPDATE_JOB_NAME)
   public async cityUpdate(job: Job<CityUpdateJob>) {
     const cityId = job.data.cityId;
+    // @todo: add error handling for updateCity call
+    // if city update fails, the update will not be added to the queue again.
+    // sometimes this is the correct behavior (e.g. if the city was deleted), but sometimes it might not.
     await this.cityUpdateService.updateCity(cityId);
     let delay = await this.cityUpdateService.getTimeDelayForNextUpdateInMs(
       cityId

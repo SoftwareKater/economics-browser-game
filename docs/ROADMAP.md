@@ -3,6 +3,9 @@
 ## To Do
 
 ### MVP
+
+- automatic city updates
+- exchange console.log calls for nestjs logger
 - if the server restarts, city update queues have to be restarted for every city
 - remove tailwind which is superfluous when using adobe spectrum
 - create a dockerfile / compose
@@ -42,7 +45,6 @@
   - guard api routes
   - add token to api request headers
   - get auth state in frontend components
-- automatic city updates
 - fix update city method (see todos in js docstring)
 - generated types (gql responses) are really f***ed up
 - auth

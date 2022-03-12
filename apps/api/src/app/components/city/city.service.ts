@@ -49,6 +49,11 @@ export class CityService {
     return res.affected || 0;
   }
 
+  /**
+   * @param cityId Id of the city where the building is created
+   * @param buildingId Id of the building that is created
+   * @returns Id of the new city building
+   */
   public async createBuilding(
     cityId: string,
     buildingId: string
@@ -190,6 +195,13 @@ export class CityService {
     }
   }
 
+  /**
+   * @todo there seems to be a bug in the assignment of residents/employees -> find options ?!?!!!
+   *
+   * @param newBuilding
+   * @param cityId
+   * @returns
+   */
   private async assignEmployeesOrResidents(
     newBuilding: Building,
     cityId: string

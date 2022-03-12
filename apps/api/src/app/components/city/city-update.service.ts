@@ -44,15 +44,20 @@ export class CityUpdateService {
     return timeUntilNextUpdate;
   }
 
-  public async updateCity(cityId: string): Promise<void> {
-    console.log(`Updating city with id ${cityId}`);
-    const city = await this.cityRepository.findOneOrFail(cityId);
+  private getRoundsSinceLastUpdate(city: City): number {
     const now = new Date().getTime();
     const lastUpdate = city.lastCityUpdate.getTime();
     const timeSinceLastUpdate = now - lastUpdate;
     const fullRoundsSinceLastUpdate = Math.floor(
       timeSinceLastUpdate / (ECONOMY_SPEED_FACTOR * MS_IN_H)
     );
+    return fullRoundsSinceLastUpdate;
+  }
+
+  public async updateCity(cityId: string): Promise<void> {
+    console.log(`Updating city with id ${cityId}`);
+    const city = await this.cityRepository.findOneOrFail(cityId);
+    const fullRoundsSinceLastUpdate = this.getRoundsSinceLastUpdate(city);
     if (fullRoundsSinceLastUpdate < 1) {
       // at least one round must have passed
       console.log(
@@ -61,8 +66,9 @@ export class CityUpdateService {
       return;
     }
     // @todo: should this be moved to the end of the city update method?
+    // @todo: is this even correct??? or should it just be "new Date().getTime();"
     const newLastUpdate =
-      lastUpdate + fullRoundsSinceLastUpdate * (ECONOMY_SPEED_FACTOR * MS_IN_H);
+      city.lastCityUpdate.getTime() + fullRoundsSinceLastUpdate * (ECONOMY_SPEED_FACTOR * MS_IN_H);
 
     const buildings = await this.cityBuildingRepository.find({
       where: {
