@@ -7,7 +7,7 @@ export const MIN_PRODUCT_FRACTION = 0.01;
 /**
  * Standard game speed is 1 round = 1 hour.
  * By increasing ECONOMY_SPEED_FACTOR the game progresses faster.
- * E.g. 60 -> 1 round = 1 minute
+ * E.g. 1/60 -> 1 round = 1 minute
  */
 export const ECONOMY_SPEED_FACTOR = 1 / 60;
 export const INIT_HABITANTS_AMOUNT_PER_CITY = 100;

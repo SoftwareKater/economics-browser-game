@@ -22,9 +22,18 @@ import { Product } from './models/product.entity';
 import { User } from './models/user.entity';
 import { DbSeedModule } from './components/db-seed/db-seed.module';
 import { TYPEORM_MODULE_CONFIG } from './constants';
+import { BullModule } from '@nestjs/bull';
+
+const BullRootModule = BullModule.forRoot({
+  redis: {
+    host: 'localhost',
+    port: 6379,
+  },
+});
 
 @Module({
   imports: [
+    BullRootModule,
     GraphQLModule.forRoot({
       installSubscriptionHandlers: true,
       autoSchemaFile: join(process.cwd(), 'tools/graphql/schema.gql'),

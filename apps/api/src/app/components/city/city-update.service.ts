@@ -22,7 +22,6 @@ import { Habitant } from '../../models/habitant.entity';
  * @todo subtract production site inputs
  * @todo take habitants productivity into account
  * @todo only allowed products can be used to pay maintenance costs and inputs
- * @param cityId
  */
 export class CityUpdateService {
   constructor(
@@ -35,6 +34,15 @@ export class CityUpdateService {
     @InjectRepository(Habitant)
     private habitantRepository: Repository<Habitant>
   ) {}
+
+  public async getTimeDelayForNextUpdateInMs(cityId: string): Promise<number> {
+    const city = await this.cityRepository.findOneOrFail(cityId);
+    const now = new Date().getTime();
+    const lastUpdate = city.lastCityUpdate.getTime();
+    const nextUpdate = lastUpdate + ECONOMY_SPEED_FACTOR * MS_IN_H;
+    const timeUntilNextUpdate = nextUpdate - now;
+    return timeUntilNextUpdate;
+  }
 
   public async updateCity(cityId: string): Promise<void> {
     console.log(`Updating city with id ${cityId}`);

@@ -1,16 +1,25 @@
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { INIT_HABITANTS_AMOUNT_PER_CITY } from '../../constants';
-import { BuildingType } from '../../models/building-type.enum';
+import {
+  ECONOMY_SPEED_FACTOR,
+  INIT_HABITANTS_AMOUNT_PER_CITY,
+  MS_IN_H,
+} from '../../constants';
 import { Building } from '../../models/building.entity';
 import { CityBuilding } from '../../models/city-building.entity';
 import { CityProduct } from '../../models/city-product.entity';
 import { City } from '../../models/city.entity';
 import { Habitant } from '../../models/habitant.entity';
 import { Product } from '../../models/product.entity';
+import { InjectQueue } from '@nestjs/bull';
+import { Queue } from 'bull';
+import { CityUpdateJob } from './city-update-job.interface';
+import { CITY_UPDATES_QUEUE_NAME, CITY_UPDATE_JOB_NAME } from './constants';
 
 export class CityCreationService {
   constructor(
+    @InjectQueue(CITY_UPDATES_QUEUE_NAME)
+    private readonly cityUpdatesQueue: Queue<CityUpdateJob>,
     @InjectRepository(Building)
     private buildingRepository: Repository<Building>,
     @InjectRepository(City)
@@ -22,7 +31,7 @@ export class CityCreationService {
     @InjectRepository(Habitant)
     private habitantRepository: Repository<Habitant>,
     @InjectRepository(Product)
-    private productRepository: Repository<Product>,
+    private productRepository: Repository<Product>
   ) {}
 
   /**
@@ -53,9 +62,20 @@ export class CityCreationService {
     let saveResult: (Partial<City> & City) | undefined = undefined;
     try {
       saveResult = await this.cityRepository.save(newCity);
+      if (!saveResult) {
+        throw new Error();
+      }
       await this.habitantRepository.insert(habitants);
       // await this.cityBuildingRepository.insert(buildings);
       await this.cityProductRepository.insert(products);
+      // add the city update with a delay of 1 round to the cityUpdates queue
+      await this.cityUpdatesQueue.add(
+        CITY_UPDATE_JOB_NAME,
+        {
+          cityId: saveResult.id,
+        },
+        { delay: ECONOMY_SPEED_FACTOR * MS_IN_H }
+      );
       return saveResult?.id;
     } catch (err) {
       // Revert everything and log error
