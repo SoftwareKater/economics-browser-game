@@ -4,8 +4,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CityProduct } from '../../models/city-product.entity';
 import { User } from '../../models/user.entity';
-import { GqlAuthGuard } from '../auth/gql-auth.guard';
-import { GqlCurrentUser } from '../auth/gql-current-user.decorator';
+import { GqlAuthGuard } from '../../modules/auth/gql-auth.guard';
+import { GqlCurrentUser } from '../../modules/auth/gql-current-user.decorator';
 
 export class CityProductResolver {
   constructor(

@@ -4,17 +4,17 @@ import {
   ECONOMY_SPEED_FACTOR,
   INIT_HABITANTS_AMOUNT_PER_CITY,
   MS_IN_H,
-} from '../../constants';
-import { Building } from '../../models/building.entity';
-import { CityBuilding } from '../../models/city-building.entity';
-import { CityProduct } from '../../models/city-product.entity';
-import { City } from '../../models/city.entity';
-import { Habitant } from '../../models/habitant.entity';
-import { Product } from '../../models/product.entity';
+} from '../../../constants';
+import { Building } from '../../../models/building.entity';
+import { CityBuilding } from '../../../models/city-building.entity';
+import { CityProduct } from '../../../models/city-product.entity';
+import { City } from '../../../models/city.entity';
+import { Habitant } from '../../../models/habitant.entity';
+import { Product } from '../../../models/product.entity';
 import { InjectQueue } from '@nestjs/bull';
 import { Queue } from 'bull';
-import { CityUpdateJob } from './city-update-job.interface';
-import { CITY_UPDATES_QUEUE_NAME, CITY_UPDATE_JOB_NAME } from './constants';
+import { CityUpdateJob } from '../models/city-update-job.interface';
+import { CITY_UPDATES_QUEUE_NAME, CITY_UPDATE_JOB_NAME } from '../constants';
 
 export class CityCreationService {
   constructor(

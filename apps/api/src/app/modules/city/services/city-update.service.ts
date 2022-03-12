@@ -1,11 +1,11 @@
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { ECONOMY_SPEED_FACTOR, MS_IN_H } from '../../constants';
-import { BuildingType } from '../../models/building-type.enum';
-import { CityBuilding } from '../../models/city-building.entity';
-import { CityProduct } from '../../models/city-product.entity';
-import { City } from '../../models/city.entity';
-import { Habitant } from '../../models/habitant.entity';
+import { ECONOMY_SPEED_FACTOR, MS_IN_H } from '../../../constants';
+import { BuildingType } from '../../../models/building-type.enum';
+import { CityBuilding } from '../../../models/city-building.entity';
+import { CityProduct } from '../../../models/city-product.entity';
+import { City } from '../../../models/city.entity';
+import { Habitant } from '../../../models/habitant.entity';
 
 /**
  * This service calculates the new state of the city.

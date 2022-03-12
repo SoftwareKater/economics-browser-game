@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { Building } from '../../models/building.entity';
-import { City } from '../../models/city.entity';
+import { Building } from '../../../models/building.entity';
+import { City } from '../../../models/city.entity';
 import { CityService } from './city.service';
 
 describe('CityService', () => {

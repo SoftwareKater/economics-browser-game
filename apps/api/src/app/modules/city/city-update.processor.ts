@@ -8,8 +8,8 @@ import {
   OnQueueFailed,
 } from '@nestjs/bull';
 import { Job } from 'bull';
-import { CityUpdateJob } from './city-update-job.interface';
-import { CityUpdateService } from './city-update.service';
+import { CityUpdateJob } from './models/city-update-job.interface';
+import { CityUpdateService } from './services/city-update.service';
 import { CITY_UPDATES_QUEUE_NAME, CITY_UPDATE_JOB_NAME } from './constants';
 import { InjectQueue } from '@nestjs/bull';
 import { Queue } from 'bull';

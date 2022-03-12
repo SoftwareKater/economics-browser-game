@@ -7,7 +7,7 @@ import { City } from '../../models/city.entity';
 import { Habitant } from '../../models/habitant.entity';
 import { Product } from '../../models/product.entity';
 import { User } from '../../models/user.entity';
-import { CityCreationService } from '../city/city-creation.service';
+import { CityCreationService } from '../city/services/city-creation.service';
 import { CityModule } from '../city/city.module';
 import { UserResolver } from './user.resolver';
 import { UserService } from './user.service';

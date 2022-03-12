@@ -3,12 +3,12 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { join } from 'path';
 
-import { AuthModule } from './components/auth/auth.module';
+import { AuthModule } from './modules/auth/auth.module';
 import { BuildingModule } from './components/building/building.module';
 import { CityProductModule } from './components/city-product/city-product.module';
-import { CityModule } from './components/city/city.module';
+import { CityModule } from './modules/city/city.module';
 import { ProductModule } from './components/product/product.module';
-import { UserModule } from './components/user/user.module';
+import { UserModule } from './modules/user/user.module';
 import { BuildingConstructionCost } from './models/building-construction-cost.entity';
 import { BuildingInput } from './models/building-input.entity';
 import { BuildingMaintenanceCost } from './models/building-maintenance-cost.entity';

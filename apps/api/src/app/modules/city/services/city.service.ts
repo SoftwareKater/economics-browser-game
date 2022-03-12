@@ -1,13 +1,13 @@
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { INIT_CITY_SIZE_IN_SQUARE_METER } from '../../constants';
-import { BuildingConstructionCost } from '../../models/building-construction-cost.entity';
-import { BuildingType } from '../../models/building-type.enum';
-import { Building } from '../../models/building.entity';
-import { CityBuilding } from '../../models/city-building.entity';
-import { CityProduct } from '../../models/city-product.entity';
-import { City } from '../../models/city.entity';
-import { Habitant } from '../../models/habitant.entity';
+import { INIT_CITY_SIZE_IN_SQUARE_METER } from '../../../constants';
+import { BuildingConstructionCost } from '../../../models/building-construction-cost.entity';
+import { BuildingType } from '../../../models/building-type.enum';
+import { Building } from '../../../models/building.entity';
+import { CityBuilding } from '../../../models/city-building.entity';
+import { CityProduct } from '../../../models/city-product.entity';
+import { City } from '../../../models/city.entity';
+import { Habitant } from '../../../models/habitant.entity';
 import { CityUpdateService } from './city-update.service';
 
 export class CityService {

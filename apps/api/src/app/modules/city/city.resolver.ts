@@ -6,8 +6,8 @@ import { City } from '../../models/city.entity';
 import { User } from '../../models/user.entity';
 import { GqlAuthGuard } from '../auth/gql-auth.guard';
 import { GqlCurrentUser } from '../auth/gql-current-user.decorator';
-import { CityUpdateService } from './city-update.service';
-import { CityService } from './city.service';
+import { CityUpdateService } from './services/city-update.service';
+import { CityService } from './services/city.service';
 
 @Resolver(() => City)
 export class CityResolver {

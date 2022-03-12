@@ -2,7 +2,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { City } from '../../models/city.entity';
 import { User } from '../../models/user.entity';
-import { CityCreationService } from '../city/city-creation.service';
+import { CityCreationService } from '../city/services/city-creation.service';
 import { CreateUserAndCityInput } from './create-user-and-city-input.interface';
 
 export class UserService {
