@@ -213,7 +213,7 @@ export class CityService {
     const freePlaces = newBuilding.places;
     if (newBuilding.buildingType === BuildingType.ACCOMMODATION) {
       const homelessHabitants = await this.habitantRepository.find({
-        where: { accommodation: null },
+        where: { city: { id: cityId }, accommodation: null },
         take: freePlaces,
       });
       newCityBuilding.residents = homelessHabitants;
@@ -221,7 +221,7 @@ export class CityService {
     }
     if (newBuilding.buildingType === BuildingType.PRODUCTION_SITE) {
       const unemployedHabitants = await this.habitantRepository.find({
-        where: { employment: null },
+        where: { city: { id: cityId }, employment: null },
         take: freePlaces,
       });
       newCityBuilding.employees = unemployedHabitants;

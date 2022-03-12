@@ -4,7 +4,7 @@
 
 ### MVP
 
-- automatic city updates
+- add ui for queues: https://selleo.com/til/posts/lkkkedpjjl-bull-board-for-nestjs
 - exchange console.log calls for nestjs logger
 - if the server restarts, city update queues have to be restarted for every city
 - remove tailwind which is superfluous when using adobe spectrum
@@ -67,6 +67,7 @@
 - landing page with mock auth
 - add adobe spectrum
 - automate creation of cities
+- automatic city updates
 
 
 ## Open Questions

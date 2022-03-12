@@ -46,9 +46,7 @@ export class CityUpdateProcessor {
     );
     await this.cityUpdatesQueue.add(
       CITY_UPDATE_JOB_NAME,
-      {
-        cityId,
-      },
+      { cityId },
       { delay }
     );
 
