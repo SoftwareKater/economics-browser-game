@@ -104,6 +104,7 @@ export const BUILDINGS: Partial<Building>[] = [
     name: 'well',
     description: 'Produces water.',
     buildingType: BuildingType.PRODUCTION_SITE,
+    inputs: [],
     outputs: [
       {
         product: PRODUCTS.WATER,
@@ -126,6 +127,7 @@ export const BUILDINGS: Partial<Building>[] = [
     size: 50000,
     places: 100,
     buildingType: BuildingType.PRODUCTION_SITE,
+    inputs: [],
     outputs: [
       {
         product: PRODUCTS.STONE,
@@ -146,6 +148,7 @@ export const BUILDINGS: Partial<Building>[] = [
     size: 10000,
     places: 100,
     buildingType: BuildingType.PRODUCTION_SITE,
+    inputs: [],
     outputs: [
       {
         product: PRODUCTS.COAL,
@@ -167,6 +170,7 @@ export const BUILDINGS: Partial<Building>[] = [
     size: 10000,
     places: 100,
     buildingType: BuildingType.PRODUCTION_SITE,
+    inputs: [],
     outputs: [
       {
         product: PRODUCTS.IRON,
@@ -244,6 +248,7 @@ export const BUILDINGS: Partial<Building>[] = [
     size: 10000,
     places: 100,
     buildingType: BuildingType.PRODUCTION_SITE,
+    inputs: [],
     outputs: [
       {
         product: PRODUCTS.COPPER,
@@ -265,6 +270,7 @@ export const BUILDINGS: Partial<Building>[] = [
     size: 100000,
     places: 5,
     buildingType: BuildingType.PRODUCTION_SITE,
+    inputs: [],
     outputs: [
       {
         product: PRODUCTS.WOOD,
