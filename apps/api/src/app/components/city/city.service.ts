@@ -82,7 +82,7 @@ export class CityService {
     this.cityUpdateService.updateCity(cityId);
 
     // Check whether construction cost can be paid
-    const costs = await this.checkConstructionCosts(newBuilding);
+    const costs = await this.checkConstructionCosts(cityId, newBuilding);
 
     // Create the products that will be outputs of the new building
     if (newBuilding.buildingType === BuildingType.PRODUCTION_SITE) {
@@ -98,7 +98,7 @@ export class CityService {
     // Pay the construction costs
     for (const cost of costs) {
       await this.cityProductRepository
-        .update({ product: cost.product }, cost)
+        .update({ city, product: cost.product }, cost)
         .catch((reason) => {
           throw new Error(
             `Could not pay construction cost ${cost.amount} ${cost.product.name}. Reason: ${reason}`
@@ -120,9 +120,12 @@ export class CityService {
   }
 
   private async checkConstructionCosts(
+    cityId: string,
     newBuilding: Building
   ): Promise<CityProduct[]> {
-    const products = await this.cityProductRepository.find();
+    const products = await this.cityProductRepository.find({
+      where: { city: { id: cityId } },
+    });
     const costs: CityProduct[] = [];
     for (const constructionCost of newBuilding.constructionCosts) {
       const { checkedProduct, hasAmount } = this.checkProduct(
@@ -164,7 +167,9 @@ export class CityService {
     newBuilding: Building,
     cityId: string
   ): Promise<void> {
-    const allCityProducts = await this.cityProductRepository.find();
+    const allCityProducts = await this.cityProductRepository.find({
+      where: { city: { id: cityId } },
+    });
     for (const output of newBuilding.outputs) {
       const cityProduct = allCityProducts.find(
         (cityProduct) => cityProduct.product.id === output.product.id

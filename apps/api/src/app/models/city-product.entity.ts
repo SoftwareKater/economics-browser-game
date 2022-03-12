@@ -34,7 +34,7 @@ export class CityProduct {
   product!: Product;
 
   /**
-   * The city that the development was made in
+   * The owner of the product
    */
   @Field((type) => City)
   @ManyToOne(() => City, (city) => city.products)
