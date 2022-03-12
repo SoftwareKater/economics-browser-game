@@ -76,6 +76,6 @@ export class CityUpdateProcessor {
 
   @OnQueueFailed()
   onQueueFailedHandler(job: Job, err: Error) {
-    console.error(`Job ${job} failed with reason ${err}`);
+    console.error(`Job ${job.id} failed with reason ${err}`);
   }
 }
