@@ -60,6 +60,7 @@ export class CityUpdateService {
       );
       return;
     }
+    // @todo: should this be moved to the end of the city update method?
     const newLastUpdate =
       lastUpdate + fullRoundsSinceLastUpdate * (ECONOMY_SPEED_FACTOR * MS_IN_H);
 
@@ -77,9 +78,11 @@ export class CityUpdateService {
         building.building.buildingType === BuildingType.PRODUCTION_SITE
     );
     const habitants = await this.habitantRepository.find({ where: { city } });
-    const cityProducts = await this.cityProductRepository.find();
+    const cityProducts = await this.cityProductRepository.find({ where: { city } });
     const updateProducts: CityProduct[] = [...cityProducts];
 
+    console.log('=================');
+    console.log('Before city update')
     console.table(
       cityProducts.map((cityProduct) => ({
         name: cityProduct.product.name,
@@ -97,6 +100,14 @@ export class CityUpdateService {
       // this.doMarketTransactions();
 
       this.feedHabitants(habitants);
+      console.log('---------------');
+      console.log(`After feeding ${habitants.length} habitants.`);
+      console.table(
+        updateProducts.map((cityProduct) => ({
+          name: cityProduct.product.name,
+          amount: cityProduct.amount,
+        }))
+      );
 
       this.payMaintenanceCosts(
         accommodations,
@@ -139,6 +150,7 @@ export class CityUpdateService {
       );
     }
     console.log('=================');
+    console.log(`At the end of all rounds`)
     console.table(
       updateProducts.map((cityProduct) => ({
         name: cityProduct.product.name,
@@ -148,7 +160,7 @@ export class CityUpdateService {
 
     for (const updateProduct of updateProducts) {
       await this.cityProductRepository.update(
-        { product: updateProduct.product },
+        { city, product: updateProduct.product },
         updateProduct
       );
     }
@@ -163,7 +175,6 @@ export class CityUpdateService {
    * @param habitants all habitants of the city
    */
   private feedHabitants(habitants: Habitant[]): void {
-    console.log(`Feeding ${habitants.length} habitants.`);
     // reduce stored products
     // update starving levels
 
