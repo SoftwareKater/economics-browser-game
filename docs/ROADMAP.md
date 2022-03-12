@@ -3,6 +3,7 @@
 ## To Do
 
 ### MVP
+- if the server restarts, city update queues have to be restarted for every city
 - remove tailwind which is superfluous when using adobe spectrum
 - create a dockerfile / compose
 - imporve views
@@ -50,6 +51,7 @@
 
 ### Future
 
+- Graphql subscriptions for auto updates of e.g. the products page
 - Utility buildings
   - may provide productivity gains for all production sites (e.g. power plant)
   - may provide productivity gains for all habitants (e.g. theater)
