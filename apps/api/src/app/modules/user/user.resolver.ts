@@ -26,16 +26,12 @@ export class UserResolver {
     @Args({ name: 'email', type: () => String }) email: string,
     @Args({ name: 'password', type: () => String }) password: string
   ): Promise<boolean | undefined> {
-    try {
-      return this.userService.createUserAndCity({
-        nickName,
-        cityName,
-        email,
-        password,
-      });
-    } catch (err: any) {
-      console.error(err);
-    }
+    return this.userService.createUserAndCity({
+      nickName,
+      cityName,
+      email,
+      password,
+    });
   }
 
   @UseGuards(GqlAuthGuard)

@@ -1,3 +1,4 @@
+import { Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ECONOMY_SPEED_FACTOR, MS_IN_H } from '../../../constants';
@@ -24,6 +25,8 @@ import { Habitant } from '../../../models/habitant.entity';
  * @todo only allowed products can be used to pay maintenance costs and inputs
  */
 export class CityUpdateService {
+  private readonly logger = new Logger('CityUpdateService');
+
   constructor(
     @InjectRepository(City)
     private cityRepository: Repository<City>,
@@ -55,12 +58,12 @@ export class CityUpdateService {
   }
 
   public async updateCity(cityId: string): Promise<void> {
-    console.log(`Updating city with id ${cityId}`);
+    this.logger.log(`Updating city with id ${cityId}`);
     const city = await this.cityRepository.findOneOrFail(cityId);
     const fullRoundsSinceLastUpdate = this.getRoundsSinceLastUpdate(city);
     if (fullRoundsSinceLastUpdate < 1) {
       // at least one round must have passed
-      console.log(
+      this.logger.log(
         `Will not update city. Reason: Last update is less than 1 round ago.`
       );
       return;
@@ -68,7 +71,8 @@ export class CityUpdateService {
     // @todo: should this be moved to the end of the city update method?
     // @todo: is this even correct??? or should it just be "new Date().getTime();"
     const newLastUpdate =
-      city.lastCityUpdate.getTime() + fullRoundsSinceLastUpdate * (ECONOMY_SPEED_FACTOR * MS_IN_H);
+      city.lastCityUpdate.getTime() +
+      fullRoundsSinceLastUpdate * (ECONOMY_SPEED_FACTOR * MS_IN_H);
 
     const buildings = await this.cityBuildingRepository.find({
       where: {
@@ -84,21 +88,20 @@ export class CityUpdateService {
         building.building.buildingType === BuildingType.PRODUCTION_SITE
     );
     const habitants = await this.habitantRepository.find({ where: { city } });
-    const cityProducts = await this.cityProductRepository.find({ where: { city } });
+    const cityProducts = await this.cityProductRepository.find({
+      where: { city },
+    });
     const updateProducts: CityProduct[] = [...cityProducts];
 
-    console.log('=================');
-    console.log('Before city update')
-    console.table(
-      cityProducts.map((cityProduct) => ({
-        name: cityProduct.product.name,
-        amount: cityProduct.amount,
-      }))
+    this.logUpdateProducts(
+      '=================',
+      'Before city update',
+      updateProducts
     );
 
     for (let round = 0; round < fullRoundsSinceLastUpdate; round++) {
-      console.log('=================');
-      console.log('Calculating round: ', round);
+      this.logger.verbose('=================');
+      this.logger.verbose(`Calculating round: ${round}`);
       // Accommodations whose maintenance costs were not paid
       const pausedAccommodations: CityBuilding[] = [];
 
@@ -106,13 +109,10 @@ export class CityUpdateService {
       // this.doMarketTransactions();
 
       this.feedHabitants(habitants);
-      console.log('---------------');
-      console.log(`After feeding ${habitants.length} habitants.`);
-      console.table(
-        updateProducts.map((cityProduct) => ({
-          name: cityProduct.product.name,
-          amount: cityProduct.amount,
-        }))
+      this.verboseUpdateProducts(
+        '---------------',
+        `After feeding ${habitants.length} habitants.`,
+        updateProducts
       );
 
       this.payMaintenanceCosts(
@@ -120,13 +120,10 @@ export class CityUpdateService {
         updateProducts,
         pausedAccommodations
       );
-      console.log('---------------');
-      console.log('After maintenance costs were paid: ');
-      console.table(
-        updateProducts.map((cityProduct) => ({
-          name: cityProduct.product.name,
-          amount: cityProduct.amount,
-        }))
+      this.verboseUpdateProducts(
+        '---------------',
+        'After maintenance costs were paid',
+        updateProducts
       );
 
       // Pay inputs of production sites and remember
@@ -135,33 +132,24 @@ export class CityUpdateService {
         productionSites,
         updateProducts
       );
-      console.log('---------------');
-      console.log('After inputs for production sites were subtracted: ');
-      console.table(
-        updateProducts.map((cityProduct) => ({
-          name: cityProduct.product.name,
-          amount: cityProduct.amount,
-        }))
+      this.verboseUpdateProducts(
+        '---------------',
+        'After inputs for production sites were subtracted',
+        updateProducts
       );
 
       // step #4: receive outputs of working production sites
       await this.receiveOutputs(workingProductionSites, updateProducts, cityId);
-      console.log('---------------');
-      console.log('After outputs of production sites were added: ');
-      console.table(
-        updateProducts.map((cityProduct) => ({
-          name: cityProduct.product.name,
-          amount: cityProduct.amount,
-        }))
+      this.verboseUpdateProducts(
+        '---------------',
+        'After outputs of production sites were added',
+        updateProducts
       );
     }
-    console.log('=================');
-    console.log(`At the end of all rounds`)
-    console.table(
-      updateProducts.map((cityProduct) => ({
-        name: cityProduct.product.name,
-        amount: cityProduct.amount,
-      }))
+    this.logUpdateProducts(
+      '=================',
+      'At the end of all rounds',
+      updateProducts
     );
 
     for (const updateProduct of updateProducts) {
@@ -183,7 +171,6 @@ export class CityUpdateService {
   private feedHabitants(habitants: Habitant[]): void {
     // reduce stored products
     // update starving levels
-
     // for (const habitant of habitants) {
     //   // get random products that have a combined nutirtion value of at least 1
     // }
@@ -302,7 +289,7 @@ export class CityUpdateService {
           (cityProduct) => cityProduct.product.id === output.product.id
         );
         if (index < 0) {
-          console.warn(
+          this.logger.warn(
             `There is a production site that produces ${output.product.id}, but the product is not listed in city products. That should never happen - fixing...!`
           );
           const newCityProduct = {
@@ -318,5 +305,29 @@ export class CityUpdateService {
         updateProducts[index].amount += productivity * output.amount;
       }
     }
+  }
+
+  private verboseUpdateProducts(
+    separator: string,
+    message: string,
+    updateProducts: CityProduct[]
+  ) {
+    this.logger.verbose(separator);
+    this.logger.verbose(message);
+    updateProducts.forEach((cityProduct) => {
+      this.logger.verbose(`${cityProduct.product.name}: ${cityProduct.amount}`);
+    });
+  }
+
+  private logUpdateProducts(
+    separator: string,
+    message: string,
+    updateProducts: CityProduct[]
+  ) {
+    this.logger.log(separator);
+    this.logger.log(message);
+    updateProducts.forEach((cityProduct) => {
+      this.logger.log(`${cityProduct.product.name}: ${cityProduct.amount}`);
+    });
   }
 }

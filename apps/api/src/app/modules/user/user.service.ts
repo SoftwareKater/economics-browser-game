@@ -1,3 +1,4 @@
+import { Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { City } from '../../models/city.entity';
@@ -6,6 +7,8 @@ import { CityCreationService } from '../city/services/city-creation.service';
 import { CreateUserAndCityInput } from './create-user-and-city-input.interface';
 
 export class UserService {
+  private readonly logger = new Logger('UserService');
+
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
@@ -24,7 +27,7 @@ export class UserService {
       city: { id: cityId } as City,
     };
 
-    console.log('Creating new user with name ', newUser.name);
+    this.logger.verbose('Creating new user with name ', newUser.name);
     const res = await this.userRepository.save(newUser);
     return true;
   }

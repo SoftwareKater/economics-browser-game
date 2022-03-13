@@ -53,7 +53,6 @@ export class MarketController {
    * @param tradeAgreement
    */
   private makeTrade(tradeAgreement: TradeAgreement): void {
-    console.log(tradeAgreement);
     tradeAgreement.purchaser.offer.quantity += tradeAgreement.tradeQuantity;
     tradeAgreement.purchaser.player.money -= tradeAgreement.tradePrice;
     tradeAgreement.seller.offer.quantity -= tradeAgreement.tradeQuantity;

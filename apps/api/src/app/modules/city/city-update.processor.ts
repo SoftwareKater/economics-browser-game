@@ -13,12 +13,15 @@ import { CityUpdateService } from './services/city-update.service';
 import { CITY_UPDATES_QUEUE_NAME, CITY_UPDATE_JOB_NAME } from './constants';
 import { InjectQueue } from '@nestjs/bull';
 import { Queue } from 'bull';
+import { Logger } from '@nestjs/common';
 
 /**
  * Processes jobs in the CITY_UPDATES_QUEUE_NAME queue
  */
 @Processor(CITY_UPDATES_QUEUE_NAME)
 export class CityUpdateProcessor {
+  private readonly logger = new Logger('CityUpdateProcessor');
+
   constructor(
     @InjectQueue(CITY_UPDATES_QUEUE_NAME)
     private readonly cityUpdatesQueue: Queue<CityUpdateJob>,
@@ -36,12 +39,12 @@ export class CityUpdateProcessor {
       cityId
     );
     if (delay < 0) {
-      console.error(
+      this.logger.error(
         'city update took longer than 1 round, updating imediately'
       );
       delay = 0;
     }
-    console.log(
+    this.logger.log(
       `Calculated the delay for the next city update for city ${cityId}. Delay is: ${delay} ms`
     );
     await this.cityUpdatesQueue.add(
@@ -55,17 +58,17 @@ export class CityUpdateProcessor {
 
   @OnQueueError()
   onQueueErrorHandler(error: Error) {
-    console.error(`Error occured in cityUpdate: ${error}`);
+    this.logger.error(`Error occured in cityUpdate: ${error}`);
   }
 
   @OnQueueWaiting()
   onQueueWaitingHandler(jobId: string) {
-    console.log(`Job ${jobId} is waiting to be processed`);
+    this.logger.log(`Job ${jobId} is waiting to be processed`);
   }
 
   @OnQueueActive()
   onQueueActiveHandler(job: Job) {
-    console.log(
+    this.logger.log(
       `Processing job ${job.id} of type ${job.name} with data `,
       job.data
     );
@@ -73,13 +76,13 @@ export class CityUpdateProcessor {
 
   @OnQueueCompleted()
   onQueueCompletedHandler(job: Job, result: any) {
-    console.log(
+    this.logger.log(
       `Processed job ${job.id} of type ${job.name} with data ${job.data}. Got result ${result}`
     );
   }
 
   @OnQueueFailed()
   onQueueFailedHandler(job: Job, err: Error) {
-    console.error(`Job ${job.id} failed with reason ${err}`);
+    this.logger.error(`Job ${job.id} failed with reason ${err}`);
   }
 }

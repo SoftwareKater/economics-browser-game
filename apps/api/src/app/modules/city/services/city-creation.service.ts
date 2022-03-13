@@ -15,8 +15,11 @@ import { InjectQueue } from '@nestjs/bull';
 import { Queue } from 'bull';
 import { CityUpdateJob } from '../models/city-update-job.interface';
 import { CITY_UPDATES_QUEUE_NAME, CITY_UPDATE_JOB_NAME } from '../constants';
+import { Logger } from '@nestjs/common';
 
 export class CityCreationService {
+  private readonly logger = new Logger('CityCreationService');
+
   constructor(
     @InjectQueue(CITY_UPDATES_QUEUE_NAME)
     private readonly cityUpdatesQueue: Queue<CityUpdateJob>,
@@ -40,7 +43,7 @@ export class CityCreationService {
    * @returns id of the new city
    */
   public async createCity(name: string): Promise<string> {
-    console.log(`Creating a new city with the name ${name}`);
+    this.logger.log(`Creating a new city with the name ${name}`);
     const newCity: Partial<City> = {
       name,
       lastCityUpdate: new Date(),

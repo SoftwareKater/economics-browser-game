@@ -1,3 +1,4 @@
+import { Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { INIT_CITY_SIZE_IN_SQUARE_METER } from '../../../constants';
@@ -11,6 +12,8 @@ import { Habitant } from '../../../models/habitant.entity';
 import { CityUpdateService } from './city-update.service';
 
 export class CityService {
+  private readonly logger = new Logger('CityService');
+
   constructor(
     @InjectRepository(City)
     private cityRepository: Repository<City>,
@@ -31,7 +34,7 @@ export class CityService {
       relations: ['habitants', 'buildings', 'products'],
     });
     if (!city) {
-      console.error(`Cannot find city with id ${cityId}`);
+      this.logger.error(`Cannot find city with id ${cityId}`);
     }
     return city;
   }
@@ -45,7 +48,7 @@ export class CityService {
     cityBuildingIds: string[]
   ): Promise<number> {
     const res = await this.cityBuildingRepository.delete(cityBuildingIds);
-    console.log(res);
+    this.logger.log(res);
     return res.affected || 0;
   }
 
@@ -58,7 +61,7 @@ export class CityService {
     cityId: string,
     buildingId: string
   ): Promise<string> {
-    console.log(`Creating a new building ${buildingId} in city ${cityId}`);
+    this.logger.log(`Creating a new building ${buildingId} in city ${cityId}`);
     const newBuilding = await this.buildingRepository.findOne({
       where: { id: buildingId },
     });
@@ -187,7 +190,7 @@ export class CityService {
             amount: 0,
           })
           .catch((reason) => {
-            console.error(
+            this.logger.error(
               `Could not create new city product for product ${output.product.id}. Reason: ${reason}`
             );
           });

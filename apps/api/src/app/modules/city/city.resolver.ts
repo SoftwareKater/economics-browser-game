@@ -6,14 +6,12 @@ import { City } from '../../models/city.entity';
 import { User } from '../../models/user.entity';
 import { GqlAuthGuard } from '../auth/gql-auth.guard';
 import { GqlCurrentUser } from '../auth/gql-current-user.decorator';
-import { CityUpdateService } from './services/city-update.service';
 import { CityService } from './services/city.service';
 
 @Resolver(() => City)
 export class CityResolver {
   constructor(
     private readonly cityService: CityService,
-    private readonly cityUpdateService: CityUpdateService,
     @InjectRepository(City)
     private cityRepository: Repository<City>
   ) {}
@@ -73,11 +71,7 @@ export class CityResolver {
     @Args({ name: 'buildingId', type: () => String }) buildingId: string
   ): Promise<string | undefined> {
     const cityId = user.city.id;
-    try {
-      return this.cityService.createBuilding(cityId, buildingId);
-    } catch (err) {
-      console.error(err);
-    }
+    return this.cityService.createBuilding(cityId, buildingId);
   }
 
   /**
@@ -95,12 +89,9 @@ export class CityResolver {
     @Args({ name: 'cityBuildingIds', type: () => [String] })
     cityBuildingIds: string[]
   ): Promise<number | undefined> {
-    try {
-      return this.cityService.destroyCityBuildings(cityBuildingIds);
-    } catch (err) {
-      console.error(err);
-    }
+    return this.cityService.destroyCityBuildings(cityBuildingIds);
   }
+
   /**
    * Delete a user's city
    */

@@ -8,8 +8,11 @@ import { BuildingOutput } from '../../models/building-output.entity';
 import { Product } from '../../models/product.entity';
 import { BUILDINGS } from '../../mocks/buildings';
 import { Building } from '../../models/building.entity';
+import { Logger } from '@nestjs/common';
 
 export class DbSeedService {
+  private readonly logger = new Logger('DbSeedService');
+
   constructor(
     @InjectRepository(Building)
     private buildingRepository: Repository<Building>,
@@ -24,7 +27,9 @@ export class DbSeedService {
     @InjectRepository(BuildingOutput)
     private buildingOutputRepository: Repository<BuildingOutput>
   ) {
+    this.logger.log('Seeding database...');
     this.seedDb();
+    this.logger.log('...finished seeding database.')
   }
 
   private async seedDb() {
@@ -47,7 +52,7 @@ export class DbSeedService {
       }
     }
     if (products.length < 1) {
-      return console.error('No products');
+      return this.logger.error('No products');
     }
 
     for (const building of BUILDINGS) {
@@ -112,10 +117,10 @@ export class DbSeedService {
       } catch (err: any) {
         const errMsg: string = err.message;
         if (errMsg.startsWith('Duplicate entry')) {
-          // console.warn(`Building ${building.name} already exists.`)
+          this.logger.verbose('Entry already exists in db')
         } else {
           // Revert all inserts
-          console.error(
+          this.logger.error(
             `Could not save mock building "${building.name}". Reason: `,
             errMsg
           );
