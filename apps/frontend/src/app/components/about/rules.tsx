@@ -38,6 +38,9 @@ export const Rules = () => {
       <Text>
         The output of a production sites is influenced by various factors. The formula for the overall productivity of a production site is
         <Well>
+          F_t(K, L) = K^a * L^(1-a)
+          L_t = sum(p_t) over all employees
+          K_t =
           sum (habitantBaseProductivity * accommodationProductivityMultiplier * starvingProductivityMultiplier) / # workplaces
         </Well>
 
@@ -61,14 +64,17 @@ export const Rules = () => {
       <Heading level={3}>Habitants</Heading>
       <Content>
         - Habitants have a base skill of 1 for each production site
-        {/* - Each habitant needs 3 nutrition units per day */}
-        {/* - Each type of food yields a different amount of nutrition */}
         - Habitants live forever (they do not die)
+        - When talking about accommodations, habitants are referred to as residents
+        - When talking about production sites, habitants are referred to as employees
       </Content>
 
       <Heading level={4}>Utility</Heading>
       <Text>
         Habitants gain utility from housing and food. The utility function is given by a Cobb-Douglas Utility Function
+        {/* @todo: increate utility when eating different food */}
+        {/* @todo: each habitant needs 3 nutrition units per day */}
+        {/* @todo: each type of food yields a different amount of nutrition and utility */}
         <Well>
           U_t(h_t, f_t) = sqrt(h_t) * sqrt(f_t)
         </Well>
@@ -79,7 +85,8 @@ export const Rules = () => {
 
       <Heading level={4}>Skill</Heading>
       <Text>
-        Habitants aquire skill as long as they are employed. Each round that the habitant is employed at a production site, the habitant skill in working at this production site increases. Let T be the round that the habitant started to work at the production site
+        {/* industry specific skill (like mining, wood works, etc.) */}
+        Habitants aquire skill as long as they are employed. Each habitant starts with a skill of 1 for each production site: s_0(habitant, production-site) = 1. Each round that the habitant is employed at a production site, the habitant skill in working at this production site increases. Let T be the round that the habitant started to work at the production site
         <Well>
           s_(t+1) = s_t + 0.01 * sqrt(t - T)
         </Well>
