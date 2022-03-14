@@ -2,6 +2,7 @@ import '@spectrum-web-components/sidenav/sp-sidenav.js';
 import '@spectrum-web-components/sidenav/sp-sidenav-heading.js';
 import '@spectrum-web-components/sidenav/sp-sidenav-item.js';
 import { DOMAttributes } from 'react';
+import { ROUTES } from '../router-container/routes';
 
 type CustomElement<T> = Partial<T & DOMAttributes<T> & { children: unknown }>;
 
@@ -45,6 +46,9 @@ export const SideNavMenu = () => {
         </sp-sidenav-item>
         <sp-sidenav-item value="Products" href="/products">
           Products
+        </sp-sidenav-item>
+        <sp-sidenav-item value="Place Offer" href="/place-offer">
+          Place Offer
         </sp-sidenav-item>
       </sp-sidenav-heading>
       <sp-sidenav-heading label="Economy">

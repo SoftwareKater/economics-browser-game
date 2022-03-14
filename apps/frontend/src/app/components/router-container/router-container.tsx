@@ -8,6 +8,8 @@ import GuardedRoute from './guarded-route';
 import HabitantsOverview from '../habitants-overview/habitants-overview';
 import About from '../about/about';
 import { Content } from '@adobe/react-spectrum';
+import PlaceOffer from '../place-offer/place-offer';
+import { ROUTES } from './routes';
 
 /**
  * Router Outlet
@@ -30,6 +32,7 @@ const RouterContainer = () => {
       <Route path="/accommodations" exact component={Accommodation} />
       <Route path="/production-sites" exact component={ProductionSite} />
       <Route path="/products" exact component={CityProducts} />
+      <Route path="/place-offer" exact component={PlaceOffer} />
       <Route path="/about" exact component={About} />
     </Content>
   );

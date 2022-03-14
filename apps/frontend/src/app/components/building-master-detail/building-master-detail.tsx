@@ -58,7 +58,7 @@ export const BuildingMasterDetail = (props: BuildingMasterDetailProps) => {
         description: building.description,
         buildAction: () => {
           createBuildingMutation({
-            variables: { cityId: props.city.id, buildingId },
+            variables: { buildingId },
           });
         },
         destroyAction: () => {
