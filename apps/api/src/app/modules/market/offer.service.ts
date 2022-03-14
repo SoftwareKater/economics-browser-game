@@ -24,10 +24,12 @@ export class OfferService {
 
   public async placeOffer({
     productId,
+    cityId,
     ...partialOffer
   }: PlaceOfferInput): Promise<Offer> {
     const newOffer: Partial<Offer> = {
       product: { id: productId } as Product,
+      provider: { id: cityId } as City,
       datePlaced: new Date(),
       offerStatus: OfferStatus.OPEN, // newly created offers are always open
       ...partialOffer,
@@ -37,6 +39,7 @@ export class OfferService {
   }
 
   /**
+   * @todo Do i have to put a "reserved" marker on the offer at the very beginning of this method?
    *
    * @param cityId
    * @param offerId
@@ -45,7 +48,9 @@ export class OfferService {
     cityId: string,
     offerId: string
   ): Promise<MarketTransaction> {
-    const offer = await this.offerRepository.findOneOrFail(offerId);
+    const offer = await this.offerRepository.findOneOrFail(offerId, {
+      relations: ['provider', 'product'],
+    });
     if (!this.checkOffer(offer)) {
       throw Error(`Cannot take offer ${offerId}. Reason: Bad offer`);
     }
@@ -55,6 +60,8 @@ export class OfferService {
     const newTransaction: Partial<MarketTransaction> = {
       price: offer.price,
       quantity: offer.quantity,
+      product: offer.product,
+      date: new Date(),
     };
     if (offer.offerType === OfferType.BID) {
       newTransaction.seller = { id: cityId } as City;
@@ -66,12 +73,13 @@ export class OfferService {
     }
     const transaction = newTransaction as MarketTransaction;
     try {
-      this.sendMoney(transaction);
-      this.receiveMoney(transaction);
-      this.shipProduct(transaction);
-      this.receiveProduct(transaction);
+      await this.sendMoney(transaction);
+      await this.receiveMoney(transaction);
+      await this.shipProduct(transaction);
+      await this.receiveProduct(transaction);
+      await this.offerRepository.update(offerId, { offerStatus: OfferStatus.TAKEN });
     } catch (err) {
-      this.logger.error(`Transactionf failed. Reson: ${err}`);
+      this.logger.error(`Transaction failed. Reson: ${err}`);
       // @todo: rollback whole transactions
     }
     const saveResult = this.transactionRepository.save(newTransaction);
@@ -92,7 +100,7 @@ export class OfferService {
       return false;
     }
     const now = new Date();
-    if (offer.expirationDate > now) {
+    if (offer.expirationDate < now) {
       this.logger.error(
         `Cannot take offer ${offer.id}. Reason: It has expired on ${offer.expirationDate}`
       );
@@ -105,7 +113,7 @@ export class OfferService {
    * Checks if the taker has enough money to take the offer.
    */
   private checkTaker(): boolean {
-    this.logger.error('Not implemented');
+    this.logger.error('checkTaker is not implemented');
     return true;
   }
 

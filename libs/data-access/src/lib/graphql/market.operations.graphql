@@ -1,0 +1,38 @@
+mutation placeOffer(
+  $expirationDate: DateTime!
+  $offerType: OfferType!
+  $quantity: Float!
+  $price: Float!
+  $productId: String!
+) {
+  placeOffer(
+    expirationDate: $expirationDate
+    offerType: $offerType
+    quantity: $quantity
+    price: $price
+    productId: $productId
+  ) {
+    id
+    datePlaced
+    offerStatus
+  }
+}
+
+mutation takeOffer($offerId: String!) {
+  takeOffer(offerId: $offerId) {
+    id
+    seller {
+      id
+    }
+    purchaser {
+      id
+    }
+    date
+    product {
+      id
+      name
+    }
+    quantity
+    price
+  }
+}

@@ -1,4 +1,3 @@
-import { City } from '../../../models/city.entity';
 import { OfferType } from '../../../models/offer-type.enum';
 
 export interface PlaceOfferInput {
@@ -7,5 +6,5 @@ export interface PlaceOfferInput {
   quantity: number;
   offerType: OfferType;
   expirationDate: Date;
-  city: Partial<City>;
+  cityId: string;
 }

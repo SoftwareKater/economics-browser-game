@@ -1,6 +1,7 @@
 import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { City } from '../../models/city.entity';
+import { MarketTransaction } from '../../models/market-transaction.entity';
 import { OfferType } from '../../models/offer-type.enum';
 import { Offer } from '../../models/offer.entity';
 import { User } from '../../models/user.entity';
@@ -17,7 +18,7 @@ export class MarketResolver {
    */
   @UseGuards(GqlAuthGuard)
   /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
-  @Mutation((returns) => City, { name: 'placeOffer' })
+  @Mutation((returns) => Offer, { name: 'placeOffer' })
   async placeOffer(
     @GqlCurrentUser() user: User,
     @Args({ name: 'productId', type: () => String }) productId: string,
@@ -26,8 +27,8 @@ export class MarketResolver {
     @Args({ name: 'offerType', type: () => OfferType }) offerType: OfferType,
     @Args({ name: 'expirationDate', type: () => Date }) expirationDate: Date
   ) {
-    this.offerService.placeOffer({
-      city: user.city,
+    return await this.offerService.placeOffer({
+      cityId: user.city.id,
       expirationDate,
       offerType,
       price,
@@ -41,11 +42,11 @@ export class MarketResolver {
    */
   @UseGuards(GqlAuthGuard)
   /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
-  @Mutation((returns) => City, { name: 'takeOffer' })
+  @Mutation((returns) => MarketTransaction, { name: 'takeOffer' })
   async takeOffer(
     @GqlCurrentUser() user: User,
     @Args({ name: 'offerId', type: () => String }) offerId: string
   ) {
-    this.offerService.takeOffer(user.city.id, offerId);
+    return await this.offerService.takeOffer(user.city.id, offerId);
   }
 }
