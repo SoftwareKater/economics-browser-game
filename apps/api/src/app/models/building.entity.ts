@@ -38,20 +38,9 @@ export class Building {
   size!: number;
 
   /**
-   * The number of products that can be stored (only applies to storages).
-   * If zero (default), the building cannot store anything (accommodation, production site)
-   * @todo when this mechanic is ever introduced: products should have a size.
-   */
-  @Field((type) => Int)
-  @Column({
-    default: 0,
-  })
-  capacity?: number;
-
-  /**
    * The number of habitants that can work in this production site,
    * or the number of habitants that can live in this accommodation.
-   * If zero (default), habitants can neither work nor live in the building (storage)
+   * If zero (default), habitants can neither work nor live in the building
    */
   @Field((type) => Int)
   @Column({
@@ -126,7 +115,7 @@ export class Building {
   buildingType!: BuildingType;
 
   @Field((type) => [CityBuilding])
-  @OneToMany(() => CityBuilding, (cityDevel) => cityDevel.building)
+  @OneToMany(() => CityBuilding, (cityBuilding) => cityBuilding.building)
   developedIn!: CityBuilding[];
 
   /**

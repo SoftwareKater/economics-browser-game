@@ -3,6 +3,8 @@ import { Entity, Column, OneToMany, PrimaryGeneratedColumn, OneToOne } from 'typ
 import { CityBuilding } from './city-building.entity';
 import { CityProduct } from './city-product.entity';
 import { Habitant } from './habitant.entity';
+import { MarketTransaction } from './market-transaction.entity';
+import { Offer } from './offer.entity';
 import { User } from './user.entity';
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
@@ -40,4 +42,25 @@ export class City {
   @Field((type) => User)
   @OneToOne(() => User, (user) => user.city)
   user!: User;
+
+  /**
+   * All offers of this city
+   */
+  @Field((type) => [Offer])
+  @OneToMany(() => Offer, (offer) => offer.provider)
+  offers!: Offer[];
+
+  /**
+   * The transaction where the city was the purchaser
+   */
+  @Field((type) => [MarketTransaction])
+  @OneToMany(() => MarketTransaction, (marketTransaction) => marketTransaction.purchaser)
+  purchasingTransactions!: MarketTransaction[];
+
+  /**
+   * The transaction where the city was the seller
+   */
+  @Field((type) => [MarketTransaction])
+  @OneToMany(() => MarketTransaction, (marketTransaction) => marketTransaction.seller)
+  sellingTransactions!: MarketTransaction[];
 }

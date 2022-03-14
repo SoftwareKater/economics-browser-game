@@ -8,7 +8,7 @@
 - exchange console.log calls for nestjs logger
 - if the server restarts, city update queues have to be restarted for every city
 - remove tailwind which is superfluous when using adobe spectrum
-- create a dockerfile / compose
+- add redis to docker-compose
 - imporve views
   - habitants
   - accommodations

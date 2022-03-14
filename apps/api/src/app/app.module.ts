@@ -23,6 +23,9 @@ import { User } from './models/user.entity';
 import { DbSeedModule } from './components/db-seed/db-seed.module';
 import { TYPEORM_MODULE_CONFIG } from './constants';
 import { BullModule } from '@nestjs/bull';
+import { MarketTransaction } from './models/market-transaction.entity';
+import { Offer } from './models/offer.entity';
+import { MarketModule } from './modules/market/market.module';
 
 const BullRootModule = BullModule.forRoot({
   redis: {
@@ -57,6 +60,8 @@ const BullRootModule = BullModule.forRoot({
         CityBuilding,
         CityProduct,
         Habitant,
+        MarketTransaction,
+        Offer,
         Product,
         User,
       ],
@@ -73,6 +78,7 @@ const BullRootModule = BullModule.forRoot({
     AuthModule,
     CityProductModule,
     DbSeedModule,
+    MarketModule,
   ],
 })
 export class AppModule {}

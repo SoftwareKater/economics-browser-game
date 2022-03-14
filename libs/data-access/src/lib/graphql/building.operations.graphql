@@ -5,7 +5,6 @@ query accommodations {
     description
     size
     places
-    capacity
     buildingType
     constructionTime
     constructionCosts {
@@ -30,7 +29,6 @@ query productionSites {
     description
     size
     places
-    capacity
     buildingType
     constructionTime
     constructionCosts {
