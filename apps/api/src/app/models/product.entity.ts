@@ -23,6 +23,14 @@ export class Product {
   })
   name!: string;
 
+  @Field((type) => Boolean)
+  @Column()
+  consumable!: boolean;
+
+  @Field((type) => Number)
+  @Column()
+  nutritionalValue!: number;
+
   @Field((type) => [BuildingInput])
   @OneToMany(() => BuildingInput, (buildingInput) => buildingInput.product)
   buildingInputs!: BuildingInput[];

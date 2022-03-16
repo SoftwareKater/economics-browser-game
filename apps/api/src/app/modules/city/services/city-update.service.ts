@@ -7,6 +7,7 @@ import { CityBuilding } from '../../../models/city-building.entity';
 import { CityProduct } from '../../../models/city-product.entity';
 import { City } from '../../../models/city.entity';
 import { Habitant } from '../../../models/habitant.entity';
+import { EconomicFunctions } from './economic-functions';
 
 /**
  * This service calculates the new state of the city.
@@ -14,10 +15,6 @@ import { Habitant } from '../../../models/habitant.entity';
  * their maintenance costs cannot be paid, and whether habitants are starving and thus have a reduced productivity.
  * This has to be calculated on a per "round" (e.g per minute or per hour) basis (if you have 10 wood and two
  * buildings that require wood, then both should be running 5 rounds, instead of one running 10 rounds and the other 0).
- * @todo solve problem: if players are offline for hours, this method has to calculate 10000 rounds...
- *        This will result in the loading spinner of death on first login after long offline time.
- *        -> use redis for periodic updates?
- * @todo save lastCityUpdate time at the city object
  * @todo subtract habitants food needs
  * @todo subtract building maintenance costs
  * @todo subtract production site inputs
@@ -108,12 +105,14 @@ export class CityUpdateService {
       // step #0: market transactions
       // this.doMarketTransactions();
 
-      this.feedHabitants(habitants);
+      const nutrition = this.feedHabitants(habitants, updateProducts);
       this.verboseUpdateProducts(
         '---------------',
         `After feeding ${habitants.length} habitants.`,
         updateProducts
       );
+
+      const productivity: { [key: string]: number } = Object.entries(nutrition).map((entry) => ({ entry[0]: EconomicFunctions.productivity(entry[1], 1) }));
 
       this.payMaintenanceCosts(
         accommodations,
@@ -167,13 +166,36 @@ export class CityUpdateService {
   /**
    * Step #2 during city update: feed all habitants
    * @param habitants all habitants of the city
+   * @returns A map of habitantIds to habitants nutrition
    */
-  private feedHabitants(habitants: Habitant[]): void {
-    // reduce stored products
-    // update starving levels
-    // for (const habitant of habitants) {
-    //   // get random products that have a combined nutirtion value of at least 1
-    // }
+  private feedHabitants(
+    habitants: Habitant[],
+    updateProducts: CityProduct[]
+  ): { [key: string]: number } {
+    // maps habitantId to habitants nutrition
+    const nutrition: { [key: string]: number } = {};
+    // sort allowed products by nutrition value
+    const sortedProducts = updateProducts
+      .filter((cityProduct) => cityProduct.allow)
+      .sort((a, b) => a.product.nutritionalValue - b.product.nutritionalValue);
+    // pick units for each habitant
+    let j = 0;
+    for (let i = 0; i++; i < habitants.length) {
+      let foundFood = false;
+      while (!foundFood) {
+        if (sortedProducts[j].amount > 0) {
+          sortedProducts[j].amount -= 3; // assuming that this also affects updateProducts
+
+          nutrition[habitants[i].id] =
+            3 * sortedProducts[0].product.nutritionalValue;
+
+          foundFood = true;
+        } else {
+          j += 1;
+        }
+      }
+    }
+    return nutrition;
   }
 
   /**
