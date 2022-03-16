@@ -1,7 +1,6 @@
 import { Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CityProduct } from '../../models/city-product.entity';
 import { City } from '../../models/city.entity';
 import { OfferStatus } from '../../models/offer-status.enum';
 import { OfferType } from '../../models/offer-type.enum';
@@ -9,6 +8,8 @@ import { Offer } from '../../models/offer.entity';
 import { MarketTransaction } from '../../models/market-transaction.entity';
 import { PlaceOfferInput } from './models/place-offer-input.interface';
 import { Product } from '../../models/product.entity';
+import { MarketTransactionService } from './services/market-transaction.service';
+import { MakeTradeInput } from './models/make-trade-input.interface';
 
 export class OfferService {
   private readonly logger = new Logger('OfferService');
@@ -16,11 +17,8 @@ export class OfferService {
   constructor(
     @InjectRepository(Offer)
     private offerRepository: Repository<Offer>,
-    @InjectRepository(MarketTransaction)
-    private transactionRepository: Repository<MarketTransaction>,
-    @InjectRepository(CityProduct)
-    private cityProductRepository: Repository<CityProduct>
-  ) {}
+    private readonly marketTransactionService: MarketTransactionService,
+  ) { }
 
   public async placeOffer({
     productId,
@@ -47,7 +45,7 @@ export class OfferService {
   public async takeOffer(
     cityId: string,
     offerId: string
-  ): Promise<MarketTransaction> {
+  ): Promise<MarketTransaction | undefined> {
     const offer = await this.offerRepository.findOneOrFail(offerId, {
       relations: ['provider', 'product'],
     });
@@ -57,32 +55,15 @@ export class OfferService {
     if (!this.checkTaker()) {
       throw Error(`Cannot take offer ${offerId}. Reason: Bad taker`);
     }
-    const newTransaction: Partial<MarketTransaction> = {
-      price: offer.price,
-      quantity: offer.quantity,
-      product: offer.product,
-      date: new Date(),
-    };
-    if (offer.offerType === OfferType.BID) {
-      newTransaction.seller = { id: cityId } as City;
-      newTransaction.purchaser = { id: offer.provider.id } as City;
-    }
-    if (offer.offerType === OfferType.OFFER) {
-      newTransaction.seller = { id: offer.provider.id } as City;
-      newTransaction.purchaser = { id: cityId } as City;
-    }
-    const transaction = newTransaction as MarketTransaction;
+    const transaction = this.createMakeTradeInput(cityId, offer) as MarketTransaction;
+    await this.offerRepository.update(offerId, { offerStatus: OfferStatus.TAKEN });
+    let saveResult;
     try {
-      await this.sendMoney(transaction);
-      await this.receiveMoney(transaction);
-      await this.shipProduct(transaction);
-      await this.receiveProduct(transaction);
-      await this.offerRepository.update(offerId, { offerStatus: OfferStatus.TAKEN });
+      saveResult = this.marketTransactionService.makeTrade(transaction);
     } catch (err) {
       this.logger.error(`Transaction failed. Reson: ${err}`);
       // @todo: rollback whole transactions
     }
-    const saveResult = this.transactionRepository.save(newTransaction);
     return saveResult;
   }
 
@@ -117,60 +98,22 @@ export class OfferService {
     return true;
   }
 
-  /**
-   * Reduces sellers product stock by the amount in the transaction.
-   *
-   * @param transaction
-   */
-  private async shipProduct(transaction: MarketTransaction) {
-    const sellerProductStock = (
-      await this.cityProductRepository.findOneOrFail({
-        city: transaction.seller,
-        product: transaction.product,
-      })
-    ).amount;
-    this.cityProductRepository.update(
-      { city: transaction.seller, product: transaction.product },
-      { amount: sellerProductStock - transaction.quantity }
-    );
+  private createMakeTradeInput(cityId: string, offer: Offer): Partial<MakeTradeInput> {
+    const newTransaction: Partial<MakeTradeInput> = {
+      price: offer.price,
+      quantity: offer.quantity,
+      product: offer.product,
+      date: new Date(),
+    };
+    if (offer.offerType === OfferType.BID) {
+      newTransaction.seller = { id: cityId } as City;
+      newTransaction.purchaser = { id: offer.provider.id } as City;
+    }
+    if (offer.offerType === OfferType.OFFER) {
+      newTransaction.seller = { id: offer.provider.id } as City;
+      newTransaction.purchaser = { id: cityId } as City;
+    }
+    return newTransaction;
   }
 
-  /**
-   * Increases purchasers product stock by the amount in the transaction.
-   *
-   * @param transaction
-   */
-  private async receiveProduct(transaction: MarketTransaction) {
-    const purchaserProductStock = (
-      await this.cityProductRepository.findOneOrFail({
-        city: transaction.purchaser,
-        product: transaction.product,
-      })
-    ).amount;
-    this.cityProductRepository.update(
-      { city: transaction.seller, product: transaction.product },
-      { amount: purchaserProductStock + transaction.quantity }
-    );
-  }
-
-  /**
-   * Reduces purchasers money by the price of the transaction
-   *
-   * @param transaction
-   */
-  private async sendMoney(transaction: MarketTransaction) {
-    const purchasingPrice = transaction.quantity * transaction.price;
-    this.logger.warn(
-      `There is not money in the economy. Not sending ${purchasingPrice} habitrons`
-    );
-  }
-
-  /**
-   * Increases sellers money by the price of the transaction
-   *
-   * @param transaction
-   */
-  private async receiveMoney(transaction: MarketTransaction) {
-    this.logger.warn('There is not money in the economy');
-  }
 }

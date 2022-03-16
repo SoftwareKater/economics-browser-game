@@ -4,6 +4,22 @@
 
 ### MVP
 
+- caching
+  - products, cityProducts, etc. mit eTag
+  - cities mit variabler Expiration (expiration = dauer bis zum nächsten city update)
+    - -> führt zu "eventual consistency", dh es kann sein, dass es durch diese Art des caching zwischendurch inkonsistente daten auf client und server gibt
+  - iamges
+- images
+  - move to backend/database
+  - respect contenttype / accept headers -> deliver image in appropriate format
+- compression of json responses
+  - respect contenttype / accept headers
+- POST-REDIRECT-GET-Reload pattern for signup + login
+- graphQL API für den Spiele-Client ist ehrlich gesagt Quatsch
+  - API for economists may be graphQL
+    - should only allow queries and no mutations
+    - should target a mirror of the "game db", so that game API requests run performant
+  - But the API for the game client should be RESTful
 - add ui for queues: https://selleo.com/til/posts/lkkkedpjjl-bull-board-for-nestjs
 - exchange console.log calls for nestjs logger
 - if the server restarts, city update queues have to be restarted for every city
@@ -18,6 +34,7 @@
   - add view/form for placing an offer
   - add view/form for placing a bid
   - add market clearing algorithm
+  - add market clearing queue
 - add endpoint to dis-/allow products
 - habitants nutrition
   - add nutrition values to consumable products
@@ -45,11 +62,13 @@
   - guard api routes
   - add token to api request headers
   - get auth state in frontend components
-- fix update city method (see todos in js docstring)
-- generated types (gql responses) are really f***ed up
-- auth
   - hash passwords before writing to db
   - validate jwts
+  - use set-cookie instead of session storage!!!
+- fix update city method (see todos in js docstring)
+- generated types (gql responses) are really f***ed up
+- deployment
+  - ...
 
 ### Future
 
